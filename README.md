@@ -29,6 +29,15 @@ Se você quer builds do código fonte, Bun, perfis locais, diagnósticos ou exem
 
 ---
 
+## Setup WINDOWS ultra rápido (PELO CMD)
+- rode npm install -g @touchzada/claudinho
+- set CLAUDE_CODE_USE_OPENAI=1
+- set OPENAI_API_KEY=SUAAPIAQUI
+- set OPENAI_BASE_URL=https://openrouter.ai/api/v1 <- substitua pela url base do seu provedor
+- set OPENAI_MODEL=qwen/qwen3.6-plus:free (altere pelo modelo disponível do seu provedor)
+- digite apenas ```claudinho``` no cmd e pronto.
+
+
 ## Instalar
 
 Para a maioria dos usuários, instale pelo npm:
