@@ -1,6 +1,6 @@
 {
   "name": "@touchzada/claudinho",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Assistente de IA no terminal com qualquer modelo — OpenAI, Gemini, DeepSeek, Ollama e 200+",
   "type": "module",
   "bin": {
