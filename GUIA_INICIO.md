@@ -66,7 +66,7 @@ E tudo que funcionava no Claude Code original continua funcionando aqui: bash, l
 Abre o terminal e digita:
 
 ```bash
-npm install -g @gitlawb/claudinho
+npm install -g @touchzada/claudinho
 ```
 
 **O que esse comando faz?**
@@ -75,7 +75,7 @@ npm install -g @gitlawb/claudinho
 |------------------|-----------------|
 | `npm install` | "npm, instala isso pra mim" |
 | `-g` | **Global** — instala em qualquer pasta, não só no projeto atual |
-| `@gitlawb/claudinho` | É o nome do pacote do Claudinho |
+| `@touchzada/claudinho` | É o nome do pacote do Claudinho |
 
 Depois da instalação, confirma que funcionou:
 
@@ -85,14 +85,14 @@ claudinho --version
 
 Se aparecer um número (tipo `0.1.7`), **tá instalado e pronto**.
 
-> **Atenção:** O nome do pacote é `@gitlawb/claudinho`, mas o comando que você roda é `claudinho`. É normal! É como se o pacote se chamasse "Maria" mas todo mundo chamasse de "Mari".
+> **Atenção:** O nome do pacote é `@touchzada/claudinho`, mas o comando que você roda é `claudinho`. É normal! É como se o pacote se chamasse "Maria" mas todo mundo chamasse de "Mari".
 
 ### Método 2: Usando sem instalar (npx)
 
 Se você não quer instalar nada permanente no computador:
 
 ```bash
-npx @gitlawb/claudinho
+npx @touchzada/claudinho
 ```
 
 | Vantagem | Desvantagem |
@@ -804,7 +804,7 @@ Mesmo no Modo Bypass, o Claudinho protege:
 Novas versões corrigem bugs e melhoram segurança. Atualize regularmente:
 
 ```bash
-npm update -g @gitlawb/claudinho
+npm update -g @touchzada/claudinho
 ```
 
 ### Como desinstalar
@@ -812,7 +812,7 @@ npm update -g @gitlawb/claudinho
 Se não quiser mais usar:
 
 ```bash
-npm uninstall -g @gitlawb/claudinho
+npm uninstall -g @touchzada/claudinho
 ```
 
 ---
@@ -820,7 +820,7 @@ npm uninstall -g @gitlawb/claudinho
 ## Atualizando o Claudinho
 
 ```bash
-npm install -g @gitlawb/claudinho@latest
+npm install -g @touchzada/claudinho@latest
 ```
 
 ---

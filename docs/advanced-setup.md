@@ -7,7 +7,7 @@ Este guia é para quem quer builds do código fonte, Bun, perfis locais, diagnó
 ### Opção A: npm
 
 ```bash
-npm install -g @gitlawb/openclaude
+npm install -g @touchzada/claudinho
 ```
 
 ### Opção B: Do código fonte com Bun

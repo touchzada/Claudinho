@@ -40,7 +40,7 @@ export function usePromptInputPlaceholder({
         viewingAgentName.length > MAX_TEAMMATE_NAME_LENGTH
           ? viewingAgentName.slice(0, MAX_TEAMMATE_NAME_LENGTH - 3) + '...'
           : viewingAgentName
-      return `Message @${displayName}…`
+      return `Mensagem pra @${displayName}…`
     }
 
     // Show queue hint if user has not seen it yet.
@@ -51,7 +51,7 @@ export function usePromptInputPlaceholder({
       (getGlobalConfig().queuedCommandUpHintCount || 0) <
         NUM_TIMES_QUEUE_HINT_SHOWN
     ) {
-      return 'Press up to edit queued messages'
+      return 'Pressione ↑ pra editar mensagens na fila'
     }
 
     // Show example command if user has not submitted yet and suggestions are enabled.

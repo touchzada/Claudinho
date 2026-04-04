@@ -20,7 +20,7 @@ Se aparecer um número como `v20.x` ou maior, tá pronto. Se não, reinstale e r
 ## 2. Instale o OpenClaude
 
 ```powershell
-npm install -g @gitlawb/openclaude
+npm install -g @touchzada/claudinho
 ```
 
 ## 3. Escolha um Provedor
@@ -34,7 +34,7 @@ $env:CLAUDE_CODE_USE_OPENAI="1"
 $env:OPENAI_API_KEY="sk-your-key-here"
 $env:OPENAI_MODEL="gpt-4o"
 
-openclaude
+claudinho
 ```
 
 ### Opção B: DeepSeek
@@ -45,7 +45,7 @@ $env:OPENAI_API_KEY="sk-your-key-here"
 $env:OPENAI_BASE_URL="https://api.deepseek.com/v1"
 $env:OPENAI_MODEL="deepseek-chat"
 
-openclaude
+claudinho
 ```
 
 ### Opção C: Ollama
@@ -61,17 +61,17 @@ $env:CLAUDE_CODE_USE_OPENAI="1"
 $env:OPENAI_BASE_URL="http://localhost:11434/v1"
 $env:OPENAI_MODEL="llama3.1:8b"
 
-openclaude
+claudinho
 ```
 
 Sem necessidade de chave de API para modelos locais do Ollama.
 
-## 4. Se `openclaude` Não For Encontrado
+## 4. Se `claudinho` Não For Encontrado
 
 Feche o PowerShell, abra um novo e tente de novo:
 
 ```powershell
-openclaude
+claudinho
 ```
 
 ## 5. Se o Provedor Falhar
@@ -92,13 +92,13 @@ Verifique o básico:
 ## 6. Atualizando o OpenClaude
 
 ```powershell
-npm install -g @gitlawb/openclaude@latest
+npm install -g @touchzada/claudinho@latest
 ```
 
 ## 7. Desinstalando o OpenClaude
 
 ```powershell
-npm uninstall -g @gitlawb/openclaude
+npm uninstall -g @touchzada/claudinho
 ```
 
 ## Quer Mais Controle?

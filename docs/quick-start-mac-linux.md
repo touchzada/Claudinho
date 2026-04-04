@@ -24,7 +24,7 @@ npm --version
 ## 2. Instale o OpenClaude
 
 ```bash
-npm install -g @gitlawb/openclaude
+npm install -g @touchzada/claudinho
 ```
 
 ## 3. Escolha um Provedor
@@ -38,7 +38,7 @@ export CLAUDE_CODE_USE_OPENAI=1
 export OPENAI_API_KEY=sk-your-key-here
 export OPENAI_MODEL=gpt-4o
 
-openclaude
+claudinho
 ```
 
 ### Opção B: DeepSeek
@@ -49,7 +49,7 @@ export OPENAI_API_KEY=sk-your-key-here
 export OPENAI_BASE_URL=https://api.deepseek.com/v1
 export OPENAI_MODEL=deepseek-chat
 
-openclaude
+claudinho
 ```
 
 ### Opção C: Ollama
@@ -65,17 +65,17 @@ export CLAUDE_CODE_USE_OPENAI=1
 export OPENAI_BASE_URL=http://localhost:11434/v1
 export OPENAI_MODEL=llama3.1:8b
 
-openclaude
+claudinho
 ```
 
 Sem necessidade de chave de API para modelos locais do Ollama.
 
-## 4. Se `openclaude` Não For Encontrado
+## 4. Se `claudinho` Não For Encontrado
 
 Feche o terminal, abra um novo e tente de novo:
 
 ```bash
-openclaude
+claudinho
 ```
 
 ## 5. Se o Provedor Falhar
@@ -96,13 +96,13 @@ Verifique o básico:
 ## 6. Atualizando o OpenClaude
 
 ```bash
-npm install -g @gitlawb/openclaude@latest
+npm install -g @touchzada/claudinho@latest
 ```
 
 ## 7. Desinstalando o OpenClaude
 
 ```bash
-npm uninstall -g @gitlawb/openclaude
+npm uninstall -g @touchzada/claudinho
 ```
 
 ## Quer Mais Controle?
