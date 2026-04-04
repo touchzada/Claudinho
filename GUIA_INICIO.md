@@ -8,7 +8,7 @@
 
 ## O que é o Claudinho?
 
-O Claudinho é um assistente de programação que roda direto no seu terminal. Ele é baseado no **Claude Code** da Anthropic (a melhor IA de programação que existe hoje), mas com uma diferença **GIGANTE**: essa versão funciona com **QUALQUER** modelo de inteligência artificial — não só com o Claude.
+O Claudinho é um assistente de programação que roda direto no seu terminal. Ele é baseado no **Claude Code**, mas com uma diferença **GIGANTE**: essa versão funciona com **QUALQUER** modelo de inteligência artificial — não só com o Claude.
 
 Isso significa que você pode usar:
 - **GPT-4o** da OpenAI (a mesma tecnologia do ChatGPT)
