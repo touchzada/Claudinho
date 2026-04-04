@@ -16,6 +16,9 @@ dist/
 .vscode
 .openclaude-profile.json
 
+# Personalidade customizada (substituir pelo .example)
+CLAUDE.md
+
 # Relatórios e backups
 reports/
 BACKUPS/
