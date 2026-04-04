@@ -123,7 +123,7 @@ Todos suportados via protocolo OpenAI. Veja exemplos na [Configuração Avançad
 
 ## Características especiais
 
-- **Histórico de conversas**: Navegue por sessões anteriores
+- 📜 **Histórico de conversas**: Navegue por todas as suas sessões anteriores com `Ctrl+H`. Veja o histórico completo de mensagens, busque por conversas específicas, e retome qualquer sessão passada. Todas as conversas ficam salvas localmente e podem ser acessadas a qualquer momento.
 - 🛡️ **Guardrails removidos**: Modo bypass para execução sem confirmação de cada ação
 - 🇧🇷 **Traduções para PT-BR**: Interface e mensagens completamente em português brasileiro
 - **Assistente de provedor**: Configure seu provedor com um assistente interativo

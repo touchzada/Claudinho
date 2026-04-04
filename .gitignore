@@ -36,3 +36,6 @@ profiling/
 # OS
 .DS_Store
 Thumbs.db
+*.png
+*.tgz
+TRADUCOES_REALIZADAS.md
