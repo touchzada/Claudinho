@@ -1,0 +1,43 @@
+# Nunca publicar sensíveis
+.env
+.env.*
+!.env.example
+
+# Código fonte
+src/
+test/
+**/tests/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Configurações e IDE
+.git/
+.github/
+.kiro/
+.vscode/
+.claude/
+
+# Relatórios e logs
+reports/
+*.log
+profiling/
+
+# Gerados e backup
+*.bak
+*.backup
+BACKUPS/
+AUTO_ANALYSIS_REPORT.md
+BACKUPS.md
+CLAUDE_CODE_REFERENCES.md
+claudinho.cmd
+IMPLEMENTATION_REPORT_SESSION_HISTORY_VIEWER.md
+.openclaude-profile.json
+
+# Dependências (instaladas pelo npm no destino)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

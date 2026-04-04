@@ -1,0 +1,38 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Configurações pessoais/sessão
+.claude
+.kiro
+.vscode
+.openclaude-profile.json
+
+# Relatórios e backups
+reports/
+BACKUPS/
+AUTO_ANALYSIS_REPORT.md
+BACKUPS.md
+CLAUDE_CODE_REFERENCES.md
+IMPLEMENTATION_REPORT_SESSION_HISTORY_VIEWER.md
+
+# Gerados
+claudinho.cmd
+
+# Backup e debug
+*.bak
+*.backup
+*.log
+profiling/
+
+# OS
+.DS_Store
+Thumbs.db

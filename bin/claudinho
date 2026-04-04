@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+/**
+ * Claudinho — Terminal de IA com qualquer modelo
+ *
+ * Se dist/cli.mjs existe (compilado), roda ele.
+ * Caso contrário, avisa o usuário pra compilar primeiro ou usar `bun run dev`.
+ */
+
+import { existsSync } from 'fs'
+import { join, dirname } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const distPath = join(__dirname, '..', 'dist', 'cli.mjs')
+
+if (existsSync(distPath)) {
+  await import(pathToFileURL(distPath).href)
+} else {
+  console.error(`
+  claudinho: dist/cli.mjs não encontrado.
+
+  Compile primeiro:
+    bun run build
+
+  Ou rode direto com Bun:
+    bun run dev
+
+  Veja README.md pras instruções de setup.
+`)
+  process.exit(1)
+}
