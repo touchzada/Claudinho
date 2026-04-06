@@ -1035,7 +1035,7 @@ export const bashToolCheckExactMatchPermission = (
   // 4. Otherwise, passthrough
   const decisionReason = {
     type: 'other' as const,
-    reason: 'This command requires approval',
+    reason: 'Este comando requer aprovação',
   }
   return {
     behavior: 'passthrough',
@@ -1165,7 +1165,7 @@ export const bashToolCheckPermission = (
   // 8. Passthrough since no rules match, will trigger permission prompt
   const decisionReason = {
     type: 'other' as const,
-    reason: 'This command requires approval',
+    reason: 'Este comando requer aprovação',
   }
   return {
     behavior: 'passthrough',

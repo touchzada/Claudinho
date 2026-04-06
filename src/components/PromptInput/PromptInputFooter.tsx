@@ -18,8 +18,7 @@ import type { AutoUpdaterResult } from '../../utils/autoUpdater.js';
 import { isFullscreenEnvEnabled } from '../../utils/fullscreen.js';
 import { isUndercover } from '../../utils/undercover.js';
 import { TokenStatusBar } from '../TokenStatusBar.js';
-import { BudgetStatusBar } from '../BudgetStatusBar.js';
-import { UnknownModelWarning } from '../UnknownModelWarning.js';
+import { SessionHud } from '../SessionHud.js';
 import { CoordinatorTaskPanel, useCoordinatorTaskCount } from '../CoordinatorAgentStatus.js';
 import { getLastAssistantMessageId, StatusLine, statusLineShouldDisplay } from '../StatusLine.js';
 import { Notifications } from './Notifications.js';
@@ -58,6 +57,7 @@ type Props = {
   isInputWrapped?: boolean;
   messages: Message[];
   isSearching: boolean;
+  input: string;
   historyQuery: string;
   setHistoryQuery: (query: string) => void;
   historyFailedMatch: boolean;
@@ -92,6 +92,7 @@ function PromptInputFooter({
   isInputWrapped = false,
   messages,
   isSearching,
+  input,
   historyQuery,
   setHistoryQuery,
   historyFailedMatch,
@@ -145,9 +146,8 @@ function PromptInputFooter({
           <PromptInputFooterLeftSide exitMessage={exitMessage} vimMode={vimMode} mode={mode} toolPermissionContext={toolPermissionContext} suppressHint={suppressHint} isLoading={isLoading} tasksSelected={pillSelected} teamsSelected={teamsSelected} teammateFooterIndex={teammateFooterIndex} tmuxSelected={tmuxSelected} isPasting={isPasting} isSearching={isSearching} historyQuery={historyQuery} setHistoryQuery={setHistoryQuery} historyFailedMatch={historyFailedMatch} onOpenTasksDialog={onOpenTasksDialog} />
         </Box>
         <Box flexShrink={1} gap={1}>
-          <TokenStatusBar messages={messages} isLoading={isLoading} />
-          <BudgetStatusBar />
-          <UnknownModelWarning />
+          <TokenStatusBar messages={messages} isLoading={isLoading} typingSignal={input} />
+          <SessionHud compact={columns < 140} />
           {isFullscreen ? null : <Notifications apiKeyStatus={apiKeyStatus} autoUpdaterResult={autoUpdaterResult} debug={debug} isAutoUpdating={isAutoUpdating} verbose={verbose} messages={messages} onAutoUpdaterResult={onAutoUpdaterResult} onChangeIsUpdating={onChangeIsUpdating} ideSelection={ideSelection} mcpClients={mcpClients} isInputWrapped={isInputWrapped} isNarrow={isNarrow} />}
           {"external" === 'ant' && isUndercover() && <Text dimColor>undercover</Text>}
           <BridgeStatusIndicator bridgeSelected={bridgeSelected} />

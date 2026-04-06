@@ -64,6 +64,16 @@ export type ProfileFile = {
   createdAt: string
 }
 
+function isLikelyCodexModel(model: string | undefined): boolean {
+  if (!model) return false
+  const normalized = model.trim().toLowerCase()
+  return (
+    normalized === 'codexplan' ||
+    normalized === 'codexspark' ||
+    normalized.startsWith('gpt-5.')
+  )
+}
+
 type SecretValueSource = Partial<
   Pick<
     NodeJS.ProcessEnv & ProfileEnv,
@@ -558,7 +568,10 @@ export async function buildLaunchEnv(options: {
       persistedOpenAIBaseUrl && isCodexBaseUrl(persistedOpenAIBaseUrl)
         ? persistedOpenAIBaseUrl
         : DEFAULT_CODEX_BASE_URL
-    env.OPENAI_MODEL = persistedOpenAIModel || 'codexplan'
+    env.OPENAI_MODEL =
+      isLikelyCodexModel(persistedOpenAIModel)
+        ? persistedOpenAIModel
+        : 'codexplan'
     delete env.OPENAI_API_KEY
 
     const codexKey =

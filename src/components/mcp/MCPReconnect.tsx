@@ -128,7 +128,7 @@ export function MCPReconnect(t0) {
     }
     let t5;
     if ($[15] !== serverName) {
-      t5 = <Text color="error">Failed to reconnect to {serverName}</Text>;
+      t5 = <Text color="error">Falha ao reconectar a {serverName}</Text>;
       $[15] = serverName;
       $[16] = t5;
     } else {
@@ -145,7 +145,7 @@ export function MCPReconnect(t0) {
     }
     let t7;
     if ($[20] !== error) {
-      t7 = <Text dimColor={true}>Error: {error}</Text>;
+      t7 = <Text dimColor={true}>Erro: {error}</Text>;
       $[20] = error;
       $[21] = t7;
     } else {

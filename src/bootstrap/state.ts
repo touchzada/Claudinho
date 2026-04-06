@@ -746,6 +746,10 @@ export function setHasUnknownModelCost(): void {
   STATE.hasUnknownModelCost = true
 }
 
+export function clearHasUnknownModelCost(): void {
+  STATE.hasUnknownModelCost = false
+}
+
 export function hasUnknownModelCost(): boolean {
   return STATE.hasUnknownModelCost
 }

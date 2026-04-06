@@ -227,17 +227,18 @@ isEnvTruthy(process.env.CLAUDE_CODE_DISABLE_BACKGROUND_TASKS);
 const fullInputSchema = lazySchema(() => z.strictObject({
   command: z.string().describe('The command to execute'),
   timeout: semanticNumber(z.number().optional()).describe(`Optional timeout in milliseconds (max ${getMaxTimeoutMs()})`),
-  description: z.string().optional().describe(`Clear, concise description of what this command does in active voice. Never use words like "complex" or "risk" in the description - just describe what it does.
+  description: z.string().optional().describe(`Descrição clara e concisa do que este comando faz em voz ativa, em português. Nunca use palavras como "complexo" ou "risco" na descrição - apenas descreva o que ele faz.
 
-For simple commands (git, npm, standard CLI tools), keep it brief (5-10 words):
-- ls → "List files in current directory"
-- git status → "Show working tree status"
-- npm install → "Install package dependencies"
+Para comandos simples (git, npm, ferramentas CLI padrão), seja breve (5-10 palavras):
+- ls → "Listar arquivos no diretório atual"
+- git status → "Mostrar status da árvore de trabalho"
+- npm install → "Instalar dependências do pacote"
+- git add → "Adicionar arquivos ao stage"
 
-For commands that are harder to parse at a glance (piped commands, obscure flags, etc.), add enough context to clarify what it does:
-- find . -name "*.tmp" -exec rm {} \\; → "Find and delete all .tmp files recursively"
-- git reset --hard origin/main → "Discard all local changes and match remote main"
-- curl -s url | jq '.data[]' → "Fetch JSON from URL and extract data array elements"`),
+Para comandos mais difíceis de entender (comandos com pipe, flags obscuras, etc.), adicione contexto suficiente para esclarecer o que faz:
+- find . -name "*.tmp" -exec rm {} \\; → "Encontrar e deletar todos os arquivos .tmp recursivamente"
+- git reset --hard origin/main → "Descartar todas as alterações locais e sincronizar com main remoto"
+- curl -s url | jq '.data[]' → "Buscar JSON da URL e extrair elementos do array data"`),
   run_in_background: semanticBoolean(z.boolean().optional()).describe(`Set to true to run this command in the background. Use Read to read the output later.`),
   dangerouslyDisableSandbox: semanticBoolean(z.boolean().optional()).describe('Set this to true to dangerously override sandbox mode and run commands without sandboxing.'),
   _simulatedSedEdit: z.object({

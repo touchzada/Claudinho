@@ -44,6 +44,45 @@ Melhorias grandes no fluxo de troca de provedor para reduzir friccao na pratica,
   - preservacao de credenciais entre trocas
 - Build e testes de provider executados com sucesso.
 
+### Ajustes Pos `/provider` (UX de sessao, custo e historico)
+
+Refinos feitos com base no uso real no terminal, focando em comportamento consistente e leitura mais limpa durante a sessao.
+
+#### `/provider` + perfil Codex
+
+- Correcoes no perfil Codex para evitar herdar modelo indevido de shell/perfil anterior.
+- Ao selecionar `codex`, o modelo padrao volta para `codexplan` quando o valor salvo nao for um modelo Codex valido.
+- Melhor consistencia entre provider salvo e modelo efetivamente aplicado no proximo boot.
+
+#### `/cost-model` e sinalizacao de custo
+
+- Correcao da assinatura do comando `/cost-model` para evitar cair em mensagem de uso em chamadas validas.
+- `list` e `remove` com ajuda de uso mais clara.
+- Ao registrar custo customizado, o aviso de "modelo desconhecido / custo estimado" e limpo corretamente.
+
+#### Barra inferior (sessao inteira)
+
+- Rework visual da barra de tokens para foco em contexto + estado da sessao.
+- Indicadores de `ativo` e `ocioso` com formato progressivo em portugues (`s`, `min`, `h`, `d`, `sem`, `mes`), sem abreviacoes em ingles.
+- Estado de contexto textual (`contexto estavel`, `contexto atento`, `contexto critico`) para leitura rapida.
+- Integracao do input digitado no sinal de atividade da sessao (nao apenas durante resposta do modelo).
+
+#### Historico de conversas no boot
+
+- Seletor inicial expandido para carregar ate `100` conversas.
+- Paginacao adicionada em blocos de `10` itens por pagina.
+- Navegacao por teclado:
+  - `↑/↓` para mover selecao
+  - `←/→` para trocar pagina
+  - `1-9` para retomar rapido dentro da pagina atual
+  - `Enter` para abrir a conversa selecionada
+
+#### Mensagem de retomada na saida
+
+- Texto atualizado para:
+  - `Volte nessa conversa usando o comando:`
+  - `claudinho --resume <id>`
+
 ### ðŸŒ TraduÃ§Ã£o Completa para PortuguÃªs Brasileiro
 
 Esta versÃ£o marca a conclusÃ£o da traduÃ§Ã£o massiva do Claudinho para portuguÃªs brasileiro, tornando a experiÃªncia completamente localizada para usuÃ¡rios brasileiros.

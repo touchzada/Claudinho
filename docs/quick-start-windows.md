@@ -74,6 +74,18 @@ Feche o PowerShell, abra um novo e tente de novo:
 claudinho
 ```
 
+Se no PowerShell o comando `claudinho` continuar falhando, tente:
+
+```powershell
+claudinho.cmd
+```
+
+Se aparecer erro de política de execução (`.ps1` bloqueado), execute:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
 ## 5. Se o Provedor Falhar
 
 Verifique o básico:
@@ -104,3 +116,14 @@ npm uninstall -g @touchzada/claudinho
 ## Quer Mais Controle?
 
 Veja: [Configuração Avançada](advanced-setup.md)
+
+## Troca Rápida de Provedor no App
+
+Dentro do Claudinho, use:
+
+- `/provider codex`
+- `/provider openai`
+- `/provider ollama`
+- `/provider gemini`
+- `/provider auto`
+- `/provider clear`

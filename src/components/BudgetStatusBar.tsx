@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Text } from '../ink.js';
 import { getTotalCostUSD, hasUnknownModelCost } from '../bootstrap/state.js';
 
-const BAR_WIDTH = 10;
+const BAR_WIDTH = 12;
 const EASE = 0.35;
 const DEFAULT_BUDGET = 2.0;
 
 function approach(current: number, target: number): number {
   if (current === target) return target;
   const next = current + (target - current) * EASE;
-  return Math.abs(next - target) < 0.01 ? target : Math.round(next * 100) / 100;
+  return Math.abs(next - target) < 1 ? target : Math.round(next);
 }
 
 function getBarColor(pct: number): string {
@@ -20,7 +20,7 @@ function getBarColor(pct: number): string {
 }
 
 function formatCost(usd: number): string {
-  if (usd < 0.01) return `$${(usd * 100).toFixed(0)}¢`;
+  if (usd > 0 && usd < 0.01) return '<$0.01';
   return `$${usd.toFixed(2)}`;
 }
 
@@ -59,20 +59,31 @@ export function BudgetStatusBar({ budget = DEFAULT_BUDGET }: Props): React.React
   const barColor = exceeded || rawPct >= 85 ? '#ef4444' : getBarColor(displayPct);
   const filled = Math.round((displayPct / 100) * BAR_WIDTH);
   const empty = BAR_WIDTH - filled;
+  const unknownModelCost = hasUnknownModelCost();
 
-  // Hide when no cost accumulated
   if (usedCost <= 0) return null;
 
   return (
-    <Box>
-      <Text color="#6b7280">$</Text>
+    <Box flexDirection="row">
+      <Text color="#6b7280">$ </Text>
+      <Text color="#6b7280">[</Text>
       <Text color={barColor}>{'\u25B0'.repeat(filled)}</Text>
       <Text color="#374151" dimColor>{'\u25B1'.repeat(empty)}</Text>
+      <Text color="#6b7280">] </Text>
+      <Text color={barColor}>{displayPct}%</Text>
       <Text color="#6b7280"> </Text>
       <Text color={barColor}>{formatCost(usedCost)}</Text>
       <Text color="#6b7280">/{formatCost(budget)}</Text>
-      {exceeded && <Text color="#ef4444"> ⚠</Text>}
-      {hasUnknownModelCost() && <Text color="#6b7280" dimColor> ~</Text>}
+      {exceeded && <Text color="#ef4444"> {'\u26a0'}</Text>}
+      {unknownModelCost && (
+        <Text color="#f59e0b"> {'\u26a0'}</Text>
+      )}
+      {unknownModelCost && (
+        <Text color="#6b7280" dimColor> estimado</Text>
+      )}
+      {unknownModelCost && (
+        <Text color="#a78bfa" wrap="truncate"> (/cost-model)</Text>
+      )}
     </Box>
   );
 }

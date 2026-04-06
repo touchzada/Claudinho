@@ -28,7 +28,7 @@ export function handleReconnectResult(result: {
       };
     case 'failed':
       return {
-        message: `Failed to reconnect to ${serverName}.`,
+        message: `Falha ao reconectar a ${serverName}.`,
         success: false
       };
     default:

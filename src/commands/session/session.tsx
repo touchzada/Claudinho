@@ -57,7 +57,7 @@ function SessionInfo(t0) {
   if (!remoteSessionUrl) {
     let t4;
     if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
-      t4 = <Pane><Text color="warning">Not in remote mode. Start with `claude --remote` to use this command.</Text><Text dimColor={true}>(press esc to close)</Text></Pane>;
+      t4 = <Pane><Text color="warning">Não está no modo remoto. Inicie com `claude --remote` pra usar este comando.</Text><Text dimColor={true}>(pressione esc pra fechar)</Text></Pane>;
       $[4] = t4;
     } else {
       t4 = $[4];
@@ -104,7 +104,7 @@ function SessionInfo(t0) {
   }
   let t8;
   if ($[13] === Symbol.for("react.memo_cache_sentinel")) {
-    t8 = <Box marginTop={1}><Text dimColor={true}>(press esc to close)</Text></Box>;
+    t8 = <Box marginTop={1}><Text dimColor={true}>(pressione esc pra fechar)</Text></Box>;
     $[13] = t8;
   } else {
     t8 = $[13];

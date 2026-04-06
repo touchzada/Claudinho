@@ -306,7 +306,7 @@ export function PermissionPrompt(t0) {
   const t11 = showTabHint && " \xB7 Tab to amend";
   let t12;
   if ($[48] !== t11) {
-    t12 = <Box marginTop={1}><Text dimColor={true}>Esc to cancel{t11}</Text></Box>;
+    t12 = <Box marginTop={1}><Text dimColor={true}>Esc pra cancelar{t11}</Text></Box>;
     $[48] = t11;
     $[49] = t12;
   } else {

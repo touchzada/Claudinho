@@ -37,6 +37,13 @@ Se você quer builds do código fonte, Bun, perfis locais, diagnósticos ou exem
 - set OPENAI_MODEL=qwen/qwen3.6-plus:free (altere pelo modelo disponível do seu provedor)
 - digite apenas ```claudinho``` no cmd e pronto.
 
+Se no **PowerShell** o comando `claudinho` falhar, tenta `claudinho.cmd`.
+Se aparecer erro de política de execução de script (`.ps1`), rode o PowerShell como usuário normal e execute:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
 
 ## Instalar
 
@@ -129,6 +136,19 @@ Todos suportados via protocolo OpenAI. Veja exemplos na [Configuração Avançad
 - **Sub-agentes**: O AgentTool gera sub-agentes usando o mesmo provedor
 - **Memória**: Sistema de memória persistente
 - **Tradução PT-BR**: Interface completa em português brasileiro
+
+### Troca rápida de provedor (na sessão)
+
+Dentro do app, use:
+
+- `/provider codex`
+- `/provider openai`
+- `/provider ollama`
+- `/provider gemini`
+- `/provider auto`
+
+Também funciona `/provider clear` para limpar o perfil salvo.
+No fluxo do Codex, agora dá pra colar `CODEX_API_KEY` e `CHATGPT_ACCOUNT_ID` manualmente se o auto-detect não achar suas credenciais.
 
 ## O que é diferente
 

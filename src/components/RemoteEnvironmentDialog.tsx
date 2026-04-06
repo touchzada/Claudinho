@@ -90,7 +90,7 @@ export function RemoteEnvironmentDialog(t0) {
       setLoadingState("updating");
       const selectedEnv = environments.find(env => env.environment_id === value);
       if (!selectedEnv) {
-        onDone("Error: Selected environment not found");
+        onDone("Erro: Ambiente selecionado não encontrado");
         return;
       }
       updateSettingsForSource("localSettings", {
@@ -128,7 +128,7 @@ export function RemoteEnvironmentDialog(t0) {
   if (error) {
     let t5;
     if ($[9] !== error) {
-      t5 = <Text color="error">Error: {error}</Text>;
+      t5 = <Text color="error">Erro: {error}</Text>;
       $[9] = error;
       $[10] = t5;
     } else {

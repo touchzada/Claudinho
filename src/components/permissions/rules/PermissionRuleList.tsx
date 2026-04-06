@@ -135,7 +135,7 @@ function RuleDetails(t0) {
   const ruleDescription = t6;
   let t7;
   if ($[13] !== exitState.keyName || $[14] !== exitState.pending) {
-    t7 = <Box marginLeft={3}>{exitState.pending ? <Text dimColor={true}>Press {exitState.keyName} again to exit</Text> : <Text dimColor={true}>Esc to cancel</Text>}</Box>;
+    t7 = <Box marginLeft={3}>{exitState.pending ? <Text dimColor={true}>Pressione {exitState.keyName} novamente pra sair</Text> : <Text dimColor={true}>Esc pra cancelar</Text>}</Box>;
     $[13] = exitState.keyName;
     $[14] = exitState.pending;
     $[15] = t7;
@@ -212,10 +212,10 @@ function RuleDetails(t0) {
   let t12;
   if ($[31] === Symbol.for("react.memo_cache_sentinel")) {
     t12 = [{
-      label: "Yes",
+      label: "Sim",
       value: "yes"
     }, {
-      label: "No",
+      label: "Não",
       value: "no"
     }];
     $[31] = t12;

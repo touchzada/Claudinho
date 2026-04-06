@@ -65,7 +65,7 @@ export function SkillPermissionRequest(props) {
   let t4;
   if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
     t4 = [{
-      label: "Yes",
+      label: "Sim",
       value: "yes",
       feedbackConfig: {
         type: "accept"
@@ -91,7 +91,7 @@ export function SkillPermissionRequest(props) {
       let t7;
       if ($[9] !== t5) {
         t7 = {
-          label: <Text>Yes, and don't ask again for {t5} in{" "}{t6}</Text>,
+          label: <Text>Sim, e não pergunte novamente para {t5} em{" "}{t6}</Text>,
           value: "yes-exact"
         };
         $[9] = t5;
@@ -122,7 +122,7 @@ export function SkillPermissionRequest(props) {
         let t11;
         if ($[14] !== t9) {
           t11 = {
-            label: <Text>Yes, and don't ask again for{" "}{t9} commands in{" "}{t10}</Text>,
+            label: <Text>Sim, e não pergunte novamente para{" "}{t9} comandos em{" "}{t10}</Text>,
             value: "yes-prefix"
           };
           $[14] = t9;
@@ -141,7 +141,7 @@ export function SkillPermissionRequest(props) {
   let t5;
   if ($[16] === Symbol.for("react.memo_cache_sentinel")) {
     t5 = {
-      label: "No",
+      label: "Não",
       value: "no",
       feedbackConfig: {
         type: "reject"

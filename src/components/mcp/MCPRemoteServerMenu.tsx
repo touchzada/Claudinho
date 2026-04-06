@@ -376,8 +376,8 @@ export function MCPRemoteServerMenu({
           </Box>}
         <Box marginLeft={3}>
           <Text dimColor>
-            Return here after authenticating in your browser. Press Esc to go
-            back.
+            Volte aqui depois de autenticar no seu navegador. Pressione Esc pra
+            voltar.
           </Text>
         </Box>
       </Box>;
@@ -578,7 +578,7 @@ export function MCPRemoteServerMenu({
         </Box>
 
         {error && <Box marginTop={1}>
-            <Text color="error">Error: {error}</Text>
+            <Text color="error">Erro: {error}</Text>
           </Box>}
 
         {menuOptions.length > 0 && <Box marginTop={1}>

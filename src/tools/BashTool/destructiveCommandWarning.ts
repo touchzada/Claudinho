@@ -26,11 +26,11 @@ const DESTRUCTIVE_PATTERNS: DestructivePattern[] = [
   },
   {
     pattern: /\bgit\s+checkout\s+(--\s+)?\.[ \t]*($|[;&|\n])/,
-    warning: 'Note: may discard all working tree changes',
+    warning: 'Nota: pode descartar todas as alterações da árvore de trabalho',
   },
   {
     pattern: /\bgit\s+restore\s+(--\s+)?\.[ \t]*($|[;&|\n])/,
-    warning: 'Note: may discard all working tree changes',
+    warning: 'Nota: pode descartar todas as alterações da árvore de trabalho',
   },
   {
     pattern: /\bgit\s+stash[ \t]+(drop|clear)\b/,

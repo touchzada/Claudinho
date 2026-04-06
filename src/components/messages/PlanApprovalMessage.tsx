@@ -113,7 +113,7 @@ export function PlanApprovalResponseDisplay(t0) {
   }
   let t3;
   if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
-    t3 = <Box marginTop={1}><Text dimColor={true}>Please revise your plan based on the feedback and call ExitPlanMode again.</Text></Box>;
+    t3 = <Box marginTop={1}><Text dimColor={true}>Por favor, revise seu plano com base no feedback e chame ExitPlanMode novamente.</Text></Box>;
     $[9] = t3;
   } else {
     t3 = $[9];
@@ -161,7 +161,7 @@ function getPlanApprovalSummary(content: string): string | null {
     if (response.approved) {
       return '[Plan Approved] You can now proceed with implementation';
     } else {
-      return `[Plan Rejected] ${response.feedback || 'Please revise your plan'}`;
+      return `[Plano Rejeitado] ${response.feedback || 'Por favor, revise seu plano'}`;
     }
   }
   return null;

@@ -320,7 +320,7 @@ export function MessageSelector({
         </Text>
 
         {error && <>
-            <Text color="error">Error: {error}</Text>
+            <Text color="error">Erro: {error}</Text>
           </>}
         {!hasMessagesToSelect && <>
             <Text>Nothing to rewind to yet.</Text>
@@ -391,9 +391,9 @@ export function MessageSelector({
             </Box>
           </>}
         {!messageToRestore && <Text dimColor italic>
-            {exitState.pending ? <>Press {exitState.keyName} again to exit</> : <>
-                {!error && hasMessagesToSelect && 'Enter to continue · '}Esc to
-                exit
+            {exitState.pending ? <>Pressione {exitState.keyName} novamente pra sair</> : <>
+                {!error && hasMessagesToSelect && 'Enter pra continuar · '}Esc pra
+                sair
               </>}
           </Text>}
       </Box>

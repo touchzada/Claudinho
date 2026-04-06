@@ -54,7 +54,7 @@ export function InstallAppStep(t0) {
   }
   let t6;
   if ($[5] !== repoUrl) {
-    t6 = <Box marginBottom={1}><Text>Please install the app for repository: <Text bold={true}>{repoUrl}</Text></Text></Box>;
+    t6 = <Box marginBottom={1}><Text>Por favor, instale o app pro repositório: <Text bold={true}>{repoUrl}</Text></Text></Box>;
     $[5] = repoUrl;
     $[6] = t6;
   } else {

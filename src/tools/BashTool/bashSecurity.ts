@@ -2165,7 +2165,7 @@ function validateQuotedNewline(context: ValidationContext): PermissionResult {
         return {
           behavior: 'ask',
           message:
-            'Command contains a quoted newline followed by a #-prefixed line, which can hide arguments from line-based permission checks',
+            'Comando contém quebra de linha entre aspas seguida de linha com #, o que pode esconder argumentos das verificações de segurança',
         }
       }
     }

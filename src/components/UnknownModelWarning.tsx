@@ -7,8 +7,8 @@ export function UnknownModelWarning(): React.ReactElement | null {
 
   return (
     <Box flexDirection="row" gap={1}>
-      <Text color="#f59e0b">⚠</Text>
-      <Text color="#6b7280" wrap="truncate">Modelo desconhecido — custo estimado. Configure com </Text>
+      <Text color="#f59e0b">{'\u26a0'}</Text>
+      <Text color="#6b7280" wrap="truncate">Custo estimado. Configure com</Text>
       <Text color="#a78bfa" wrap="truncate">/cost-model</Text>
     </Box>
   );

@@ -45,7 +45,7 @@ export function AddMarketplace({
   const handleAdd = async () => {
     const input = inputValue.trim();
     if (!input) {
-      setError('Please enter a marketplace source');
+      setError('Por favor, insira uma fonte de marketplace');
       return;
     }
     const parsed = await parseMarketplaceInput(input);

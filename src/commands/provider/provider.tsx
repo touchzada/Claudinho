@@ -736,10 +736,27 @@ function buildQuickProfileFromChoice(
   }
 
   if (choice === 'codex') {
+    const shellOpenAIModel = sanitizeProviderConfigValue(
+      processEnv.OPENAI_MODEL,
+      processEnv,
+    )
+    const shellOpenAIBaseUrl = sanitizeProviderConfigValue(
+      processEnv.OPENAI_BASE_URL,
+      processEnv,
+    )
+    const shellRequest = resolveProviderRequest({
+      model: shellOpenAIModel,
+      baseUrl: shellOpenAIBaseUrl,
+      fallbackModel: 'codexplan',
+    })
+    const persistedCodexModel =
+      persisted?.profile === 'codex'
+        ? sanitizeProviderConfigValue(persistedEnv?.OPENAI_MODEL, persistedEnv)
+        : undefined
     const codexModel =
-      sanitizeProviderConfigValue(processEnv.OPENAI_MODEL, processEnv) ||
-      sanitizeProviderConfigValue(persistedEnv?.OPENAI_MODEL, persistedEnv) ||
-      'codexplan'
+      shellRequest.transport === 'codex_responses' && shellOpenAIModel
+        ? shellOpenAIModel
+        : persistedCodexModel || 'codexplan'
     const env = buildCodexProfileEnv({
       model: codexModel,
       processEnv: mergedEnv,

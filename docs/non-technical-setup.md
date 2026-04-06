@@ -71,6 +71,14 @@ A partir daí, você pode pedir para:
 - rodar comandos
 - revisar mudanças
 
+Pra trocar de provedor depois, dentro do app use:
+
+- `/provider codex`
+- `/provider openai`
+- `/provider ollama`
+- `/provider gemini`
+- `/provider auto`
+
 ## Problemas Comuns
 
 ### Comando `claudinho` não encontrado

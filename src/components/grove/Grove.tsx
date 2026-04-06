@@ -291,7 +291,7 @@ export function GroveDialog(t0) {
   }
   let t9;
   if ($[18] === Symbol.for("react.memo_cache_sentinel")) {
-    t9 = <Box flexDirection="column"><Text bold={true}>Please select how you'd like to continue</Text><Text>Your choice takes effect immediately upon confirmation.</Text></Box>;
+    t9 = <Box flexDirection="column"><Text bold={true}>Por favor, selecione como você gostaria de continuar</Text><Text>Sua escolha entra em vigor imediatamente após a confirmação.</Text></Box>;
     $[18] = t9;
   } else {
     t9 = $[18];

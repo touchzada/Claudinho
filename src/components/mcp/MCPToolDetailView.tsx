@@ -81,7 +81,7 @@ export function MCPToolDetailView(t0) {
           });
           setToolDescription(desc);
         } catch {
-          setToolDescription("Failed to load description");
+          setToolDescription("Falha ao carregar descrição");
         }
       };
       loadDescription();

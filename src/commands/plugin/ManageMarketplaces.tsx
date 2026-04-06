@@ -665,7 +665,7 @@ export function ManageMarketplaces({
 
         <Box marginLeft={3}>
           <Text dimColor italic>
-            {isUpdating ? <>Please wait…</> : <Byline>
+            {isUpdating ? <>Por favor, aguarde…</> : <Byline>
                 <ConfigurableShortcutHint action="select:accept" context="Select" fallback="Enter" description="select" />
                 <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="go back" />
               </Byline>}

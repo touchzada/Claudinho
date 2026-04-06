@@ -416,7 +416,7 @@ export function powershellToolCheckExactMatchPermission(
 
   const decisionReason: PermissionDecisionReason = {
     type: 'other' as const,
-    reason: 'This command requires approval',
+    reason: 'Este comando requer aprovação',
   }
   return {
     behavior: 'passthrough',
@@ -500,7 +500,7 @@ export function powershellToolCheckPermission(
   // 5. Passthrough since no rules match, will trigger permission prompt
   const decisionReason = {
     type: 'other' as const,
-    reason: 'This command requires approval',
+    reason: 'Este comando requer aprovação',
   }
   return {
     behavior: 'passthrough',
@@ -1628,7 +1628,7 @@ export async function powershellToolHasPermission(
   // 6. Some sub-commands need approval — build suggestions
   const decisionReason = {
     type: 'other' as const,
-    reason: 'This command requires approval',
+    reason: 'Este comando requer aprovação',
   }
 
   const pendingSuggestions: PermissionUpdate[] = []

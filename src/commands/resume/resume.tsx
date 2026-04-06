@@ -33,7 +33,7 @@ function resumeHelpMessage(result: ResumeResult): string {
     case 'sessionNotFound':
       return `Session ${chalk.bold(result.arg)} was not found.`;
     case 'multipleMatches':
-      return `Found ${result.count} sessions matching ${chalk.bold(result.arg)}. Please use /resume to pick a specific session.`;
+      return `Encontradas ${result.count} sessões correspondendo a ${chalk.bold(result.arg)}. Por favor, use /resume pra escolher uma sessão específica.`;
   }
 }
 function ResumeError(t0) {

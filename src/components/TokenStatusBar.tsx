@@ -1,111 +1,107 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Text } from '../ink.js';
-import type { Message } from '../types/message.js';
-import { finalContextTokensFromLastResponse, getTokenUsage } from '../utils/tokens.js';
 import { roughTokenCountEstimationForMessages } from '../services/tokenEstimation.js';
+import type { Message } from '../types/message.js';
+import {
+  finalContextTokensFromLastResponse,
+  getTokenUsage,
+} from '../utils/tokens.js';
 
-const SPINNER_CHARS = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
-const FADEOUT_MS = 5_000; // Show the thinking badge for 5s after response completes
+const SPINNER_CHARS = ['\u280b', '\u2819', '\u2839', '\u2838', '\u283c', '\u2834', '\u2826', '\u2827', '\u2807', '\u280f'];
+const FADEOUT_MS = 5_000;
+const SESSION_STARTED_AT = Date.now();
 const THINKING_PHRASES = [
-  'Claudiando...',
-  'Cerebrando...',
-  'Trabalhando nisso...',
-  'Fritando neurônio...',
-  'Embananando...',
-  'Desembananando...',
-  'Bebopando...',
-  'Caramelizando...',
-  'Chacoalhando o servidor...',
-  'Cozinhando os dados...',
-  'Fermentando ideia...',
-  'Frescurando no código...',
-  'Zanzando nas variáveis...',
-  'Cutucando a nuvem...',
-  'Boogieando no heap...',
-  'Claudiando com raiva...',
-  'Catapultando tokens...',
-  'Borrifando código...',
-  'Cascateando na API...',
-  'Brewando café virtual...',
-  'Claudiando no modo turbo...',
-  'Emocionando o CPU...',
-  'Minguando tokens...',
+  'processando...',
+  'pensando...',
+  'analisando...',
+  'organizando resposta...',
 ];
-let lastPhraseIndex = 0;
-
-function randomPhrase(): string {
-  let idx: number;
-  do {
-    idx = Math.floor(Math.random() * THINKING_PHRASES.length);
-  } while (idx === lastPhraseIndex && THINKING_PHRASES.length > 1);
-  lastPhraseIndex = idx;
-  return THINKING_PHRASES[idx]!;
-}
-
-function ThinkingBadge({ isLoading }: { isLoading: boolean }): React.ReactElement | null {
-  const [frame, setFrame] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
-  const [finalElapsed, setFinalElapsed] = useState(0);
-  const [phrase, setPhrase] = useState(randomPhrase());
-  const startRef = useRef(0);
-  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (!isLoading) {
-      // Store the final elapsed time so we can show it in fade-out
-      if (startRef.current > 0) {
-        setFinalElapsed(Date.now() - startRef.current);
-        startRef.current = 0;
-      }
-      // Start a fade-out timer
-      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
-      fadeTimerRef.current = setTimeout(() => setFinalElapsed(0), FADEOUT_MS);
-      return;
-    }
-
-    // Loading just started (or resumed)
-    if (startRef.current === 0) {
-      startRef.current = Date.now();
-    }
-    setFinalElapsed(0); // Clear any lingering fade-out
-    if (fadeTimerRef.current) {
-      clearTimeout(fadeTimerRef.current);
-      fadeTimerRef.current = null;
-    }
-    const spinnerTimer = setInterval(() => setFrame(f => (f + 1) % SPINNER_CHARS.length), 80);
-    const elapsedTimer = setInterval(() => setElapsed(Date.now() - startRef.current), 50);
-    // Rotate phrases so it doesn't get stale
-    const phraseTimer = setInterval(() => setPhrase(randomPhrase()), 4000);
-    return () => {
-      clearInterval(spinnerTimer);
-      clearInterval(elapsedTimer);
-      clearInterval(phraseTimer);
-    };
-  }, [isLoading]);
-
-  // Nothing to show
-  if (!isLoading && finalElapsed === 0) return null;
-
-  const showMs = isLoading ? elapsed : finalElapsed;
-  const sec = (showMs / 1000).toFixed(1);
-
-  const statusText = isLoading ? phrase : `✓ ${sec}s`;
-
-  return (
-    <Text>
-      {!isLoading ? (
-        <Text color="#22c55e">■</Text>
-      ) : (
-        <Text color="#6b7280">{SPINNER_CHARS[frame]}</Text>
-      )}
-      <Text color="#a78bfa"> {statusText}</Text>
-      <Text color="#4b5563"> {sec}s</Text>
-    </Text>
-  );
-}
 
 const BAR_WIDTH = 12;
 const EASE = 0.35;
+const DEFAULT_CONTEXT = 200_000;
+
+const PROVIDER_CONTEXT_DEFAULTS: Record<string, number> = {
+  openrouter: 128_000,
+  openai: 128_000,
+  groq: 128_000,
+  together: 128_000,
+  deepinfra: 128_000,
+  fireworks: 128_000,
+  anthropic: 200_000,
+  gemini: 1_048_576,
+  ollama: 128_000,
+};
+
+const MODEL_CONTEXT: Record<string, number> = {
+  'gpt-4o': 128_000,
+  'gpt-4o-mini': 128_000,
+  'gpt-4': 8_192,
+  'gpt-3.5-turbo': 16_385,
+  o1: 200_000,
+  'o1-mini': 128_000,
+  'o3-mini': 200_000,
+  'claude-sonnet-4-6': 200_000,
+  'claude-opus-4-6': 200_000,
+  'claude-3.5-sonnet': 200_000,
+  'claude-3.5-haiku': 200_000,
+  'claude-3-opus': 200_000,
+  'gemini-2.0-flash': 1_048_576,
+  'gemini-2.5-pro': 1_048_576,
+  'gemini-2.5-flash': 1_048_576,
+  'deepseek-chat': 64_000,
+  'qwen3.6': 131_072,
+  'qwen3.6-plus': 131_072,
+  'qwen/qwen3.6': 131_072,
+  'qwen/qwen3.6-plus': 131_072,
+  'qwen3-235b-a22b': 131_072,
+  'qwen3-30b-a3b': 131_072,
+  'qwen3-32b': 131_072,
+  'qwen-max': 32_768,
+  'qwen-plus': 131_072,
+  'qwen-turbo': 131_072,
+  'llama3.1:8b': 8_000,
+  'llama3.3:70b': 128_000,
+};
+
+interface Props {
+  messages: Message[];
+  isLoading: boolean;
+  typingSignal?: string;
+}
+
+function formatDuration(ms: number): string {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  const monthSeconds = 30 * 24 * 60 * 60;
+  const weekSeconds = 7 * 24 * 60 * 60;
+  const daySeconds = 24 * 60 * 60;
+  const hourSeconds = 60 * 60;
+  const minuteSeconds = 60;
+
+  let remaining = totalSeconds;
+  const months = Math.floor(remaining / monthSeconds);
+  remaining -= months * monthSeconds;
+  const weeks = Math.floor(remaining / weekSeconds);
+  remaining -= weeks * weekSeconds;
+  const days = Math.floor(remaining / daySeconds);
+  remaining -= days * daySeconds;
+  const hours = Math.floor(remaining / hourSeconds);
+  remaining -= hours * hourSeconds;
+  const minutes = Math.floor(remaining / minuteSeconds);
+  remaining -= minutes * minuteSeconds;
+  const seconds = remaining;
+
+  if (months > 0) return `${months}mes ${weeks}sem ${days}d ${hours}h ${minutes}min ${seconds}s`;
+  if (weeks > 0) return `${weeks}sem ${days}d ${hours}h ${minutes}min ${seconds}s`;
+  if (days > 0) return `${days}d ${hours}h ${minutes}min ${seconds}s`;
+  if (hours > 0) return `${hours}h ${minutes}min ${seconds}s`;
+  if (minutes > 0) return `${minutes}min ${seconds}s`;
+  return `${seconds}s`;
+}
+
+function randomPhrase(): string {
+  return THINKING_PHRASES[Math.floor(Math.random() * THINKING_PHRASES.length)]!;
+}
 
 function approach(current: number, target: number): number {
   if (current === target) return target;
@@ -126,10 +122,6 @@ function humanizeTokens(n: number): string {
   return String(Math.round(n));
 }
 
-/**
- * Detect the active provider from the base URL.
- * The base URL reveals the real identity, not just the model name.
- */
 function detectProviderFromBaseUrl(baseUrl: string | undefined): string | undefined {
   if (!baseUrl) return undefined;
   const url = baseUrl.toLowerCase();
@@ -145,151 +137,169 @@ function detectProviderFromBaseUrl(baseUrl: string | undefined): string | undefi
   return undefined;
 }
 
-/**
- * Provider-based context window defaults.
- * Used when the model name doesn't match MODEL_CONTEXT exactly.
- */
-const PROVIDER_CONTEXT_DEFAULTS: Record<string, number> = {
-  openrouter: 128_000,
-  openai: 128_000,
-  groq: 128_000,
-  together: 128_000,
-  deepinfra: 128_000,
-  fireworks: 128_000,
-  anthropic: 200_000,
-  gemini: 1_048_576,
-  ollama: 128_000,
-};
-
-/** Map of known model context windows (in tokens). */
-const MODEL_CONTEXT: Record<string, number> = {
-  // OpenAI
-  'gpt-4o': 128_000,
-  'gpt-4o-mini': 128_000,
-  'gpt-4': 8_192,
-  'gpt-3.5-turbo': 16_385,
-  'o1': 200_000,
-  'o1-mini': 128_000,
-  'o3-mini': 200_000,
-  // Claude
-  'claude-sonnet-4-6': 200_000,
-  'claude-opus-4-6': 200_000,
-  'claude-3.5-sonnet': 200_000,
-  'claude-3.5-haiku': 200_000,
-  'claude-3-opus': 200_000,
-  // Gemini
-  'gemini-2.0-flash': 1_048_576,
-  'gemini-2.5-pro': 1_048_576,
-  'gemini-2.5-flash': 1_048_576,
-  // DeepSeek
-  'deepseek-chat': 64_000,
-  // Qwen
-  'qwen3.6': 131_072,
-  'qwen3.6-plus': 131_072,
-  'qwen/qwen3.6': 131_072,
-  'qwen/qwen3.6-plus': 131_072,
-  'qwen3-235b-a22b': 131_072,
-  'qwen3-30b-a3b': 131_072,
-  'qwen3-32b': 131_072,
-  'qwen-max': 32_768,
-  'qwen-plus': 131_072,
-  'qwen-turbo': 131_072,
-  // Llama (local)
-  'llama3.1:8b': 8_000,
-  'llama3.3:70b': 128_000,
-};
-
-const DEFAULT_CONTEXT = 200_000;
-
-function getContextWindow(
-  model: string | undefined,
-  provider: string | undefined,
-): number {
+function getContextWindow(model: string | undefined, provider: string | undefined): number {
   if (!model) return DEFAULT_CONTEXT;
-
-  // Exact match (highest priority)
   if (MODEL_CONTEXT[model]) return MODEL_CONTEXT[model]!;
 
-  // Partial match (e.g. "claude-sonnet-4-6-2025..." → match "claude-sonnet-4-6")
   for (const [key, val] of Object.entries(MODEL_CONTEXT)) {
     if (model.startsWith(key)) return val;
   }
 
-  // Fallback by provider defaults
   if (provider && PROVIDER_CONTEXT_DEFAULTS[provider]) {
     return PROVIDER_CONTEXT_DEFAULTS[provider]!;
   }
-
   return DEFAULT_CONTEXT;
 }
 
-interface Props {
-  messages: Message[];
-  isLoading: boolean;
-}
-
-/**
- * Get the total context size including messages not yet in an API response.
- * Uses the last API response's final context window + estimates for all
- * messages after that point (new user messages, streaming assistant content,
- * tool_results still being generated, etc.).
- *
- * This ensures the bar shows the FULL context, not just the last response's
- * portion, and accurately updates during streaming.
- */
 function getTotalContextSize(messages: Message[]): number {
   const lastResponseContext = finalContextTokensFromLastResponse(messages);
+  if (lastResponseContext <= 0) return roughTokenCountEstimationForMessages(messages);
 
-  if (lastResponseContext > 0) {
-    // Find where the last API response ends so we estimate only the
-    // messages that came AFTER it (streaming content, new user msg, etc.)
-    let i = messages.length - 1;
-    while (i >= 0) {
-      const msg = messages[i];
-      const usage = msg ? getTokenUsage(msg) : undefined;
-      if (usage) {
-        // Found the last assistant message with usage data
-        break;
-      }
-      i--;
-    }
-    // If i < 0, no API response found → estimate everything
-    // If i >= 0, estimate only messages after the response anchor
-    const afterAnchor = messages.slice(i + 1);
-    const estimate = roughTokenCountEstimationForMessages(afterAnchor);
-    return lastResponseContext + estimate;
+  let i = messages.length - 1;
+  while (i >= 0) {
+    const msg = messages[i];
+    if (msg && getTokenUsage(msg)) break;
+    i--;
   }
 
-  // No API response yet — estimate all messages
-  return roughTokenCountEstimationForMessages(messages);
+  return (
+    lastResponseContext + roughTokenCountEstimationForMessages(messages.slice(i + 1))
+  );
 }
 
-export function TokenStatusBar({ messages, isLoading }: Props): React.ReactElement | null {
-  const model = process.env.OPENAI_MODEL ||
-                process.env.OPENROUTER_MODEL ||
-                process.env.ANTHROPIC_MODEL ||
-                undefined;
+function ThinkingBadge({ isLoading }: { isLoading: boolean }): React.ReactElement | null {
+  const [frame, setFrame] = useState(0);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const [finalElapsedMs, setFinalElapsedMs] = useState(0);
+  const [phrase, setPhrase] = useState(randomPhrase());
+  const startRef = useRef(0);
+  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const baseUrl = process.env.OPENAI_BASE_URL ||
-                  process.env.OPENROUTER_BASE_URL ||
-                  process.env.ANTHROPIC_BASE_URL ||
-                  undefined;
+  useEffect(() => {
+    if (!isLoading) {
+      if (startRef.current > 0) {
+        setFinalElapsedMs(Date.now() - startRef.current);
+        startRef.current = 0;
+      }
+      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+      fadeTimerRef.current = setTimeout(() => setFinalElapsedMs(0), FADEOUT_MS);
+      return;
+    }
+
+    if (startRef.current === 0) startRef.current = Date.now();
+    setFinalElapsedMs(0);
+    if (fadeTimerRef.current) {
+      clearTimeout(fadeTimerRef.current);
+      fadeTimerRef.current = null;
+    }
+
+    const spinnerTimer = setInterval(
+      () => setFrame(prev => (prev + 1) % SPINNER_CHARS.length),
+      90,
+    );
+    const elapsedTimer = setInterval(
+      () => setElapsedMs(Date.now() - startRef.current),
+      100,
+    );
+    const phraseTimer = setInterval(() => setPhrase(randomPhrase()), 4000);
+
+    return () => {
+      clearInterval(spinnerTimer);
+      clearInterval(elapsedTimer);
+      clearInterval(phraseTimer);
+    };
+  }, [isLoading]);
+
+  if (!isLoading && finalElapsedMs <= 0) return null;
+
+  const shownMs = isLoading ? elapsedMs : finalElapsedMs;
+  const secLabel = `${(shownMs / 1000).toFixed(1)}s`;
+
+  return (
+    <Text>
+      {isLoading ? (
+        <Text color="#6b7280">{SPINNER_CHARS[frame]}</Text>
+      ) : (
+        <Text color="#22c55e">{'\u2713'}</Text>
+      )}
+      <Text color={isLoading ? '#a78bfa' : '#22c55e'}>
+        {isLoading ? ` ${phrase}` : ' pronto'}
+      </Text>
+      <Text color="#4b5563"> {secLabel}</Text>
+    </Text>
+  );
+}
+
+export function TokenStatusBar({
+  messages,
+  isLoading,
+  typingSignal = '',
+}: Props): React.ReactElement | null {
+  const [now, setNow] = useState(() => Date.now());
+  const [totalActiveMs, setTotalActiveMs] = useState(0);
+  const [isTypingActive, setIsTypingActive] = useState(false);
+  const activeStartedAtRef = useRef<number | null>(isLoading ? Date.now() : null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const previousTypingSignalRef = useRef<string>(typingSignal);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (typingSignal !== previousTypingSignalRef.current) {
+      setIsTypingActive(true);
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = setTimeout(() => setIsTypingActive(false), 1500);
+      previousTypingSignalRef.current = typingSignal;
+    }
+  }, [typingSignal]);
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    };
+  }, []);
+
+  const isSessionActive = isLoading || isTypingActive;
+
+  useEffect(() => {
+    if (isSessionActive) {
+      if (activeStartedAtRef.current == null) {
+        activeStartedAtRef.current = Date.now();
+      }
+      return;
+    }
+
+    if (activeStartedAtRef.current != null) {
+      setTotalActiveMs(prev => prev + (Date.now() - activeStartedAtRef.current!));
+      activeStartedAtRef.current = null;
+    }
+  }, [isSessionActive]);
+
+  const model =
+    process.env.OPENAI_MODEL ||
+    process.env.OPENROUTER_MODEL ||
+    process.env.ANTHROPIC_MODEL ||
+    undefined;
+
+  const baseUrl =
+    process.env.OPENAI_BASE_URL ||
+    process.env.OPENROUTER_BASE_URL ||
+    process.env.ANTHROPIC_BASE_URL ||
+    undefined;
 
   const provider = detectProviderFromBaseUrl(baseUrl);
   const windowTokens = getContextWindow(model, provider);
   const usedTokens = getTotalContextSize(messages);
 
-  // Detect free tier from model name (e.g., "qwen/qwen3.6-plus:free")
   const isFreeModel = model?.toLowerCase().includes(':free') || false;
-
-  // Track if we exceeded the window (for color), but cap display at 100
-  const rawPct = windowTokens > 0
-    ? Math.max(0, Math.round((usedTokens / windowTokens) * 100))
-    : 0;
+  const rawPct =
+    windowTokens > 0 ? Math.max(0, Math.round((usedTokens / windowTokens) * 100)) : 0;
   const exceeded = rawPct > 100;
   const pct = exceeded ? 100 : rawPct;
 
-  // Initialize displayPct at the current pct so color is correct immediately
   const pctRef = useRef(pct);
   const [displayPct, setDisplayPct] = useState(pct);
 
@@ -301,15 +311,26 @@ export function TokenStatusBar({ messages, isLoading }: Props): React.ReactEleme
     return () => clearInterval(timer);
   }, [pct]);
 
-  // Color uses rawPct so it goes red when exceeded
+  if (usedTokens === 0 && messages.length === 0 && !isLoading) return null;
+
+  const activeInFlightMs =
+    isSessionActive && activeStartedAtRef.current != null
+      ? now - activeStartedAtRef.current
+      : 0;
+  const activeMs = totalActiveMs + activeInFlightMs;
+  const sessionMs = Math.max(0, now - SESSION_STARTED_AT);
+  const idleMs = Math.max(0, sessionMs - activeMs);
+
+  const contextState = exceeded || rawPct >= 90
+    ? { label: 'contexto critico', color: '#ef4444' }
+    : rawPct >= 75
+      ? { label: 'contexto atento', color: '#f59e0b' }
+      : { label: 'contexto estavel', color: '#22c55e' };
+
+  const displayName = model?.replace(/:free$/i, '') || undefined;
   const barColor = exceeded || rawPct >= 85 ? '#ef4444' : getBarColor(displayPct);
   const filled = Math.round((displayPct / 100) * BAR_WIDTH);
   const empty = BAR_WIDTH - filled;
-
-  if (usedTokens === 0 && messages.length === 0 && !isLoading) return null;
-
-  // Clean model name for display (strip ":free" suffix)
-  const displayName = model?.replace(/:free$/i, '') || undefined;
 
   return (
     <Box flexDirection="row" gap={1}>
@@ -321,12 +342,18 @@ export function TokenStatusBar({ messages, isLoading }: Props): React.ReactEleme
         <Text color="#6b7280">] </Text>
         <Text color={barColor}>{displayPct}%</Text>
         <Text color="#6b7280"> {humanizeTokens(usedTokens)}/{humanizeTokens(windowTokens)}</Text>
-        {exceeded && <Text color="#ef4444"> ⚠</Text>}
-        {isFreeModel && (
-          <Text color="#22c55e"> FREE</Text>
-        )}
+        {exceeded && <Text color="#ef4444"> {'\u26a0'}</Text>}
         {displayName && (
-          <Text color="#6b7280"> {displayName}</Text>
+          <Text color="#4b5563"> {'\u00b7'} {displayName}</Text>
+        )}
+        <Text color="#4b5563"> {'\u00b7'} </Text>
+        <Text color="#86efac">ativo {formatDuration(activeMs)}</Text>
+        <Text color="#4b5563"> </Text>
+        <Text color="#6b7280">ocioso {formatDuration(idleMs)}</Text>
+        <Text color="#4b5563"> {'\u00b7'} </Text>
+        <Text color={contextState.color}>{contextState.label}</Text>
+        {isFreeModel && (
+          <Text color="#22c55e"> {'\u00b7'} FREE</Text>
         )}
       </Box>
     </Box>

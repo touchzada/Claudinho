@@ -140,7 +140,7 @@ export function MCPServerDesktopImportDialog(t0) {
   }
   let t12;
   if ($[18] === Symbol.for("react.memo_cache_sentinel")) {
-    t12 = <Text>Please select the servers you want to import:</Text>;
+    t12 = <Text>Por favor, selecione os servidores que você quer importar:</Text>;
     $[18] = t12;
   } else {
     t12 = $[18];

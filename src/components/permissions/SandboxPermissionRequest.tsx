@@ -67,7 +67,7 @@ export function SandboxPermissionRequest(t0) {
   let t4;
   if ($[3] === Symbol.for("react.memo_cache_sentinel")) {
     t4 = {
-      label: "Yes",
+      label: "Sim",
       value: "yes"
     };
     $[3] = t4;
@@ -77,7 +77,7 @@ export function SandboxPermissionRequest(t0) {
   let t5;
   if ($[4] !== host) {
     t5 = !managedDomainsOnly ? [{
-      label: <Text>Yes, and don't ask again for <Text bold={true}>{host}</Text></Text>,
+      label: <Text>Sim, e não pergunte novamente para <Text bold={true}>{host}</Text></Text>,
       value: "yes-dont-ask-again"
     }] : [];
     $[4] = host;
@@ -88,7 +88,7 @@ export function SandboxPermissionRequest(t0) {
   let t6;
   if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
     t6 = {
-      label: <Text>No, and tell Claude what to do differently <Text bold={true}>(esc)</Text></Text>,
+      label: <Text>Não, e diga ao Claude o que fazer diferente <Text bold={true}>(esc)</Text></Text>,
       value: "no"
     };
     $[6] = t6;

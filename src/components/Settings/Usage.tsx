@@ -212,7 +212,7 @@ function AnthropicUsage(): React.ReactNode {
   });
   if (error) {
     return <Box flexDirection="column" gap={1}>
-        <Text color="error">Error: {error}</Text>
+        <Text color="error">Erro: {error}</Text>
         <Text dimColor>
           <Byline>
             <ConfigurableShortcutHint action="settings:retry" context="Settings" fallback="r" description="retry" />

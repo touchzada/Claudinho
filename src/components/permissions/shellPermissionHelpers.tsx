@@ -125,8 +125,8 @@ export function generateShellSuggestionsLabel(suggestions: PermissionUpdate[], s
   if (hasCommands && !hasDirectories && !hasReadPaths) {
     // Only shell command permissions
     return <Text>
-        {"Yes, and don't ask again for "}
-        {commandListDisplayTruncated(shellCommands)} commands in{' '}
+        {"Sim, e não pergunte novamente para "}
+        {commandListDisplayTruncated(shellCommands)} comandos em{' '}
         <Text bold>{getOriginalCwd()}</Text>
       </Text>;
   }

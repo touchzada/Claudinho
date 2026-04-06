@@ -316,9 +316,9 @@ export function PreviewQuestionView({
             <Text color="inactive" dimColor>
               Enter to select · {figures.arrowUp}/{figures.arrowDown} to
               navigate · n to add notes
-              {questions.length > 1 && <> · Tab to switch questions</>}
-              {isInNotesInput && editorName && <> · ctrl+g to edit in {editorName}</>}{' '}
-              · Esc to cancel
+              {questions.length > 1 && <> · Tab pra trocar perguntas</>}
+              {isInNotesInput && editorName && <> · ctrl+g pra editar no {editorName}</>}{' '}
+              · Esc pra cancelar
             </Text>
           </Box>
         </Box>

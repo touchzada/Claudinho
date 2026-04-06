@@ -179,7 +179,7 @@ function printResumeHint(): void {
         1,
         Buffer.from(
           chalk.dim(
-            `\nRetome esta sessão com:\nclaudinho --resume ${resumeArg}\n`,
+      `\nVolte nessa conversa usando o comando:\nclaudinho --resume ${resumeArg}\n`,
           ),
           'utf8',
         ),

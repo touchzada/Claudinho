@@ -23,6 +23,10 @@ interface Props {
   onSkip: () => void
 }
 
+const MAX_SESSIONS_DISPLAY = 100
+const DIRECT_SHORTCUT_MAX = 9
+const ITEMS_PER_PAGE = 10
+
 function timeAgo(timestampMs: number): string {
   const diff = Date.now() - timestampMs
   const secs = Math.floor(diff / 1000)
@@ -46,12 +50,18 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
   const handlersRef = useRef({ onNew, onResume, onSkip })
   handlersRef.current = { onNew, onResume, onSkip }
 
+  const totalPages = Math.max(1, Math.ceil(sessions.length / ITEMS_PER_PAGE))
+  const currentPage = Math.floor(selectedIndex / ITEMS_PER_PAGE)
+  const pageStart = currentPage * ITEMS_PER_PAGE
+  const pageEnd = pageStart + ITEMS_PER_PAGE
+  const visibleSessions = sessions.slice(pageStart, pageEnd)
+
   // Load sessions on mount
   useEffect(() => {
     ;(async () => {
       try {
         const cwd = getCwd()
-        const data = await listSessions(cwd, 10)
+        const data = await listSessions(cwd, MAX_SESSIONS_DISPLAY)
         setSessions(data)
       } catch {
         // No sessions or error
@@ -69,6 +79,8 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
 
       const isUpArrow = !!key.upArrow
       const isDownArrow = !!key.downArrow
+      const isLeftArrow = !!key.leftArrow
+      const isRightArrow = !!key.rightArrow
       const isReturn = !!key.return
       const isEscape = !!key.escape
 
@@ -79,6 +91,25 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
       }
       if (isDownArrow) {
         setSelectedIndex(prev => Math.min(Math.max(0, sessionsRef.current.length - 1), prev + 1))
+        try { ev.stopImmediatePropagation() } catch {}
+        return
+      }
+      if (isLeftArrow) {
+        setSelectedIndex(prev => {
+          const page = Math.floor(prev / ITEMS_PER_PAGE)
+          if (page <= 0) return prev
+          return (page - 1) * ITEMS_PER_PAGE
+        })
+        try { ev.stopImmediatePropagation() } catch {}
+        return
+      }
+      if (isRightArrow) {
+        setSelectedIndex(prev => {
+          const page = Math.floor(prev / ITEMS_PER_PAGE)
+          const maxPage = Math.max(0, Math.ceil(sessionsRef.current.length / ITEMS_PER_PAGE) - 1)
+          if (page >= maxPage) return prev
+          return (page + 1) * ITEMS_PER_PAGE
+        })
         try { ev.stopImmediatePropagation() } catch {}
         return
       }
@@ -101,8 +132,18 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
       }
 
       const num = parseInt(input, 10)
-      if (!isNaN(num) && num >= 1 && num <= 9 && num <= sessionsRef.current.length) {
-        handlersRef.current.onResume(sessionsRef.current[num - 1]!.sessionId)
+      const currentPageStart = Math.floor(selectedRef.current / ITEMS_PER_PAGE) * ITEMS_PER_PAGE
+      const pageItemCount = Math.min(
+        ITEMS_PER_PAGE,
+        Math.max(0, sessionsRef.current.length - currentPageStart),
+      )
+      if (
+        !isNaN(num) &&
+        num >= 1 &&
+        num <= DIRECT_SHORTCUT_MAX &&
+        num <= pageItemCount
+      ) {
+        handlersRef.current.onResume(sessionsRef.current[currentPageStart + num - 1]!.sessionId)
         try { ev.stopImmediatePropagation() } catch {}
         return
       }
@@ -129,6 +170,19 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
           setSelectedIndex(prev => Math.max(0, prev - 1))
         } else if (input === '\x1b[B') { // Down
           setSelectedIndex(prev => Math.min(Math.max(0, sessionsRef.current.length - 1), prev + 1))
+        } else if (input === '\x1b[D') { // Left
+          setSelectedIndex(prev => {
+            const page = Math.floor(prev / ITEMS_PER_PAGE)
+            if (page <= 0) return prev
+            return (page - 1) * ITEMS_PER_PAGE
+          })
+        } else if (input === '\x1b[C') { // Right
+          setSelectedIndex(prev => {
+            const page = Math.floor(prev / ITEMS_PER_PAGE)
+            const maxPage = Math.max(0, Math.ceil(sessionsRef.current.length / ITEMS_PER_PAGE) - 1)
+            if (page >= maxPage) return prev
+            return (page + 1) * ITEMS_PER_PAGE
+          })
         } else if (input === '\r' || input === '\n') {
           const { onNew: hNew, onResume: hResume } = handlersRef.current
           if (sessionsRef.current.length > 0) {
@@ -140,8 +194,18 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
           handlersRef.current.onSkip()
         } else {
           const num = parseInt(input, 10)
-          if (!isNaN(num) && num >= 1 && num <= 9 && num <= sessionsRef.current.length) {
-            handlersRef.current.onResume(sessionsRef.current[num - 1]!.sessionId)
+          const currentPageStart = Math.floor(selectedRef.current / ITEMS_PER_PAGE) * ITEMS_PER_PAGE
+          const pageItemCount = Math.min(
+            ITEMS_PER_PAGE,
+            Math.max(0, sessionsRef.current.length - currentPageStart),
+          )
+          if (
+            !isNaN(num) &&
+            num >= 1 &&
+            num <= DIRECT_SHORTCUT_MAX &&
+            num <= pageItemCount
+          ) {
+            handlersRef.current.onResume(sessionsRef.current[currentPageStart + num - 1]!.sessionId)
           }
         }
       }
@@ -179,10 +243,12 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
         {!loading && sessions.length > 0 && (
           <>
             <Box flexDirection="column" marginTop={1}>
-              {sessions.map((s, i) => (
+              {visibleSessions.map((s, i) => {
+                const globalIndex = pageStart + i
+                return (
                 <Box key={s.sessionId}>
                   <Text>
-                    {i === selectedIndex ? (
+                    {globalIndex === selectedIndex ? (
                       <Text color="cyan" bold={true}>
                         {'>'}{' '}{i + 1}.{' '}
                       </Text>
@@ -191,19 +257,19 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
                         {'  '}{i + 1}.{' '}
                       </Text>
                     )}
-                    <Text color={i === selectedIndex ? 'cyan' : undefined}>
+                    <Text color={globalIndex === selectedIndex ? 'cyan' : undefined}>
                       [{timeAgo(s.lastModified)}]{' '}
                       {s.title ? `"${s.title}"` : 'Untitled'}{' '}
                       <Text dimColor={true}>({s.messageCount} msgs)</Text>
                     </Text>
                   </Text>
                 </Box>
-              ))}
+              )})}
             </Box>
 
             <Box marginTop={1}>
               <Text dimColor={true}>
-                [1-{Math.min(9, sessions.length)}] Retomar  |  [Enter] Selecionada  |  [Esc] Pular
+                Pag {currentPage + 1}/{totalPages}  |  [1-{Math.min(DIRECT_SHORTCUT_MAX, visibleSessions.length)}] Retomar rapido  |  [↑/↓] Navegar  |  [←/→] Pagina  |  [Enter] Selecionada  |  [Esc] Pular
               </Text>
             </Box>
           </>

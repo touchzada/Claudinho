@@ -1022,25 +1022,25 @@ export function getSearchReadSummaryText(
   if (searchCount > 0) {
     const searchVerb = isActive
       ? parts.length === 0
-        ? 'Searching for'
-        : 'searching for'
+        ? 'Buscando'
+        : 'buscando'
       : parts.length === 0
-        ? 'Searched for'
-        : 'searched for'
+        ? 'Buscou'
+        : 'buscou'
     parts.push(
-      `${searchVerb} ${searchCount} ${searchCount === 1 ? 'pattern' : 'patterns'}`,
+      `${searchVerb} ${searchCount} ${searchCount === 1 ? 'padrão' : 'padrões'}`,
     )
   }
 
   if (readCount > 0) {
     const readVerb = isActive
       ? parts.length === 0
-        ? 'Reading'
-        : 'reading'
+        ? 'Lendo'
+        : 'lendo'
       : parts.length === 0
-        ? 'Read'
-        : 'read'
-    parts.push(`${readVerb} ${readCount} ${readCount === 1 ? 'file' : 'files'}`)
+        ? 'Leu'
+        : 'leu'
+    parts.push(`${readVerb} ${readCount} ${readCount === 1 ? 'arquivo' : 'arquivos'}`)
   }
 
   if (listCount > 0) {

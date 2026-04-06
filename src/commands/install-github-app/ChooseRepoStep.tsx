@@ -181,7 +181,7 @@ export function ChooseRepoStep(t0) {
   }
   let t18;
   if ($[41] !== showEmptyError) {
-    t18 = showEmptyError && <Box marginLeft={3} marginBottom={1}><Text color="error">Please enter a repository name to continue</Text></Box>;
+    t18 = showEmptyError && <Box marginLeft={3} marginBottom={1}><Text color="error">Por favor, insira um nome de repositório pra continuar</Text></Box>;
     $[41] = showEmptyError;
     $[42] = t18;
   } else {

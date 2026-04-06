@@ -163,7 +163,7 @@ export function MCPAgentServerMenu({
       </Box>
 
       {error && <Box>
-          <Text color="error">Error: {error}</Text>
+          <Text color="error">Erro: {error}</Text>
         </Box>}
 
       <Box>

@@ -165,7 +165,7 @@ export function ViewHookMode(t0) {
  * based on its type.
  */
 function _temp() {
-  return <Text>Esc to go back</Text>;
+  return <Text>Esc pra voltar</Text>;
 }
 function getContentFieldLabel(config: IndividualHookConfig['config']): string {
   switch (config.type) {

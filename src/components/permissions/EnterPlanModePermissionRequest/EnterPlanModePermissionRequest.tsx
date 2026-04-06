@@ -71,7 +71,7 @@ export function EnterPlanModePermissionRequest(t0) {
   let t5;
   if ($[8] === Symbol.for("react.memo_cache_sentinel")) {
     t5 = {
-      label: "Yes, enter plan mode",
+      label: "Sim, entrar no modo de planejamento",
       value: "yes" as const
     };
     $[8] = t5;
@@ -81,7 +81,7 @@ export function EnterPlanModePermissionRequest(t0) {
   let t6;
   if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
     t6 = [t5, {
-      label: "No, start implementing now",
+      label: "Não, começar a implementar agora",
       value: "no" as const
     }];
     $[9] = t6;

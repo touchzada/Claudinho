@@ -76,10 +76,10 @@ export function RemoveWorkspaceDirectory(t0) {
   let t5;
   if ($[11] === Symbol.for("react.memo_cache_sentinel")) {
     t5 = [{
-      label: "Yes",
+      label: "Sim",
       value: "yes"
     }, {
-      label: "No",
+      label: "Não",
       value: "no"
     }];
     $[11] = t5;

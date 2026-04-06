@@ -157,7 +157,7 @@ export function FallbackPermissionRequest(t0) {
   let t7;
   if ($[15] === Symbol.for("react.memo_cache_sentinel")) {
     t7 = {
-      label: "Yes",
+      label: "Sim",
       value: "yes",
       feedbackConfig: {
         type: "accept"
@@ -182,7 +182,7 @@ export function FallbackPermissionRequest(t0) {
       let t10;
       if ($[19] !== t8) {
         t10 = {
-          label: <Text>Yes, and don't ask again for {t8}{" "}commands in {t9}</Text>,
+          label: <Text>Sim, e não pergunte novamente para {t8}{" "}comandos em {t9}</Text>,
           value: "yes-dont-ask-again"
         };
         $[19] = t8;
@@ -195,7 +195,7 @@ export function FallbackPermissionRequest(t0) {
     let t8;
     if ($[21] === Symbol.for("react.memo_cache_sentinel")) {
       t8 = {
-        label: "No",
+        label: "Não",
         value: "no",
         feedbackConfig: {
           type: "reject"

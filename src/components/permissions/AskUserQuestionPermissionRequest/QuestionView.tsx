@@ -405,7 +405,7 @@ export function QuestionView(t0) {
   }
   let t23;
   if ($[98] !== t21 || $[99] !== t22) {
-    t23 = <Box marginTop={1}><Text color="inactive" dimColor={true}>Enter to select ·{" "}{t21}{t22}{" "}· Esc to cancel</Text></Box>;
+    t23 = <Box marginTop={1}><Text color="inactive" dimColor={true}>Enter pra selecionar ·{" "}{t21}{t22}{" "}· Esc pra cancelar</Text></Box>;
     $[98] = t21;
     $[99] = t22;
     $[100] = t23;

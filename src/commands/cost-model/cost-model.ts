@@ -6,17 +6,17 @@ import {
 import { formatModelPricing } from '../../utils/modelCost.js'
 import type { LocalCommandCall } from '../../types/command.js'
 
-export const call: LocalCommandCall = async (_onDone, _context, args) => {
+export const call: LocalCommandCall = async (args, _context) => {
   const trimmed = args?.trim() || ''
 
   if (!trimmed || /^(--help|-h|help)$/i.test(trimmed)) {
     return {
       type: 'text',
       value:
-        'Uso: /cost-model <model> <input $/Mtok> <output $/Mtok>\n' +
+        'Uso: /cost-model [model] [input $/Mtok] [output $/Mtok]\n' +
         '  /cost-model meu-modelo 2 10   -> Configura $2 input / $10 output por Mtok\n' +
         '  /cost-model list              -> Lista custos customizados\n' +
-        '  /cost-model remove <model>    -> Remove custo customizado\n',
+        '  /cost-model remove [model]    -> Remove custo customizado\n',
     }
   }
 
@@ -41,10 +41,10 @@ export const call: LocalCommandCall = async (_onDone, _context, args) => {
     return { type: 'text', value: lines.join('\n') }
   }
 
-  // /cost-model remove <model>
+  // /cost-model remove [model]
   if (parts[0] === 'remove') {
     if (parts.length < 2) {
-      return { type: 'text', value: 'Uso: /cost-model remove <model>' }
+      return { type: 'text', value: 'Uso: /cost-model remove [model]' }
     }
     const removed = removeUserModelCost(parts.slice(1).join(' '))
     if (removed) {
@@ -53,7 +53,7 @@ export const call: LocalCommandCall = async (_onDone, _context, args) => {
     return { type: 'text', value: `Nenhum custo customizado encontrado para "${parts.slice(1).join(' ')}".` }
   }
 
-  // /cost-model <model> <input> <output>
+  // /cost-model [model] [input] [output]
   if (parts.length < 3) {
     return {
       type: 'text',
