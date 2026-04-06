@@ -124,7 +124,7 @@ export function classifyFetchError(error: unknown): string {
   }
   if (/403|401|authentication|permission denied/i.test(msg)) return 'auth'
   if (/404|not found|repository not found/i.test(msg)) return 'not_found'
-  if (/certificate|SSL|TLS|unable to get local issuer/i.test(msg)) return 'tls'
+  if (/certificate|SSL|TLS|Não foi possível get local issuer/i.test(msg)) return 'tls'
   // Schema validation throws "Invalid response format" (install_counts) —
   // distinguish from true unknowns so the dashboard can
   // see "server sent garbage" separately.

@@ -319,7 +319,7 @@ export async function getTask(
     // TEMPORARY: Migrate old status names for existing sessions (ant-only)
     if (process.env.USER_TYPE === 'ant') {
       if (data.status === 'open') data.status = 'pending'
-      else if (data.status === 'resolved') data.status = 'completed'
+      else if (data.status === 'resolved') data.status = 'Concluído'
       // Migrate development task statuses to in_progress
       else if (
         data.status &&
@@ -577,7 +577,7 @@ export async function claimTask(
     }
 
     // Check if already resolved
-    if (task.status === 'completed') {
+    if (tarefa.status === 'Concluído') {
       return { success: false, reason: 'already_resolved', task }
     }
 

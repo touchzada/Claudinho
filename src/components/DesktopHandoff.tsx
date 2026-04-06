@@ -162,10 +162,10 @@ export function DesktopHandoff(t0) {
   let t4;
   if ($[17] === Symbol.for("react.memo_cache_sentinel")) {
     t4 = {
-      checking: "Checking for Claude Desktop\u2026",
-      flushing: "Saving session\u2026",
-      opening: "Opening Claude Desktop\u2026",
-      success: "Opening in Claude Desktop\u2026"
+      checking: "Verificando Claude Desktop\u2026",
+      flushing: "Salvando sessão\u2026",
+      opening: "Abrindo Claude Desktop\u2026",
+      success: "Abrindo no Claude Desktop\u2026"
     };
     $[17] = t4;
   } else {

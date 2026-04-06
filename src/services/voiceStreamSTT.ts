@@ -440,7 +440,7 @@ export async function connectVoiceStream(
       }
       case 'TranscriptError': {
         const desc =
-          msg.description ?? msg.error_code ?? 'unknown transcription error'
+          msg.description ?? msg.error_code ?? 'unknown transcription Erro'
         logForDebugging(`[voice_stream] TranscriptError: ${desc}`)
         if (!finalizing) {
           callbacks.onError(desc)

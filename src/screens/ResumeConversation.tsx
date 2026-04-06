@@ -299,7 +299,7 @@ export function ResumeConversation({
   if (loading) {
     return <Box>
         <Spinner />
-        <Text> Loading conversations…</Text>
+        <Text> Carregando conversations…</Text>
       </Box>;
   }
   if (resuming) {
@@ -327,7 +327,7 @@ function NoConversationsMessage() {
   useKeybinding("app:interrupt", _temp, t0);
   let t1;
   if ($[1] === Symbol.for("react.memo_cache_sentinel")) {
-    t1 = <Box flexDirection="column"><Text>No conversations found to resume.</Text><Text dimColor={true}>Press Ctrl+C to exit and start a new conversation.</Text></Box>;
+    t1 = <Box flexDirection="column"><Text>Não conversations found to resume.</Text><Text dimColor={true}>Pressione Ctrl+C to exit and start a novo conversation.</Text></Box>;
     $[1] = t1;
   } else {
     t1 = $[1];

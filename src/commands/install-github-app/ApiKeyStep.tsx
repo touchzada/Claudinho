@@ -145,7 +145,7 @@ export function ApiKeyStep(t0) {
   useKeybindings(t8, t9);
   let t10;
   if ($[26] === Symbol.for("react.memo_cache_sentinel")) {
-    t10 = <Box flexDirection="column" marginBottom={1}><Text bold={true}>Install GitHub App</Text><Text dimColor={true}>Choose API key</Text></Box>;
+    t10 = <Box flexDirection="column" marginBottom={1}><Text bold={true}>Instalar GitHub App</Text><Text dimColor={true}>Choose API key</Text></Box>;
     $[26] = t10;
   } else {
     t10 = $[26];

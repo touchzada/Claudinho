@@ -88,7 +88,7 @@ export function Settings(t0) {
   }
   let t6;
   if ($[12] === Symbol.for("react.memo_cache_sentinel")) {
-    t6 = <Tab key="usage" title="Usage"><Usage /></Tab>;
+    t6 = <Tab key="usage" title="Uso"><Usage /></Tab>;
     $[12] = t6;
   } else {
     t6 = $[12];

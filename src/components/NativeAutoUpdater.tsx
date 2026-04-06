@@ -176,7 +176,7 @@ export function NativeAutoUpdater({
         </Text>}
       {isUpdating ? <Box>
           <Text dimColor wrap="truncate">
-            Checking for updates
+            Verificando atualizações
           </Text>
         </Box> : autoUpdaterResult?.status === 'success' && showSuccessMessage && updateSemver && <Text color="success" wrap="truncate">
             ✓ Update installed · Restart to update

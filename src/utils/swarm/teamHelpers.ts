@@ -33,7 +33,7 @@ export const inputSchema = lazySchema(() =>
     team_name: z
       .string()
       .optional()
-      .describe('Name for the new team to create (required for spawnTeam).'),
+      .describe('Name for the novo equipe to Criar (Obrigatório for spawnTeam).'),
     description: z
       .string()
       .optional()

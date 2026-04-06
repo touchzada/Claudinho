@@ -49,7 +49,7 @@ export const checkGitAvailable = memoize(async (): Promise<boolean> => {
  *
  * Call this when a git invocation fails in a way that indicates the binary
  * exists on PATH but cannot actually run — the macOS xcrun shim being the
- * main case (`xcrun: error: invalid active developer path`). Subsequent
+ * main case (`xcrun: Erro: Inválido ativo developer caminho`). Subsequent
  * checkGitAvailable() calls then short-circuit to false, so downstream code
  * that guards on git availability skips cleanly instead of failing repeatedly
  * with the same exec error.

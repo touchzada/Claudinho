@@ -53,19 +53,19 @@ export function extractConversationText(messages: Message[]): string {
     : text
 }
 
-const SESSION_TITLE_PROMPT = `Generate a concise, sentence-case title (3-7 words) that captures the main topic or goal of this coding session. The title should be clear enough that the user recognizes the session in a list. Use sentence case: capitalize only the first word and proper nouns.
+const SESSION_TITLE_PROMPT = `Gere um título conciso em formato de frase (3-7 palavras) que capture o tópico principal ou objetivo desta sessão de código. O título deve ser claro o suficiente para que o usuário reconheça a sessão em uma lista. Use capitalização de frase: capitalize apenas a primeira palavra e nomes próprios.
 
-Return JSON with a single "title" field.
+Retorne JSON com um único campo "title".
 
-Good examples:
-{"title": "Fix login button on mobile"}
-{"title": "Add OAuth authentication"}
-{"title": "Debug failing CI tests"}
-{"title": "Refactor API client error handling"}
+Bons exemplos:
+{"title": "Corrigir botão de login no mobile"}
+{"title": "Adicionar autenticação OAuth"}
+{"title": "Debugar testes CI falhando"}
+{"title": "Refatorar tratamento de erros do cliente API"}
 
-Bad (too vague): {"title": "Code changes"}
-Bad (too long): {"title": "Investigate and fix the issue where the login button does not respond on mobile devices"}
-Bad (wrong case): {"title": "Fix Login Button On Mobile"}`
+Ruim (muito vago): {"title": "Mudanças no código"}
+Ruim (muito longo): {"title": "Investigar e corrigir o problema onde o botão de login não responde em dispositivos móveis"}
+Ruim (capitalização errada): {"title": "Corrigir Botão De Login No Mobile"}`
 
 const titleSchema = lazySchema(() => z.object({ title: z.string() }))
 

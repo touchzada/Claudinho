@@ -97,7 +97,7 @@ function BtwSideQuestion(t0) {
             if (result.response) {
               setResponse(result.response);
             } else {
-              setError("No response received");
+              setError("Não response received");
             }
           }
         } catch (t5) {

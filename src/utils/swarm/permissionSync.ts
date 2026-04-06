@@ -181,13 +181,13 @@ export function createPermissionRequest(params: {
   const workerColor = params.workerColor || getTeammateColor()
 
   if (!teamName) {
-    throw new Error('Team name is required for permission requests')
+    throw new Error('equipe name is Obrigatório for permissão requests')
   }
   if (!workerId) {
-    throw new Error('Worker ID is required for permission requests')
+    throw new Error('Worker ID is Obrigatório for permissão requests')
   }
   if (!workerName) {
-    throw new Error('Worker name is required for permission requests')
+    throw new Error('Worker name is Obrigatório for permissão requests')
   }
 
   return {

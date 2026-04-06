@@ -189,7 +189,7 @@ export function SandboxSettings(t0) {
   const overridesTab = t14;
   let t15;
   if ($[25] === Symbol.for("react.memo_cache_sentinel")) {
-    t15 = <Tab key="config" title="Config"><SandboxConfigTab /></Tab>;
+    t15 = <Tab key="config" title="Configuração"><SandboxConfigTab /></Tab>;
     $[25] = t15;
   } else {
     t15 = $[25];

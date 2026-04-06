@@ -61,7 +61,7 @@ export const plainTextStorage = {
       chmodSync(storagePath, 0o600)
       return {
         success: true,
-        warning: 'Warning: Storing credentials in plaintext.',
+        warning: 'Aviso: Storing credentials in plaintext.',
       }
     } catch {
       return { success: false }

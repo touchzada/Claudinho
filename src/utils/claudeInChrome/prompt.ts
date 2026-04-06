@@ -31,7 +31,7 @@ When using browser automation tools, stay focused on the specific task. If you e
 - No response from the browser extension
 - Page elements not responding to clicks or input
 - Pages not loading or timing out
-- Unable to complete the browser task despite multiple approaches
+- Não foi possível complete the browser tarefa despite multiple approaches
 
 Explain what you attempted, what went wrong, and ask how the user would like to proceed. Do not keep retrying the same failing browser action or explore unrelated pages without checking in first.
 

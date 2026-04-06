@@ -33,7 +33,7 @@ export type StickyPrompt = {
   text: string;
   scrollTo: () => void;
 }
-// Click sets this — header HIDES but padding stays collapsed (0) so
+// Clique sets this — header HIDES but padding stays collapsed (0) so
 // the content ❯ lands at screen row 0 instead of row 1. Cleared on
 // the next sticky-prompt compute (user scrolls again).
 | 'clicked';

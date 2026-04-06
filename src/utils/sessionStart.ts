@@ -94,14 +94,14 @@ export async function processSessionStartHooks(
         errorMessage.includes('ENOTFOUND')
       ) {
         userGuidance =
-          'This appears to be a network issue. Check your internet connection and try again.'
+          'Isso parece ser um problema de rede. Verifica sua conexão com a internet e tenta de novo.'
       } else if (
         errorMessage.includes('Permission denied') ||
         errorMessage.includes('EACCES') ||
         errorMessage.includes('EPERM')
       ) {
         userGuidance =
-          'This appears to be a permissions issue. Check file permissions on ~/.claude/plugins/'
+          'Isso parece ser um problema de permissões. Verifica as permissões de arquivo em ~/.claude/plugins/'
       } else if (
         errorMessage.includes('Invalid') ||
         errorMessage.includes('parse') ||
@@ -109,10 +109,10 @@ export async function processSessionStartHooks(
         errorMessage.includes('schema')
       ) {
         userGuidance =
-          'This appears to be a configuration issue. Check your plugin settings in .claude/settings.json'
+          'Isso parece ser um problema de configuração. Verifica as configurações de plugin em .claude/settings.json'
       } else {
         userGuidance =
-          'Please fix the plugin configuration or remove problematic plugins from your settings.'
+          'Por favor, corrige a configuração do plugin ou remove plugins problemáticos das suas configurações.'
       }
 
       logForDebugging(

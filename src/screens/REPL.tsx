@@ -35,6 +35,7 @@ import { logForDebugging } from '../utils/debug.js';
 import { QueryGuard } from '../utils/QueryGuard.js';
 import { isEnvTruthy } from '../utils/envUtils.js';
 import { formatTokens, truncateToWidth } from '../utils/format.js';
+import { formatSlugToTitle } from '../utils/stringUtils.js';
 import { consumeEarlyInput } from '../utils/earlyInput.js';
 import { setMemberActive } from '../utils/swarm/teamHelpers.js';
 import { isSwarmWorker, generateSandboxRequestId, sendSandboxPermissionRequestViaMailbox, sendSandboxPermissionResponseViaMailbox } from '../utils/swarm/permissionSync.js';
@@ -378,7 +379,7 @@ function TranscriptSearchBar({
   jumpRef: RefObject<JumpHandle | null>;
   count: number;
   current: number;
-  /** Enter — commit. Query persists for n/N. */
+  /** Digite — commit. Query persists for n/N. */
   onClose: (lastQuery: string) => void;
   /** Esc/ctrl+c/ctrl+g — undo to pre-/ state. */
   onCancel: () => void;
@@ -1126,7 +1127,7 @@ export function REPL({
   // on resume (initialMessages present) so we don't re-title a resumed
   // session from mid-conversation context.
   const haikuTitleAttemptedRef = useRef((initialMessages?.length ?? 0) > 0);
-  const agentTitle = mainThreadAgentDefinition?.agentType;
+  const agentTitle = mainThreadAgentDefinition?.agentType ? formatSlugToTitle(mainThreadAgentDefinition.agentType) : undefined;
   const terminalTitle = sessionTitle ?? agentTitle ?? haikuTitle ?? 'Claudinho';
   const isWaitingForApproval = toolUseConfirmQueue.length > 0 || promptQueue.length > 0 || pendingWorkerRequest || pendingSandboxRequest;
   // Local-jsx commands (like /plugin, /config) show user-facing dialogs that
@@ -1515,7 +1516,7 @@ export function REPL({
   // showBashesDialog is REPL-level so it survives PromptInput unmounting.
   // When ultraplan approval fires while the pill dialog is open, PromptInput
   // unmounts (focusedInputDialog → 'ultraplan-choice') but this stays true;
-  // after accepting, PromptInput remounts into an empty "No tasks" dialog
+  // after accepting, PromptInput remounts into an empty "Não tasks" dialog
   // (the completed ultraplan task has been filtered out). Close it here.
   useEffect(() => {
     if (ultraplanPendingChoice && showBashesDialog) {
@@ -2025,7 +2026,7 @@ export function REPL({
     // High priority dialogs (always show regardless of typing)
     if (isMessageSelectorVisible) return 'message-selector';
 
-    // Suppress interrupt dialogs while user is actively typing
+    // Suppress interrupt dialogs while usuário is actively typing
     if (isPromptInputActive) return undefined;
     if (sandboxPermissionRequestQueue[0]) return 'sandbox-permission';
 
@@ -2994,7 +2995,7 @@ export function REPL({
         // Clear the controller so CancelRequestHandler's canCancelRunningTask
         // reads false at the idle prompt. Without this, the stale non-aborted
         // controller makes ctrl+c fire onCancel() (aborting nothing) instead of
-        // propagating to the double-press exit flow.
+        // propagating to the double-Pressione exit flow.
         setAbortController(null);
       }
 
@@ -4082,7 +4083,7 @@ export function REPL({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     // biome-ignore lint/correctness/useHookAtTopLevel: conditional for dead code elimination in external builds
     useProactive?.({
-      // Suppress ticks while an initial message is pending — the initial
+      // Suppress ticks while an initial message is pendente — the initial
       // message will be processed asynchronously and a premature tick would
       // race with it, causing concurrent-query enqueue of expanded skill text.
       isLoading: isLoading || initialMessage !== null,
@@ -4316,7 +4317,7 @@ export function REPL({
           // space + slack). Floor at 80. PassThrough has no .columns so
           // without this Ink defaults to 80. Trailing-space strip: right-
           // aligned timestamps still leave a flexbox spacer run at EOL.
-          // eslint-disable-next-line custom-rules/prefer-use-terminal-size -- one-shot at keypress time, not a reactive render dep
+          // eslint-Desativar-Próximo-line custom-rules/prefer-use-terminal-size -- one-shot at keypress time, not a reactive render dep
           const w = Math.max(80, (process.stdout.columns ?? 80) - 6);
           const raw = await renderMessagesToPlainText(deferredMessages, tools, w);
           const text = raw.replace(/[ \t]+$/gm, '');
@@ -4441,7 +4442,7 @@ export function REPL({
         // Cancel-restore handles the 'don't lose prior search'
         // concern differently (onCancel re-applies searchQuery).
         initialQuery="" count={searchCount} current={searchCurrent} onClose={q => {
-          // Enter — commit. 0-match guard: junk query shouldn't
+          // Digite — commit. 0-match guard: junk query shouldn't
           // persist (badge hidden, n/N dead anyway).
           setSearchQuery(searchCount > 0 ? q : '');
           setSearchOpen(false);
@@ -4930,7 +4931,7 @@ export function REPL({
               // selector still shows (REPL keeps full history for
               // scrollback). Surface why nothing happened instead
               // of silently no-oping.
-              setMessages(prev => [...prev, createSystemMessage('That message is no longer in the active context (snipped or pre-compact). Choose a more recent message.', 'warning')]);
+              setMessages(prev => [...prev, createSystemMessage('That message is Não longer in the ativo context (snipped or pre-compact). Escolher a mais recent message.', 'warning')]);
               return;
             }
             const newAbortController = createAbortController();

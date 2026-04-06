@@ -447,7 +447,7 @@ const getWindowsUserProfile = memoize(async (): Promise<string | undefined> => {
   ])
   if (code === 0 && stdout.trim()) return stdout.trim()
   logForDebugging(
-    'Unable to get Windows USERPROFILE via PowerShell - IDE detection may be incomplete',
+    'Não foi possível get Windows USERPROFILE via PowerShell - IDE detection may be incomplete',
   )
   return undefined
 })

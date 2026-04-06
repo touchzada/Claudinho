@@ -147,7 +147,7 @@ function restoreSessionToOriginalCwd(
 
 export const ExitWorktreeTool: Tool<InputSchema, Output> = buildTool({
   name: EXIT_WORKTREE_TOOL_NAME,
-  searchHint: 'exit a worktree session and return to the original directory',
+  searchHint: 'exit a worktree sessão and return to the original diretório',
   maxResultSizeChars: 100_000,
   async description() {
     return 'Exits a worktree session created by EnterWorktree and restores the original working directory'

@@ -86,7 +86,7 @@ Parse the user's input into ISO 8601 format. Return ONLY the formatted string, o
     if (!parsedText || parsedText === 'INVALID') {
       return {
         success: false,
-        error: 'Unable to parse date/time from input',
+        error: 'Não foi possível interpretar data/hora da entrada',
       }
     }
 
@@ -94,7 +94,7 @@ Parse the user's input into ISO 8601 format. Return ONLY the formatted string, o
     if (!/^\d{4}/.test(parsedText)) {
       return {
         success: false,
-        error: 'Unable to parse date/time from input',
+        error: 'Não foi possível interpretar data/hora da entrada',
       }
     }
 
@@ -105,7 +105,7 @@ Parse the user's input into ISO 8601 format. Return ONLY the formatted string, o
     return {
       success: false,
       error:
-        'Unable to parse date/time. Please enter in ISO 8601 format manually.',
+        'Não foi possível interpretar data/hora. Por favor, insira no formato ISO 8601 manualmente.',
     }
   }
 }

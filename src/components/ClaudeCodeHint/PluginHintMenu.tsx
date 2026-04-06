@@ -47,7 +47,7 @@ export function PluginHintMenu({
     label: "No, and don't show plugin installation hints again",
     value: 'disable'
   }];
-  return <PermissionDialog title="Plugin Recommendation">
+  return <PermissionDialog title="Recomendação de Plugin">
       <Box flexDirection="column" paddingX={2} paddingY={1}>
         <Box marginBottom={1}>
           <Text dimColor>
@@ -67,7 +67,7 @@ export function PluginHintMenu({
             <Text dimColor>{pluginDescription}</Text>
           </Box>}
         <Box marginTop={1}>
-          <Text>Would you like to install it?</Text>
+          <Text>Você gostaria de instalá-lo?</Text>
         </Box>
         <Box>
           <Select options={options} onChange={onSelect} onCancel={() => onResponse('no')} />

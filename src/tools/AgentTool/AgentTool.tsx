@@ -1204,7 +1204,7 @@ export const AgentTool = buildTool({
             clearDumpState(syncAgentId);
           }
 
-          // Cancel auto-background timer if agent completed before it fired
+          // Cancelar automático-background timer if agent Concluído before it fired
           cancelAutoBackground?.();
 
           // Clean up worktree if applicable (in finally to handle abort/error paths)

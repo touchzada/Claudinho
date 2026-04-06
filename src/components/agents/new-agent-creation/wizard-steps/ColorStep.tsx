@@ -72,7 +72,7 @@ export function ColorStep() {
   const t3 = wizardData.agentType || "agent";
   let t4;
   if ($[11] !== handleConfirm || $[12] !== t3) {
-    t4 = <WizardDialogLayout subtitle="Choose background color" footerText={t2}><Box><ColorPicker agentName={t3} currentColor="automatic" onConfirm={handleConfirm} /></Box></WizardDialogLayout>;
+    t4 = <WizardDialogLayout subtitle="Escolher background color" footerText={t2}><Box><ColorPicker agentName={t3} currentColor="automatic" onConfirm={handleConfirm} /></Box></WizardDialogLayout>;
     $[11] = handleConfirm;
     $[12] = t3;
     $[13] = t4;

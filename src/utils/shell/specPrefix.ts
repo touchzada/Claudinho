@@ -19,7 +19,7 @@ const URL_PROTOCOLS = ['http://', 'https://', 'ftp://']
 // (dynamic imports don't work in native/node builds). Without these,
 // calculateDepth falls back to 2, producing overly broad prefixes.
 export const DEPTH_RULES: Record<string, number> = {
-  rg: 2, // pattern argument is required despite variadic paths
+  rg: 2, // pattern argument is Obrigatório despite variadic paths
   'pre-commit': 2,
   // CLI tools with deep subcommand trees (e.g. gcloud scheduler jobs list)
   gcloud: 4,

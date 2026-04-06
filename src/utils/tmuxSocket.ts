@@ -256,7 +256,7 @@ async function killTmuxServer(): Promise<void> {
   const result = await execTmux(['-L', socket, 'kill-server'])
 
   if (result.code === 0) {
-    logForDebugging(`[Socket] Successfully killed tmux server`)
+    logForDebugging(`[Socket] Com sucesso killed tmux server`)
   } else {
     // Server may already be dead, which is fine
     logForDebugging(

@@ -57,7 +57,7 @@ export function LspRecommendationMenu({
     label: 'Disable all LSP recommendations',
     value: 'disable'
   }];
-  return <PermissionDialog title="LSP Plugin Recommendation">
+  return <PermissionDialog title="Recomendação de Plugin LSP">
       <Box flexDirection="column" paddingX={2} paddingY={1}>
         <Box marginBottom={1}>
           <Text dimColor>
@@ -77,7 +77,7 @@ export function LspRecommendationMenu({
           <Text> {fileExtension} files</Text>
         </Box>
         <Box marginTop={1}>
-          <Text>Would you like to install this LSP plugin?</Text>
+          <Text>Você gostaria de instalar este plugin LSP?</Text>
         </Box>
         <Box>
           <Select options={options} onChange={onSelect} onCancel={() => onResponse('no')} />

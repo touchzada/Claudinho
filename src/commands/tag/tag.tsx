@@ -92,7 +92,7 @@ function ToggleTagAndClose(t0) {
     t2 = () => {
       const id = getSessionId() as UUID;
       if (!id) {
-        onDone("No active session to tag", {
+        onDone("Não ativo sessão to tag", {
           display: "system"
         });
         return;
@@ -187,7 +187,7 @@ function ShowHelp(t0) {
   let t2;
   if ($[0] !== onDone) {
     t1 = () => {
-      onDone("Usage: /tag <tag-name>\n\nToggle a searchable tag on the current session.\nRun the same command again to remove the tag.\nTags are displayed after the branch name in /resume and can be searched with /.\n\nExamples:\n  /tag bugfix        # Add tag\n  /tag bugfix        # Remove tag (toggle)\n  /tag feature-auth\n  /tag wip", {
+      onDone("Uso: /tag <nome-da-tag>\n\nAlterna uma tag pesquisável na sessão atual.\nExecute o mesmo comando novamente pra remover a tag.\nTags são exibidas após o nome do branch em /resume e podem ser pesquisadas com /.\n\nExemplos:\n  /tag bugfix        # Adicionar tag\n  /tag bugfix        # Remover tag (alternar)\n  /tag feature-auth\n  /tag wip", {
         display: "system"
       });
     };

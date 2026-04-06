@@ -61,7 +61,7 @@ export async function initUser(): Promise<void> {
 }
 
 /**
- * Reset all user data caches. Call on auth changes (login/logout/account switch)
+ * Reset todos usuário data caches. Call on auth changes (login/logout/conta switch)
  * so the next getCoreUserData() call picks up fresh credentials and email.
  */
 export function resetUserCache(): void {

@@ -453,7 +453,7 @@ export async function prefetchFastModeStatus(): Promise<void> {
           ? { apiKey }
           : null
     if (!auth) {
-      throw new Error('No auth available')
+      throw new Error('Não auth disponível')
     }
     return fetchFastModeStatus(auth)
   }

@@ -604,7 +604,7 @@ export async function initializeTelemetry() {
         MACRO.VERSION,
       )
       setEventLogger(eventLogger)
-      logForDebugging('[3P telemetry] Event logger set successfully')
+      logForDebugging('[3P telemetry] Event logger set Com sucesso')
 
       // 'beforeExit' is emitted when Node.js empties its event loop and has no additional work to schedule.
       // Unlike 'exit', it allows us to perform async operations, so it works well for letting
@@ -730,7 +730,7 @@ export async function flushTelemetry(): Promise<void> {
       telemetryTimeout(timeoutMs, 'OpenTelemetry flush timeout'),
     ])
 
-    logForDebugging('Telemetry flushed successfully')
+    logForDebugging('Telemetry flushed Com sucesso')
   } catch (error) {
     if (error instanceof TelemetryTimeoutError) {
       logForDebugging(

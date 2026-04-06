@@ -195,7 +195,7 @@ function RateLimitOptionsMenu(t0) {
   }
   let t7;
   if ($[22] !== handleCancel || $[23] !== t6) {
-    t7 = <Dialog title="What do you want to do?" onCancel={handleCancel} color="suggestion">{t6}</Dialog>;
+    t7 = <Dialog title="What Você quer to do?" onCancel={handleCancel} color="suggestion">{t6}</Dialog>;
     $[22] = handleCancel;
     $[23] = t6;
     $[24] = t7;

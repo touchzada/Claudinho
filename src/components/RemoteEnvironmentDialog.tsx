@@ -110,7 +110,7 @@ export function RemoteEnvironmentDialog(t0) {
   if (loadingState === "loading") {
     let t5;
     if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
-      t5 = <LoadingState message={"Loading environments\u2026"} />;
+      t5 = <LoadingState message={"Carregando ambientes\u2026"} />;
       $[6] = t5;
     } else {
       t5 = $[6];
@@ -148,7 +148,7 @@ export function RemoteEnvironmentDialog(t0) {
   if (!selectedEnvironment) {
     let t5;
     if ($[14] === Symbol.for("react.memo_cache_sentinel")) {
-      t5 = <Text>No remote environments available.</Text>;
+      t5 = <Text>Nenhum ambiente remoto disponível.</Text>;
       $[14] = t5;
     } else {
       t5 = $[14];
@@ -303,7 +303,7 @@ function MultipleEnvironmentsContent(t0) {
   }
   let t5;
   if ($[8] !== environments || $[9] !== loadingState || $[10] !== onSelect || $[11] !== selectedEnvironment.environment_id) {
-    t5 = loadingState === "updating" ? <LoadingState message={"Updating\u2026"} /> : <Select options={environments.map(_temp)} defaultValue={selectedEnvironment.environment_id} onChange={onSelect} onCancel={() => onSelect("cancel")} layout="compact-vertical" />;
+    t5 = loadingState === "updating" ? <LoadingState message={"Atualizando\u2026"} /> : <Select options={environments.map(_temp)} defaultValue={selectedEnvironment.environment_id} onChange={onSelect} onCancel={() => onSelect("cancel")} layout="compact-vertical" />;
     $[8] = environments;
     $[9] = loadingState;
     $[10] = onSelect;

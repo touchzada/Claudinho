@@ -47,7 +47,7 @@ export function renderToolResultMessage(output: Output, _progressMessagesForMess
         <MessageResponse>
           <Box flexDirection="column">
             {filePath && <Text dimColor>Plan file: {displayPath}</Text>}
-            <Text dimColor>Waiting for team lead to review and approve...</Text>
+            <Text dimColor>Aguardando revisão e aprovação do líder...</Text>
           </Box>
         </MessageResponse>
       </Box>;

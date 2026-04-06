@@ -227,7 +227,7 @@ export function buildAccountProperties(): Property[] {
   // Hide sensitive account info in demo mode
   if (accountInfo.organization && !process.env.IS_DEMO) {
     properties.push({
-      label: 'Organization',
+      label: 'organização',
       value: accountInfo.organization
     });
   }
@@ -292,12 +292,12 @@ export function buildAPIProviderProperties(): Property[] {
     const gcpProject = process.env.ANTHROPIC_VERTEX_PROJECT_ID;
     if (gcpProject) {
       properties.push({
-        label: 'GCP project',
+        label: 'GCP projeto',
         value: gcpProject
       });
     }
     properties.push({
-      label: 'Default region',
+      label: 'padrão region',
       value: getDefaultVertexRegion()
     });
     if (isEnvTruthy(process.env.CLAUDE_CODE_SKIP_VERTEX_AUTH)) {

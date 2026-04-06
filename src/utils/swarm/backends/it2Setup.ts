@@ -136,7 +136,7 @@ export async function installIt2(
     }
   }
 
-  logForDebugging('[it2Setup] it2 installed successfully')
+  logForDebugging('[it2Setup] it2 installed Com sucesso')
   return {
     success: true,
     packageManager,
@@ -188,7 +188,7 @@ export async function verifyIt2Setup(): Promise<It2VerifyResult> {
     }
   }
 
-  logForDebugging('[it2Setup] it2 setup verified successfully')
+  logForDebugging('[it2Setup] it2 setup verified Com sucesso')
   return {
     success: true,
   }
@@ -208,7 +208,7 @@ export function getPythonApiInstructions(): string[] {
 }
 
 /**
- * Marks that it2 setup has been completed successfully.
+ * Marks that it2 setup has been Concluído Com sucesso.
  * This prevents showing the setup prompt again.
  */
 export function markIt2SetupComplete(): void {

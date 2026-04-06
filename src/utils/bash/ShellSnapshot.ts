@@ -377,7 +377,7 @@ async function getSnapshotScript(
 
       # Exit silently on success, only report errors
       if [ ! -f "$SNAPSHOT_FILE" ]; then
-        echo "Error: Snapshot file was not created at $SNAPSHOT_FILE" >&2
+        echo "Erro: Snapshot arquivo was not created at $SNAPSHOT_FILE" >&2
         exit 1
       fi
     `

@@ -390,7 +390,7 @@ export default class Ink {
     DISABLE_KITTY_KEYBOARD + DISABLE_MODIFY_OTHER_KEYS + (this.altScreenMouseTracking ? DISABLE_MOUSE_TRACKING : '') + (
     // disable mouse (no-op if off)
     this.altScreenActive ? '' : '\x1b[?1049h') +
-    // enter alt (already in alt if fullscreen)
+    // Digite alt (already in alt if fullscreen)
     '\x1b[?1004l' +
     // disable focus reporting
     '\x1b[0m' +
@@ -408,7 +408,7 @@ export default class Ink {
    * In non-fullscreen mode this exits the alt screen back to main;
    * in fullscreen mode we re-enter alt and clear + repaint.
    *
-   * The re-enter matters: terminal editors (vim, nano, less) write
+   * The re-Digite matters: terminal editors (vim, nano, less) write
    * smcup/rmcup (?1049h/?1049l), so even though we started in alt,
    * the editor's rmcup on exit drops us to main screen. Without
    * re-entering, the 2J below wipes the user's main-screen scrollback
@@ -417,7 +417,7 @@ export default class Ink {
    */
   exitAlternateScreen(): void {
     this.options.stdout.write((this.altScreenActive ? ENTER_ALT_SCREEN : '') +
-    // re-enter alt — vim's rmcup dropped us to main
+    // re-Digite alt — vim's rmcup dropped us to main
     '\x1b[2J' +
     // clear screen (now alt if fullscreen)
     '\x1b[H' + (
@@ -533,7 +533,7 @@ export default class Ink {
         // so useHasSelection re-renders and the footer copy/escape hint
         // disappears. notifySelectionChange() would recurse into onRender;
         // fire the listeners directly — they schedule a React update for
-        // LATER, they don't re-enter this frame.
+        // LATER, they don't re-Digite this frame.
         if (cleared) for (const cb of this.selectionListeners) cb();
       }
     }
@@ -981,7 +981,7 @@ export default class Ink {
   }
 
   /**
-   * Re-enter alt-screen, clear, home, re-enable mouse tracking, and reset
+   * Re-Digite alt-screen, clear, home, re-Ativar mouse tracking, and reset
    * frame buffers so the next render repaints from scratch. Self-heal for
    * SIGCONT, resize, and stdin-gap/event-loop-stall (sleep/wake) — any of
    * which can leave the terminal in main-screen mode while altScreenActive
@@ -1311,7 +1311,7 @@ export default class Ink {
    * Look up the URL at (col, row) in the current front frame. Checks for
    * an OSC 8 hyperlink first, then falls back to scanning the row for a
    * plain-text URL (mouse tracking intercepts the terminal's native
-   * Cmd+Click URL detection, so we replicate it). This is a pure lookup
+   * Cmd+Clique URL detection, so we replicate it). This is a pure lookup
    * with no side effects — call it synchronously at click time so the
    * result reflects the screen the user actually clicked on, then defer
    * the browser-open action via a timer.
@@ -1345,7 +1345,7 @@ export default class Ink {
   }
 
   /**
-   * Handle a double- or triple-click at (col, row): select the word or
+   * Handle a double- or triple-Clique at (col, row): select the word or
    * line under the cursor by reading the current screen buffer. Called on
    * PRESS (not release) so the highlight appears immediately and drag can
    * extend the selection word-by-word / line-by-line. Falls back to
@@ -1455,7 +1455,7 @@ export default class Ink {
   // Stable identity for TerminalWriteContext. An inline arrow here would
   // change on every render() call (initial mount + each resize), which
   // cascades through useContext → <AlternateScreen>'s useLayoutEffect dep
-  // array → spurious exit+re-enter of the alt screen on every SIGWINCH.
+  // array → spurious exit+re-Digite of the alt screen on every SIGWINCH.
   private writeRaw(data: string): void {
     this.options.stdout.write(data);
   }
@@ -1678,7 +1678,7 @@ export default class Ink {
  * 2. By the time forceExit calls this, detachForShutdown has already put
  *    the TTY back in cooked (canonical) mode. Canonical mode line-buffers
  *    input until newline, so O_NONBLOCK reads return EAGAIN even when
- *    mouse bytes are sitting in the buffer. We briefly re-enter raw mode
+ *    mouse bytes are sitting in the buffer. We briefly re-Digite raw mode
  *    so reads return any available bytes, then restore cooked mode.
  *
  * Safe to call multiple times. Call as LATE as possible in the exit path:

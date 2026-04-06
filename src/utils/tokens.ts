@@ -115,7 +115,7 @@ export function finalContextTokensFromLastResponse(
  * Get only the output_tokens from the last API response.
  * This excludes input context (system prompt, tools, prior messages).
  *
- * WARNING: Do NOT use this for threshold comparisons (autocompact, session memory).
+ * Aviso: Do NOT use this for threshold comparisons (autocompact, session memory).
  * Use tokenCountWithEstimation() instead, which measures full context size.
  * This function is only useful for measuring how many tokens Claude generated
  * in a single response, not how full the context window is.

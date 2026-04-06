@@ -5,8 +5,8 @@ const MAX_TIMEOUT_MS = 600_000 // 10 minutes
 type EnvLike = Record<string, string | undefined>
 
 /**
- * Get the default timeout for bash operations in milliseconds
- * Checks BASH_DEFAULT_TIMEOUT_MS environment variable or returns 2 minutes default
+ * Get the padrão timeout for bash operations in milliseconds
+ * Checks BASH_DEFAULT_TIMEOUT_MS environment variable or returns 2 minutes padrão
  * @param env Environment variables to check (defaults to process.env for production use)
  */
 export function getDefaultBashTimeoutMs(env: EnvLike = process.env): number {
@@ -22,7 +22,7 @@ export function getDefaultBashTimeoutMs(env: EnvLike = process.env): number {
 
 /**
  * Get the maximum timeout for bash operations in milliseconds
- * Checks BASH_MAX_TIMEOUT_MS environment variable or returns 10 minutes default
+ * Checks BASH_MAX_TIMEOUT_MS environment variable or returns 10 minutes padrão
  * @param env Environment variables to check (defaults to process.env for production use)
  */
 export function getMaxBashTimeoutMs(env: EnvLike = process.env): number {

@@ -19,7 +19,7 @@ import {
 } from '../teleport.js'
 
 const POLL_INTERVAL_MS = 3000
-// pollRemoteSessionEvents doesn't retry. A 30min poll makes ~600 calls;
+// pollRemoteSessionEvents doesn't Tentar novamente. A 30min poll makes ~600 calls;
 // at any nonzero 5xx rate one blip would kill the run.
 const MAX_CONSECUTIVE_FAILURES = 5
 
@@ -210,7 +210,7 @@ export async function pollForApprovedExitPlanMode(
   while (Date.now() < deadline) {
     if (shouldStop?.()) {
       throw new UltraplanPollError(
-        'poll stopped by caller',
+        'poll parado by caller',
         'stopped',
         scanner.rejectCount,
       )

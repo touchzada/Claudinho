@@ -147,7 +147,7 @@ function UltraplanSessionDetail(t0) {
   const sessionUrl = t4;
   let t5;
   if ($[8] !== onBack || $[9] !== onDone) {
-    t5 = onBack ?? (() => onDone("Remote session details dismissed", {
+    t5 = onBack ?? (() => onDone("Detalhes da sessão remota dispensados", {
       display: "system"
     }));
     $[8] = onBack;
@@ -168,7 +168,7 @@ function UltraplanSessionDetail(t0) {
     }
     let t7;
     if ($[12] === Symbol.for("react.memo_cache_sentinel")) {
-      t7 = <Text dimColor={true}>This will terminate the Claude Code on the web session.</Text>;
+      t7 = <Text dimColor={true}>Isso vai encerrar a sessão do Claudinho na web.</Text>;
       $[12] = t7;
     } else {
       t7 = $[12];
@@ -176,7 +176,7 @@ function UltraplanSessionDetail(t0) {
     let t8;
     if ($[13] === Symbol.for("react.memo_cache_sentinel")) {
       t8 = {
-        label: "Terminate session",
+        label: "Encerrar sessão",
         value: "stop" as const
       };
       $[13] = t8;
@@ -186,7 +186,7 @@ function UltraplanSessionDetail(t0) {
     let t9;
     if ($[14] === Symbol.for("react.memo_cache_sentinel")) {
       t9 = [t8, {
-        label: "Back",
+        label: "Voltar",
         value: "back" as const
       }];
       $[14] = t9;
@@ -195,7 +195,7 @@ function UltraplanSessionDetail(t0) {
     }
     let t10;
     if ($[15] !== goBackOrClose || $[16] !== onKill) {
-      t10 = <Dialog title="Stop ultraplan?" onCancel={t6} color="background"><Box flexDirection="column" gap={1}>{t7}<Select options={t9} onChange={v => {
+      t10 = <Dialog title="Parar ultraplan?" onCancel={t6} color="background"><Box flexDirection="column" gap={1}>{t7}<Select options={t9} onChange={v => {
             if (v === "stop") {
               onKill?.();
               goBackOrClose();
@@ -311,7 +311,7 @@ function UltraplanSessionDetail(t0) {
   let t19;
   if ($[47] === Symbol.for("react.memo_cache_sentinel")) {
     t19 = {
-      label: "Review in Claude Code on the web",
+      label: "Revisar no Claudinho na web",
       value: "open" as const
     };
     $[47] = t19;
@@ -321,7 +321,7 @@ function UltraplanSessionDetail(t0) {
   let t20;
   if ($[48] !== onKill || $[49] !== running) {
     t20 = onKill && running ? [{
-      label: "Stop ultraplan",
+      label: "Parar ultraplan",
       value: "stop" as const
     }] : [];
     $[48] = onKill;
@@ -333,7 +333,7 @@ function UltraplanSessionDetail(t0) {
   let t21;
   if ($[51] === Symbol.for("react.memo_cache_sentinel")) {
     t21 = {
-      label: "Back",
+      label: "Voltar",
       value: "back" as const
     };
     $[51] = t21;
@@ -519,7 +519,7 @@ function ReviewSessionDetail(t0) {
   const elapsedTime = useElapsedTime(session.startTime, running, 1000, 0, session.endTime);
   let t1;
   if ($[0] !== onDone) {
-    t1 = () => onDone("Remote session details dismissed", {
+    t1 = () => onDone("Detalhes da sessão remota dispensados", {
       display: "system"
     });
     $[0] = onDone;
@@ -549,7 +549,7 @@ function ReviewSessionDetail(t0) {
     }
     let t4;
     if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
-      t4 = <Text dimColor={true}>This archives the remote session and stops local tracking. The review will not complete and any findings so far are discarded.</Text>;
+      t4 = <Text dimColor={true}>Isso arquiva a sessão remota e para o rastreamento local. A revisão não vai completar e quaisquer descobertas até agora são descartadas.</Text>;
       $[5] = t4;
     } else {
       t4 = $[5];
@@ -557,7 +557,7 @@ function ReviewSessionDetail(t0) {
     let t5;
     if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
       t5 = {
-        label: "Stop ultrareview",
+        label: "Parar ultrareview",
         value: "stop" as const
       };
       $[6] = t5;
@@ -567,7 +567,7 @@ function ReviewSessionDetail(t0) {
     let t6;
     if ($[7] === Symbol.for("react.memo_cache_sentinel")) {
       t6 = [t5, {
-        label: "Back",
+        label: "Voltar",
         value: "back" as const
       }];
       $[7] = t6;
@@ -576,7 +576,7 @@ function ReviewSessionDetail(t0) {
     }
     let t7;
     if ($[8] !== goBackOrClose || $[9] !== onKill) {
-      t7 = <Dialog title="Stop ultrareview?" onCancel={t3} color="background"><Box flexDirection="column" gap={1}>{t4}<Select options={t6} onChange={v => {
+      t7 = <Dialog title="Parar ultrareview?" onCancel={t3} color="background"><Box flexDirection="column" gap={1}>{t4}<Select options={t6} onChange={v => {
             if (v === "stop") {
               onKill?.();
               goBackOrClose();
@@ -595,19 +595,19 @@ function ReviewSessionDetail(t0) {
   let t3;
   if ($[11] !== completed || $[12] !== onKill || $[13] !== running) {
     t3 = completed ? [{
-      label: "Open in Claude Code on the web",
+      label: "Abrir no Claudinho na web",
       value: "open"
     }, {
-      label: "Dismiss",
+      label: "Dispensar",
       value: "dismiss"
     }] : [{
-      label: "Open in Claude Code on the web",
+      label: "Abrir no Claudinho na web",
       value: "open"
     }, ...(onKill && running ? [{
-      label: "Stop ultrareview",
+      label: "Parar ultrareview",
       value: "stop" as const
     }] : []), {
-      label: "Back",
+      label: "Voltar",
       value: "back"
     }];
     $[11] = completed;
@@ -803,7 +803,7 @@ export function RemoteSessionDetailDialog({
   if (session.isRemoteReview) {
     return <ReviewSessionDetail session={session} onDone={onDone} onBack={onBack} onKill={onKill} />;
   }
-  const handleClose = () => onDone('Remote session details dismissed', {
+  const handleClose = () => onDone('Detalhes da sessão remota dispensados', {
     display: 'system'
   });
 
@@ -812,7 +812,7 @@ export function RemoteSessionDetailDialog({
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === ' ') {
       e.preventDefault();
-      onDone('Remote session details dismissed', {
+      onDone('Detalhes da sessão remota dispensados', {
         display: 'system'
       });
     } else if (e.key === 'left' && onBack) {
@@ -844,31 +844,31 @@ export function RemoteSessionDetailDialog({
   const displayTitle = truncateToWidth(session.title, 50);
 
   // Map TaskStatus to display status (handle 'pending')
-  const displayStatus = session.status === 'pending' ? 'starting' : session.status;
+  const displayStatus = session.status === 'pending' ? 'iniciando' : session.status;
   return <Box flexDirection="column" tabIndex={0} autoFocus onKeyDown={handleKeyDown}>
-      <Dialog title="Remote session details" onCancel={handleClose} color="background" inputGuide={exitState => exitState.pending ? <Text>Press {exitState.keyName} again to exit</Text> : <Byline>
-              {onBack && <KeyboardShortcutHint shortcut="←" action="go back" />}
-              <KeyboardShortcutHint shortcut="Esc/Enter/Space" action="close" />
-              {!isTeleporting && <KeyboardShortcutHint shortcut="t" action="teleport" />}
+      <Dialog title="Detalhes da sessão remota" onCancel={handleClose} color="background" inputGuide={exitState => exitState.pending ? <Text>Pressione {exitState.keyName} de novo pra sair</Text> : <Byline>
+              {onBack && <KeyboardShortcutHint shortcut="←" action="voltar" />}
+              <KeyboardShortcutHint shortcut="Esc/Enter/Space" action="fechar" />
+              {!isTeleporting && <KeyboardShortcutHint shortcut="t" action="teletransportar" />}
             </Byline>}>
         <Box flexDirection="column">
           <Text>
             <Text bold>Status</Text>:{' '}
-            {displayStatus === 'running' || displayStatus === 'starting' ? <Text color="background">{displayStatus}</Text> : displayStatus === 'completed' ? <Text color="success">{displayStatus}</Text> : <Text color="error">{displayStatus}</Text>}
+            {displayStatus === 'running' || displayStatus === 'iniciando' ? <Text color="background">{displayStatus}</Text> : displayStatus === 'completed' ? <Text color="success">{displayStatus}</Text> : <Text color="error">{displayStatus}</Text>}
           </Text>
           <Text>
-            <Text bold>Runtime</Text>:{' '}
+            <Text bold>Tempo de execução</Text>:{' '}
             {formatDuration((session.endTime ?? Date.now()) - session.startTime)}
           </Text>
           <Text wrap="truncate-end">
-            <Text bold>Title</Text>: {displayTitle}
+            <Text bold>Título</Text>: {displayTitle}
           </Text>
           <Text>
-            <Text bold>Progress</Text>:{' '}
+            <Text bold>Progresso</Text>:{' '}
             <RemoteSessionProgress session={session} />
           </Text>
           <Text>
-            <Text bold>Session URL</Text>:{' '}
+            <Text bold>URL da sessão</Text>:{' '}
             <Link url={getRemoteTaskSessionUrl(session.sessionId)}>
               <Text dimColor>{getRemoteTaskSessionUrl(session.sessionId)}</Text>
             </Link>
@@ -878,26 +878,26 @@ export function RemoteSessionDetailDialog({
         {/* Remote session messages section */}
         {session.log.length > 0 && <Box flexDirection="column" marginTop={1}>
             <Text>
-              <Text bold>Recent messages</Text>:
+              <Text bold>Mensagens recentes</Text>:
             </Text>
             <Box flexDirection="column" height={10} overflowY="hidden">
               {lastMessages.map((msg, i) => <Message key={i} message={msg} lookups={EMPTY_LOOKUPS} addMargin={i > 0} tools={toolUseContext.options.tools} commands={toolUseContext.options.commands} verbose={toolUseContext.options.verbose} inProgressToolUseIDs={new Set()} progressMessagesForMessage={[]} shouldAnimate={false} shouldShowDot={false} style="condensed" isTranscriptMode={false} isStatic={true} />)}
             </Box>
             <Box marginTop={1}>
               <Text dimColor italic>
-                Showing last {lastMessages.length} of {session.log.length}{' '}
-                messages
+                Mostrando últimas {lastMessages.length} de {session.log.length}{' '}
+                mensagens
               </Text>
             </Box>
           </Box>}
 
         {/* Teleport error message */}
         {teleportError && <Box marginTop={1}>
-            <Text color="error">Teleport failed: {teleportError}</Text>
+            <Text color="error">Teletransporte falhou: {teleportError}</Text>
           </Box>}
 
         {/* Teleporting status */}
-        {isTeleporting && <Text color="background">Teleporting to session…</Text>}
+        {isTeleporting && <Text color="background">Teletransportando pra sessão…</Text>}
       </Dialog>
     </Box>;
 }

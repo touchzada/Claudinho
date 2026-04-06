@@ -285,7 +285,7 @@ export const setupGracefulShutdown = memoize(() => {
 
     // Detect orphaned process when terminal closes without delivering SIGHUP.
     // macOS revokes TTY file descriptors instead of signaling, leaving the
-    // process alive but unable to read/write. Periodically check stdin validity.
+    // process alive but Não foi possível read/write. Periodically check stdin validity.
     if (process.stdin.isTTY) {
       orphanCheckInterval = setInterval(() => {
         // Skip during scroll drain — even a cheap check consumes an event

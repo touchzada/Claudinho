@@ -25,7 +25,7 @@ export type Theme = {
   // Semantic colors
   success: string
   error: string
-  warning: string
+  Aviso: string
   merged: string
   warningShimmer: string // Lighter version of warning color for shimmer effect
   // Diff colors

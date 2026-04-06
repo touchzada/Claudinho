@@ -85,7 +85,7 @@ export const RemoteTriggerTool = buildTool({
     }
     const orgUUID = await getOrganizationUUID()
     if (!orgUUID) {
-      throw new Error('Unable to resolve organization UUID.')
+      throw new Error('Não foi possível resolve organização UUID.')
     }
 
     const base = `${getOauthConfig().BASE_API_URL}/v1/code/triggers`

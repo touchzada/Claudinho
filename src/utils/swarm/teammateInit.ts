@@ -121,7 +121,7 @@ export function initializeTeammateHooks(
       )
       return true // Don't block the Stop
     },
-    'Failed to send idle notification to team leader',
+    'Falhou to send ocioso notification to equipe leader',
     {
       timeout: 10000,
     },

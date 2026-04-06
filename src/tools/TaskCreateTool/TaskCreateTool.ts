@@ -47,7 +47,7 @@ export type Output = z.infer<OutputSchema>
 
 export const TaskCreateTool = buildTool({
   name: TASK_CREATE_TOOL_NAME,
-  searchHint: 'create a task in the task list',
+  searchHint: 'Criar a tarefa in the tarefa list',
   maxResultSizeChars: 100_000,
   async description() {
     return DESCRIPTION

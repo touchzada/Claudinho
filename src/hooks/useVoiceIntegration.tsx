@@ -38,7 +38,7 @@ const voiceNs: {
 // excluding normal typing speed (100-300ms between keystrokes).
 const RAPID_KEY_GAP_MS = 120;
 
-// Fallback (ms) for modifier-combo first-press activation. Must match
+// Fallback (ms) for modifier-combo primeiro-Pressione activation. Must match
 // FIRST_PRESS_FALLBACK_MS in useVoice.ts. Covers the max OS initial
 // key-repeat delay (~2s on macOS with slider at "Long") so holding a
 // modifier combo doesn't fragment into two sessions when the first
@@ -284,7 +284,7 @@ export function useVoiceIntegration({
     // No voice anchor — voice was reset (or never started). Nothing to do.
     if (prefix_1 === null) return;
     const suffix_1 = voiceSuffixRef.current;
-    // Submit race: finishRecording() → user presses Enter (input cleared)
+    // Enviar race: finishRecording() → usuário presses Digite (input cleared)
     // → WebSocket close → this callback fires with stale prefix/suffix.
     // If the input isn't what this hook last set (via the interim effect
     // or anchor), the user submitted or edited — don't re-fill. Comparing

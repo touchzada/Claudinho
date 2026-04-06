@@ -71,7 +71,7 @@ export function filterAllowedSdkBetas(
   if (isClaudeAISubscriber()) {
     // biome-ignore lint/suspicious/noConsole: intentional warning
     console.warn(
-      'Warning: Custom betas are only available for API key users. Ignoring provided betas.',
+      'Aviso: personalizado betas are only disponível for API key users. Ignoring provided betas.',
     )
     return undefined
   }

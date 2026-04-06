@@ -407,7 +407,7 @@ export function endLLMRequestSpan(
   if (llmSpanContext.perfettoSpanId) {
     endLLMRequestPerfettoSpan(llmSpanContext.perfettoSpanId, {
       ttftMs: metadata?.ttftMs,
-      ttltMs: duration, // Time to last token is the total duration
+      ttltMs: duration, // Time to último token is the total duration
       promptTokens: metadata?.inputTokens,
       outputTokens: metadata?.outputTokens,
       cacheReadTokens: metadata?.cacheReadTokens,

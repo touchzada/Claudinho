@@ -385,7 +385,7 @@ function validateHookJson(
   const parsed = jsonParse(jsonString)
   const validation = hookJSONOutputSchema().safeParse(parsed)
   if (validation.success) {
-    logForDebugging('Successfully parsed and validated hook JSON output')
+    logForDebugging('Com sucesso parsed and validated hook JSON output')
     return { json: validation.data }
   }
   const errors = validation.error.issues
@@ -3123,7 +3123,7 @@ async function executeHooksOutsideREPL({
           const blocked =
             isSyncHookJSONOutput(json) && json.decision === 'block'
 
-          logForDebugging(`${hookName} [callback] completed successfully`)
+          logForDebugging(`${hookName} [callback] Concluído Com sucesso`)
 
           return {
             command: 'callback',

@@ -30,7 +30,7 @@ async function checkEndpoints(): Promise<PreflightCheckResult> {
           const hostname = new URL(url).hostname;
           return {
             success: false,
-            error: `Failed to connect to ${hostname}: Status ${response.status}`
+            error: `Falha ao conectar em ${hostname}: Status ${response.status}`
           };
         }
         return {
@@ -41,7 +41,7 @@ async function checkEndpoints(): Promise<PreflightCheckResult> {
         const sslHint = getSSLErrorHint(error);
         return {
           success: false,
-          error: `Failed to connect to ${hostname}: ${error instanceof Error ? (error as ErrnoException).code || error.message : String(error)}`,
+          error: `Falha ao conectar em ${hostname}: ${error instanceof Error ? (error as ErrnoException).code || error.message : String(error)}`,
           sslHint: sslHint ?? undefined
         };
       }
@@ -68,7 +68,7 @@ async function checkEndpoints(): Promise<PreflightCheckResult> {
     });
     return {
       success: false,
-      error: `Connectivity check error: ${error instanceof Error ? (error as ErrnoException).code || error.message : String(error)}`
+      error: `Erro de verificação de conectividade: ${error instanceof Error ? (error as ErrnoException).code || error.message : String(error)}`
     };
   }
 }
@@ -127,7 +127,7 @@ export function PreflightStep(t0) {
   useEffect(t3, t4);
   let t5;
   if ($[6] !== isChecking || $[7] !== result || $[8] !== showSpinner) {
-    t5 = isChecking && showSpinner ? <Box paddingLeft={1}><Spinner /><Text>Checking connectivity...</Text></Box> : !result?.success && !isChecking && <Box flexDirection="column" gap={1}><Text color="error">Unable to connect to Anthropic services</Text><Text color="error">{result?.error}</Text>{result?.sslHint ? <Box flexDirection="column" gap={1}><Text>{result.sslHint}</Text><Text color="suggestion">See https://code.claude.com/docs/en/network-config</Text></Box> : <Box flexDirection="column" gap={1}><Text>Please check your internet connection and network settings.</Text><Text>Note: Claude Code might not be available in your country. Check supported countries at{" "}<Text color="suggestion">https://anthropic.com/supported-countries</Text></Text></Box>}</Box>;
+    t5 = isChecking && showSpinner ? <Box paddingLeft={1}><Spinner /><Text>Verificando conectividade...</Text></Box> : !result?.success && !isChecking && <Box flexDirection="column" gap={1}><Text color="error">Não foi possível conectar aos serviços da Anthropic</Text><Text color="error">{result?.error}</Text>{result?.sslHint ? <Box flexDirection="column" gap={1}><Text>{result.sslHint}</Text><Text color="suggestion">Veja https://code.claude.com/docs/en/network-config</Text></Box> : <Box flexDirection="column" gap={1}><Text>Por favor, verifique sua conexão de internet e configurações de rede.</Text><Text>Nota: Claude Code pode não estar disponível no seu país. Verifique os países suportados em{" "}<Text color="suggestion">https://anthropic.com/supported-countries</Text></Text></Box>}</Box>;
     $[6] = isChecking;
     $[7] = result;
     $[8] = showSpinner;

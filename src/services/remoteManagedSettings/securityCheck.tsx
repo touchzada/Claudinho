@@ -62,7 +62,7 @@ export async function checkManagedSettingsSecurity(cachedSettings: SettingsJson 
 
 /**
  * Handle the security check result by exiting if rejected
- * Returns true if we should continue, false if we should stop
+ * Returns true if we should Continuar, false if we should stop
  */
 export function handleSecurityCheckResult(result: SecurityCheckResult): boolean {
   if (result === 'rejected') {

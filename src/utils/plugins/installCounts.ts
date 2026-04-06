@@ -74,7 +74,7 @@ async function loadInstallCountsCache(): Promise<InstallCountsCache | null> {
       !('fetchedAt' in parsed) ||
       !('counts' in parsed)
     ) {
-      logForDebugging('Install counts cache has invalid structure')
+      logForDebugging('Instalar counts cache has Inválido structure')
       return null
     }
 
@@ -94,14 +94,14 @@ async function loadInstallCountsCache(): Promise<InstallCountsCache | null> {
 
     // Validate fetchedAt and counts
     if (typeof cache.fetchedAt !== 'string' || !Array.isArray(cache.counts)) {
-      logForDebugging('Install counts cache has invalid structure')
+      logForDebugging('Instalar counts cache has Inválido structure')
       return null
     }
 
     // Validate fetchedAt is a valid date
     const fetchedAt = new Date(cache.fetchedAt).getTime()
     if (Number.isNaN(fetchedAt)) {
-      logForDebugging('Install counts cache has invalid fetchedAt timestamp')
+      logForDebugging('Instalar counts cache has Inválido fetchedAt timestamp')
       return null
     }
 
@@ -166,7 +166,7 @@ async function saveInstallCountsCache(
 
     // Atomic rename
     await rename(tempPath, cachePath)
-    logForDebugging('Install counts cache saved successfully')
+    logForDebugging('Instalar counts cache saved Com sucesso')
   } catch (error) {
     logError(error)
     // Clean up temp file if it exists
@@ -193,7 +193,7 @@ async function fetchInstallCountsFromGitHub(): Promise<
     })
 
     if (!response.data?.plugins || !Array.isArray(response.data.plugins)) {
-      throw new Error('Invalid response format from install counts API')
+      throw new Error('Inválido response format from Instalar counts API')
     }
 
     logPluginFetch(

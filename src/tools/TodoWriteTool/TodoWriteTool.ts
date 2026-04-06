@@ -30,7 +30,7 @@ export type Output = z.infer<OutputSchema>
 
 export const TodoWriteTool = buildTool({
   name: TODO_WRITE_TOOL_NAME,
-  searchHint: 'manage the session task checklist',
+  searchHint: 'manage the sessão tarefa checklist',
   maxResultSizeChars: 100_000,
   strict: true,
   async description() {

@@ -77,7 +77,7 @@ export function usePluginInstallationStatus() {
         return;
       }
       if (!installationStatus) {
-        logForDebugging("No installation status to monitor");
+        logForDebugging("Não installation status to monitor");
         return;
       }
       if (totalFailed === 0) {

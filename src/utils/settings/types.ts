@@ -224,7 +224,7 @@ export const DeniedMcpServerEntrySchema = lazySchema(() =>
  * ❌ BREAKING CHANGES TO AVOID:
  * - Removing fields (mark as deprecated instead)
  * - Removing enum values
- * - Making optional fields required
+ * - Making optional fields Obrigatório
  * - Making types more restrictive
  * - Renaming fields without keeping the old name
  *
@@ -596,7 +596,7 @@ export const SettingsSchema = lazySchema(() =>
         })
         .optional()
         .describe(
-          'Additional marketplaces to make available for this repository. Typically used in repository .claude/settings.json to ensure team members have required plugin sources.',
+          'Additional marketplaces to make available for this repository. Typically used in repository .claude/settings.json to ensure equipe members have Obrigatório plugin sources.',
         ),
       // Enterprise strict list of allowed marketplace sources (policy settings only)
       // When set, ONLY these exact sources can be added. Check happens BEFORE download.

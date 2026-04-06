@@ -24,14 +24,14 @@ export async function validateModel(
 
   // Empty model is invalid
   if (!normalizedModel) {
-    return { valid: false, error: 'Model name cannot be empty' }
+    return { valid: false, error: 'Nome do modelo não pode estar vazio' }
   }
 
   // Check against availableModels allowlist before any API call
   if (!isModelAllowed(normalizedModel)) {
     return {
       valid: false,
-      error: `Model '${normalizedModel}' is not in the list of available models`,
+      error: `Modelo '${normalizedModel}' não está na lista de modelos disponíveis`,
     }
   }
 
@@ -88,10 +88,10 @@ function handleValidationError(
   // NotFoundError (404) means the model doesn't exist
   if (error instanceof NotFoundError) {
     const fallback = get3PFallbackSuggestion(modelName)
-    const suggestion = fallback ? `. Try '${fallback}' instead` : ''
+    const suggestion = fallback ? `. Tenta '${fallback}' ao invés` : ''
     return {
       valid: false,
-      error: `Model '${modelName}' not found${suggestion}`,
+      error: `Modelo '${modelName}' não encontrado${suggestion}`,
     }
   }
 
@@ -100,14 +100,14 @@ function handleValidationError(
     if (error instanceof AuthenticationError) {
       return {
         valid: false,
-        error: 'Authentication failed. Please check your API credentials.',
+        error: 'Autenticação falhou. Por favor, verifica suas credenciais de API.',
       }
     }
 
     if (error instanceof APIConnectionError) {
       return {
         valid: false,
-        error: 'Network error. Please check your internet connection.',
+        error: 'Erro de rede. Por favor, verifica sua conexão com a internet.',
       }
     }
 
@@ -122,18 +122,18 @@ function handleValidationError(
       typeof errorBody.message === 'string' &&
       errorBody.message.includes('model:')
     ) {
-      return { valid: false, error: `Model '${modelName}' not found` }
+      return { valid: false, error: `Modelo '${modelName}' não encontrado` }
     }
 
     // Generic API error
-    return { valid: false, error: `API error: ${error.message}` }
+    return { valid: false, error: `Erro de API: ${error.message}` }
   }
 
   // For unknown errors, be safe and reject
   const errorMessage = error instanceof Error ? error.message : String(error)
   return {
     valid: false,
-    error: `Unable to validate model: ${errorMessage}`,
+    error: `Não foi possível validar o modelo: ${errorMessage}`,
   }
 }
 

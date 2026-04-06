@@ -9,15 +9,15 @@ type Props = {
 };
 export function WizardNavigationFooter({
   instructions = <Byline>
-      <KeyboardShortcutHint shortcut="↑↓" action="navigate" />
-      <KeyboardShortcutHint shortcut="Enter" action="select" />
-      <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="go back" />
+      <KeyboardShortcutHint shortcut="↑↓" action="navegar" />
+      <KeyboardShortcutHint shortcut="Enter" action="selecionar" />
+      <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="voltar" />
     </Byline>
 }: Props): ReactNode {
   const exitState = useExitOnCtrlCDWithKeybindings();
   return <Box marginLeft={3} marginTop={1}>
       <Text dimColor>
-        {exitState.pending ? `Press ${exitState.keyName} again to exit` : instructions}
+        {exitState.pending ? `Pressione ${exitState.keyName} de novo pra sair` : instructions}
       </Text>
     </Box>;
 }

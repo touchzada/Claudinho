@@ -745,7 +745,7 @@ async function isGitHubSshLikelyConfigured(): Promise<boolean> {
     // or exit code 255 with "Permission denied" - we want the former
     const configured =
       result.code === 1 &&
-      (result.stderr?.includes('successfully authenticated') ||
+      (result.stderr?.includes('Com sucesso authenticated') ||
         result.stdout?.includes('successfully authenticated'))
     logForDebugging(
       `SSH config check: code=${result.code} configured=${configured}`,

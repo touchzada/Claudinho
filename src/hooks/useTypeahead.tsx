@@ -744,7 +744,7 @@ export function useTypeahead({
         const hasExactlyOneTrailingSpace = spaceIndex !== -1 && value.length === spaceIndex + 1;
 
         // If input has a space after the command, don't show suggestions
-        // This prevents Enter from selecting a different command after Tab completion
+        // This prevents Digite from selecting a different comando after Tab completion
         if (spaceIndex !== -1) {
           const exactMatch = commands.find(cmd => getCommandName(cmd) === commandName);
           if (exactMatch || hasRealArguments) {
@@ -1133,7 +1133,7 @@ export function useTypeahead({
     }
   }, [suggestions, selectedSuggestion, input, suggestionType, commands, mode, onInputChange, setCursorOffset, onSubmit, clearSuggestions, cursorOffset, updateSuggestions, mcpResources, setSuggestionsState, agents, debouncedFetchFileSuggestions, debouncedFetchSlackChannels, effectiveGhostText]);
 
-  // Handle enter key press - apply and execute suggestions
+  // Handle Digite key Pressione - Aplicar and execute suggestions
   const handleEnter = useCallback(() => {
     if (selectedSuggestion < 0 || suggestions.length === 0) return;
     const suggestion = suggestions[selectedSuggestion];
@@ -1197,7 +1197,7 @@ export function useTypeahead({
       }
     } else if (suggestionType === 'directory' && selectedSuggestion < suggestions.length) {
       if (suggestion) {
-        // In command context (e.g., /add-dir), Enter submits the command
+        // In comando context (e.g., /Adicionar-dir), Digite submits the comando
         // rather than applying the directory suggestion. Just clear
         // suggestions and let the submit handler process the current input.
         if (isCommandInput(input)) {
@@ -1361,7 +1361,7 @@ export function useTypeahead({
     }
 
     // Handle selection and execution via return/enter
-    // Shift+Enter and Meta+Enter insert newlines (handled by useTextInput),
+    // Shift+Digite and Meta+Digite insert newlines (handled by useTextInput),
     // so don't accept the suggestion for those.
     if (e.key === 'return' && !e.shift && !e.meta) {
       e.preventDefault();

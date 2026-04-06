@@ -20,7 +20,7 @@ import { makeSecondaryModelPrompt } from './prompt.js'
 // Custom error classes for domain blocking
 class DomainBlockedError extends Error {
   constructor(domain: string) {
-    super(`Claude Code is unable to fetch from ${domain}`)
+    super(`Claude Code não consegue buscar de ${domain}`)
     this.name = 'DomainBlockedError'
   }
 }
@@ -28,7 +28,7 @@ class DomainBlockedError extends Error {
 class DomainCheckFailedError extends Error {
   constructor(domain: string) {
     super(
-      `Unable to verify if domain ${domain} is safe to fetch. This may be due to network restrictions or enterprise security policies blocking claude.ai.`,
+      `Não foi possível verificar se o domínio ${domain} é seguro pra buscar. Isso pode ser devido a restrições de rede ou políticas de segurança empresariais bloqueando claude.ai.`,
     )
     this.name = 'DomainCheckFailedError'
   }
@@ -40,7 +40,7 @@ class EgressBlockedError extends Error {
       JSON.stringify({
         error_type: 'EGRESS_BLOCKED',
         domain,
-        message: `Access to ${domain} is blocked by the network egress proxy.`,
+        message: `Acesso a ${domain} está bloqueado pelo proxy de saída de rede.`,
       }),
     )
     this.name = 'EgressBlockedError'
@@ -266,7 +266,7 @@ export async function getWithPermittedRedirects(
   depth = 0,
 ): Promise<AxiosResponse<ArrayBuffer> | RedirectInfo> {
   if (depth > MAX_REDIRECTS) {
-    throw new Error(`Too many redirects (exceeded ${MAX_REDIRECTS})`)
+    throw new Error(`Muitos redirecionamentos (excedeu ${MAX_REDIRECTS})`)
   }
   try {
     return await axios.get(url, {
@@ -288,7 +288,7 @@ export async function getWithPermittedRedirects(
     ) {
       const redirectLocation = error.response.headers.location
       if (!redirectLocation) {
-        throw new Error('Redirect missing Location header')
+        throw new Error('Redirecionamento sem cabeçalho Location')
       }
 
       // Resolve relative URLs against the original URL
@@ -349,7 +349,7 @@ export async function getURLMarkdownContent(
   abortController: AbortController,
 ): Promise<FetchedContent | RedirectInfo> {
   if (!validateURL(url)) {
-    throw new Error('Invalid URL')
+    throw new Error('URL inválida')
   }
 
   // Check cache (LRUCache handles TTL automatically)
@@ -526,5 +526,5 @@ export async function applyPromptToMarkdown(
       return contentBlock.text
     }
   }
-  return 'No response from model'
+  return 'Sem resposta do modelo'
 }

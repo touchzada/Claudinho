@@ -70,7 +70,7 @@ export const getWslVersion = memoize((): string | undefined => {
       return '1'
     }
 
-    // Not WSL or unable to determine version
+    // Not WSL or Não foi possível determine versão
     return undefined
   } catch (error) {
     logError(error)

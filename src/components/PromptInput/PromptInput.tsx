@@ -1632,7 +1632,7 @@ function PromptInput({
         onImagePaste(imageData.base64, imageData.mediaType);
       } else {
         const shortcutDisplay = getShortcutDisplay('chat:imagePaste', 'Chat', 'ctrl+v');
-        const message = env.isSSH() ? "No image found in clipboard. You're SSH'd; try scp?" : `No image found in clipboard. Use ${shortcutDisplay} to paste images.`;
+        const message = env.isSSH() ? "Nenhuma imagem encontrada na área de transferência. Você está via SSH; tenta scp?" : `Nenhuma imagem encontrada na área de transferência. Use ${shortcutDisplay} pra colar imagens.`;
         addNotification({
           key: 'no-image-in-clipboard',
           text: message,

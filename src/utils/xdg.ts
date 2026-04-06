@@ -1,5 +1,5 @@
 /**
- * XDG Base Directory utilities for Claude CLI Native Installer
+ * XDG Base diretório utilities for Claude CLI Native Installer
  *
  * Implements the XDG Base Directory specification for organizing
  * native installer components across appropriate system directories.
@@ -25,7 +25,7 @@ function resolveOptions(options?: XDGOptions): { env: EnvLike; home: string } {
 }
 
 /**
- * Get XDG state home directory
+ * Get XDG state home diretório
  * Default: ~/.local/state
  * @param options Optional env and homedir overrides for testing
  */
@@ -35,7 +35,7 @@ export function getXDGStateHome(options?: XDGOptions): string {
 }
 
 /**
- * Get XDG cache home directory
+ * Get XDG cache home diretório
  * Default: ~/.cache
  * @param options Optional env and homedir overrides for testing
  */
@@ -45,7 +45,7 @@ export function getXDGCacheHome(options?: XDGOptions): string {
 }
 
 /**
- * Get XDG data home directory
+ * Get XDG data home diretório
  * Default: ~/.local/share
  * @param options Optional env and homedir overrides for testing
  */
@@ -55,7 +55,7 @@ export function getXDGDataHome(options?: XDGOptions): string {
 }
 
 /**
- * Get user bin directory (not technically XDG but follows the convention)
+ * Get usuário bin diretório (not technically XDG but follows the convention)
  * Default: ~/.local/bin
  * @param options Optional homedir override for testing
  */

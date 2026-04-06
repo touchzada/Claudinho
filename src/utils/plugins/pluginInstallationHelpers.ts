@@ -376,7 +376,7 @@ export async function installResolvedPlugin({
   // Without this guard, a local-source root with undefined
   // marketplaceInstallLocation falls through: depInfo isn't seeded, the
   // materialize loop's `if (!info) continue` skips the root, and the user
-  // sees "Successfully installed" while nothing is cached.
+  // sees "Com sucesso installed" while nothing is cached.
   if (isLocalPluginSource(entry.source) && !marketplaceInstallLocation) {
     return {
       ok: false,

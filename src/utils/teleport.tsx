@@ -73,22 +73,22 @@ type TeleportToRemoteResponse = {
   id: string;
   title: string;
 };
-const SESSION_TITLE_AND_BRANCH_PROMPT = `You are coming up with a succinct title and git branch name for a coding session based on the provided description. The title should be clear, concise, and accurately reflect the content of the coding task.
-You should keep it short and simple, ideally no more than 6 words. Avoid using jargon or overly technical terms unless absolutely necessary. The title should be easy to understand for anyone reading it.
-Use sentence case for the title (capitalize only the first word and proper nouns), not Title Case.
+const SESSION_TITLE_AND_BRANCH_PROMPT = `Você está criando um título sucinto e um nome de branch git para uma sessão de código baseado na descrição fornecida. O título deve ser claro, conciso e refletir com precisão o conteúdo da tarefa de código.
+Mantenha curto e simples, idealmente não mais que 6 palavras. Evite usar jargão ou termos excessivamente técnicos a menos que seja absolutamente necessário. O título deve ser fácil de entender para qualquer pessoa lendo.
+Use capitalização de frase para o título (capitalize apenas a primeira palavra e nomes próprios), não Capitalização de Título.
 
-The branch name should be clear, concise, and accurately reflect the content of the coding task.
-You should keep it short and simple, ideally no more than 4 words. The branch should always start with "claude/" and should be all lower case, with words separated by dashes.
+O nome do branch deve ser claro, conciso e refletir com precisão o conteúdo da tarefa de código.
+Mantenha curto e simples, idealmente não mais que 4 palavras. O branch deve sempre começar com "claude/" e deve estar todo em minúsculas, com palavras separadas por hífens.
 
-Return a JSON object with "title" and "branch" fields.
+Retorne um objeto JSON com campos "title" e "branch".
 
-Example 1: {"title": "Fix login button not working on mobile", "branch": "claude/fix-mobile-login-button"}
-Example 2: {"title": "Update README with installation instructions", "branch": "claude/update-readme"}
-Example 3: {"title": "Improve performance of data processing script", "branch": "claude/improve-data-processing"}
+Exemplo 1: {"title": "Corrigir botão de login não funcionando no mobile", "branch": "claude/fix-mobile-login-button"}
+Exemplo 2: {"title": "Atualizar README com instruções de instalação", "branch": "claude/update-readme"}
+Exemplo 3: {"title": "Melhorar performance do script de processamento de dados", "branch": "claude/improve-data-processing"}
 
-Here is the session description:
+Aqui está a descrição da sessão:
 <description>{description}</description>
-Please generate a title and branch name for this session.`;
+Por favor, gere um título e nome de branch para esta sessão.`;
 type TitleAndBranch = {
   title: string;
   branchName: string;
@@ -429,7 +429,7 @@ export async function validateSessionRepository(sessionData: SessionResource): P
  */
 export async function teleportResumeCodeSession(sessionId: string, onProgress?: TeleportProgressCallback): Promise<TeleportRemoteResponse> {
   if (!isPolicyAllowed('allow_remote_sessions')) {
-    throw new Error("Remote sessions are disabled by your organization's policy.");
+    throw new Error("Remote sessions are desativado by your organização's policy.");
   }
   logForDebugging(`Resuming code session ID: ${sessionId}`);
   try {
@@ -447,7 +447,7 @@ export async function teleportResumeCodeSession(sessionId: string, onProgress?: 
       logEvent('tengu_teleport_resume_error', {
         error_type: 'no_org_uuid' as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
       });
-      throw new Error('Unable to get organization UUID for constructing session URL');
+      throw new Error('Não foi possível get organização UUID for constructing sessão URL');
     }
 
     // Fetch and validate repository matches before resuming
@@ -581,7 +581,7 @@ export async function teleportFromSessionsAPI(sessionId: string, orgUUID: string
     }
     logForDebugging(`[teleport] Session logs fetched in ${Date.now() - logsStartTime}ms`);
     if (logs === null) {
-      throw new Error('Failed to fetch session logs');
+      throw new Error('Falhou to fetch sessão logs');
     }
 
     // Filter to get only transcript messages, excluding sidechain messages
@@ -635,11 +635,11 @@ export async function pollRemoteSessionEvents(sessionId: string, afterId: string
 }): Promise<PollRemoteSessionResponse> {
   const accessToken = getClaudeAIOAuthTokens()?.accessToken;
   if (!accessToken) {
-    throw new Error('No access token for polling');
+    throw new Error('Não access token for polling');
   }
   const orgUUID = await getOrganizationUUID();
   if (!orgUUID) {
-    throw new Error('No org UUID for polling');
+    throw new Error('Não org UUID for polling');
   }
   const headers = {
     ...getOAuthHeaders(accessToken),
@@ -671,12 +671,12 @@ export async function pollRemoteSessionEvents(sessionId: string, afterId: string
     }
     const eventsData: EventsResponse = eventsResponse.data;
     if (!eventsData?.data || !Array.isArray(eventsData.data)) {
-      throw new Error('Invalid events response');
+      throw new Error('Inválido events response');
     }
     for (const event of eventsData.data) {
       if (event && typeof event === 'object' && 'type' in event) {
         if (event.type === 'env_manager_log' || event.type === 'control_response') {
-          continue;
+          Continuar;
         }
         if ('session_id' in event) {
           sdkMessages.push(event as SDKMessage);
@@ -802,7 +802,7 @@ export async function teleportToRemote(options: {
     await checkAndRefreshOAuthTokenIfNeeded();
     const accessToken = getClaudeAIOAuthTokens()?.accessToken;
     if (!accessToken) {
-      logError(new Error('No access token found for remote session creation'));
+      logError(new Error('Não access token found for remote sessão creation'));
       return null;
     }
 
@@ -1010,7 +1010,7 @@ export async function teleportToRemote(options: {
       if (!bundle.success) {
         logError(new Error(`Bundle upload failed: ${bundle.error}`));
         // Only steer users to GitHub setup when there's a remote to clone from.
-        const setup = repoInfo ? '. Please setup GitHub on https://claude.ai/code' : '';
+        const setup = repoInfo ? '. Por favor setup GitHub on https://claude.ai/code' : '';
         let msg: string;
         switch (bundle.failReason) {
           case 'empty_repo':
@@ -1059,7 +1059,7 @@ export async function teleportToRemote(options: {
     }
     logForDebugging(`Available environments: ${environments.map(e => `${e.environment_id} (${e.name}, ${e.kind})`).join(', ')}`);
 
-    // Select environment based on settings, then anthropic_cloud preference, then first available.
+    // Selecionar environment based on configurações, then anthropic_cloud preference, then first available.
     // Prefer anthropic_cloud environments over byoc: anthropic_cloud environments (e.g. "Default")
     // are the standard compute environments with full repo access, whereas byoc environments
     // (e.g. "monorepo") are user-owned compute that may not support the current repository.
@@ -1068,7 +1068,7 @@ export async function teleportToRemote(options: {
     let cloudEnv = environments.find(env => env.kind === 'anthropic_cloud');
     // When the caller opts out of their configured default, do not fall
     // through to a BYOC env that may not support the current repo or the
-    // requested permission mode. Retry once for eventual consistency,
+    // requested permission mode. Tentar novamente once for eventual consistency,
     // then fail loudly.
     if (options.useDefaultEnvironment && !cloudEnv) {
       logForDebugging(`No anthropic_cloud in env list (${environments.length} envs); retrying fetchEnvironments`);

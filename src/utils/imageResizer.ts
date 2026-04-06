@@ -173,10 +173,10 @@ export async function maybeResizeAndDownsampleImageBuffer(
 ): Promise<ResizeResult> {
   if (imageBuffer.length === 0) {
     // Empty buffer would fall through the catch block below (sharp throws
-    // "Unable to determine image format"), and the fallback's size check
+    // "Não foi possível determine image format"), and the fallback's size check
     // `0 ≤ 5MB` would pass it through, yielding an empty base64 string
     // that the API rejects with `image cannot be empty`.
-    throw new ImageResizeError('Image file is empty (0 bytes)')
+    throw new ImageResizeError('Arquivo de imagem está vazio (0 bytes)')
   }
   try {
     const sharp = await getImageProcessor()
@@ -423,11 +423,11 @@ export async function maybeResizeAndDownsampleImageBuffer(
     // Image is too large and we failed to compress it - fail with user-friendly error
     throw new ImageResizeError(
       overDim
-        ? `Unable to resize image — dimensions exceed the ${IMAGE_MAX_WIDTH}x${IMAGE_MAX_HEIGHT}px limit and image processing failed. ` +
-            `Please resize the image to reduce its pixel dimensions.`
-        : `Unable to resize image (${formatFileSize(originalSize)} raw, ${formatFileSize(base64Size)} base64). ` +
-            `The image exceeds the 5MB API limit and compression failed. ` +
-            `Please resize the image manually or use a smaller image.`,
+        ? `Não foi possível redimensionar a imagem — dimensões excedem o limite de ${IMAGE_MAX_WIDTH}x${IMAGE_MAX_HEIGHT}px e o processamento falhou. ` +
+            `Por favor, redimensiona a imagem pra reduzir suas dimensões em pixels.`
+        : `Não foi possível redimensionar a imagem (${formatFileSize(originalSize)} raw, ${formatFileSize(base64Size)} base64). ` +
+            `A imagem excede o limite de 5MB da API e a compressão falhou. ` +
+            `Por favor, redimensiona a imagem manualmente ou usa uma imagem menor.`,
     )
   }
 }
@@ -570,8 +570,8 @@ export async function compressImageBuffer(
 
     // Image is too large and compression failed - throw error
     throw new ImageResizeError(
-      `Unable to compress image (${formatFileSize(imageBuffer.length)}) to fit within ${formatFileSize(maxBytes)}. ` +
-        `Please use a smaller image.`,
+      `Não foi possível comprimir a imagem (${formatFileSize(imageBuffer.length)}) pra caber em ${formatFileSize(maxBytes)}. ` +
+        `Por favor, usa uma imagem menor.`,
     )
   }
 }

@@ -37,7 +37,7 @@ export function FallbackToolUseErrorMessage(t0) {
       const withoutErrorTags = withoutSandboxViolations.replace(/<\/?error>/g, "");
       const trimmed = withoutErrorTags.trim();
       if (!verbose && trimmed.includes("InputValidationError: ")) {
-        error = "Invalid tool parameters";
+        error = "Parâmetros de ferramenta inválidos";
       } else {
         if (trimmed.startsWith("Error: ") || trimmed.startsWith("Cancelled: ")) {
           error = trimmed;

@@ -91,7 +91,7 @@ export function It2SetupPrompt(t0) {
   if ($[9] !== packageManager) {
     t7 = async function handleInstall() {
       if (!packageManager) {
-        setError("No Python package manager found (uvx, pipx, or pip)");
+        setError("Não Python package manager found (uvx, pipx, or pip)");
         setStep("failed");
         return;
       }
@@ -169,7 +169,7 @@ export function It2SetupPrompt(t0) {
     };
     function renderInitialPrompt() {
       const options = [{
-        label: "Install it2 now",
+        label: "Instalar it2 now",
         value: "install",
         description: packageManager ? `Uses ${packageManager} to install the it2 CLI tool` : "Requires Python (uvx, pipx, or pip)"
       }];
@@ -177,13 +177,13 @@ export function It2SetupPrompt(t0) {
         options.push({
           label: "Use tmux instead",
           value: "tmux",
-          description: "Opens teammates in a separate tmux session"
+          description: "Opens teammates in a separate tmux sessão"
         });
       }
       options.push({
-        label: "Cancel",
+        label: "Cancelar",
         value: "cancel",
-        description: "Skip teammate spawning for now"
+        description: "Pular spawning de colegas de equipe por enquanto"
       });
       return <Box flexDirection="column" gap={1}><Text>To use native iTerm2 split panes for teammates, you need the{" "}<Text bold={true}>it2</Text> CLI tool.</Text><Text dimColor={true}>This enables teammates to appear as split panes within your current window.</Text><Box marginTop={1}><Select options={options} onChange={value => {
             bb61: switch (value) {
@@ -205,7 +205,7 @@ export function It2SetupPrompt(t0) {
           }} onCancel={() => onDone("cancelled")} /></Box></Box>;
     }
     function renderInstalling() {
-      return <Box flexDirection="column" gap={1}><Box><Spinner /><Text> Installing it2 using {packageManager}…</Text></Box><Text dimColor={true}>This may take a moment.</Text></Box>;
+      return <Box flexDirection="column" gap={1}><Box><Spinner /><Text> Instalando it2 usando {packageManager}…</Text></Box><Text dimColor={true}>Isso pode demorar um pouco.</Text></Box>;
     }
     function renderInstallFailed() {
       const options_0 = [{
@@ -221,11 +221,11 @@ export function It2SetupPrompt(t0) {
         });
       }
       options_0.push({
-        label: "Cancel",
+        label: "Cancelar",
         value: "cancel",
-        description: "Skip teammate spawning for now"
+        description: "Pular spawning de colegas de equipe por enquanto"
       });
-      return <Box flexDirection="column" gap={1}><Text color="error">Installation failed</Text>{error && <Text dimColor={true}>{error}</Text>}<Text dimColor={true}>You can try installing manually:{" "}{packageManager === "uvx" ? "uv tool install it2" : packageManager === "pipx" ? "pipx install it2" : "pip install --user it2"}</Text><Box marginTop={1}><Select options={options_0} onChange={value_0 => {
+      return <Box flexDirection="column" gap={1}><Text color="error">Instalação falhou</Text>{error && <Text dimColor={true}>{error}</Text>}<Text dimColor={true}>Você pode tentar instalar manualmente:{" "}{packageManager === "uvx" ? "uv tool install it2" : packageManager === "pipx" ? "pipx install it2" : "pip install --user it2"}</Text><Box marginTop={1}><Select options={options_0} onChange={value_0 => {
             bb89: switch (value_0) {
               case "retry":
                 {
@@ -246,33 +246,33 @@ export function It2SetupPrompt(t0) {
     }
     function renderApiInstructions() {
       const instructions = getPythonApiInstructions();
-      return <Box flexDirection="column" gap={1}><Text color="success">✓ it2 installed successfully</Text><Box flexDirection="column" marginTop={1}>{instructions.map(_temp)}</Box><Box marginTop={1}><Text dimColor={true}>Press Enter when ready to verify…</Text></Box></Box>;
+      return <Box flexDirection="column" gap={1}><Text color="success">✓ it2 instalado com sucesso</Text><Box flexDirection="column" marginTop={1}>{instructions.map(_temp)}</Box><Box marginTop={1}><Text dimColor={true}>Pressione Enter quando estiver pronto pra verificar…</Text></Box></Box>;
     }
     function renderVerifying() {
-      return <Box><Spinner /><Text> Verifying it2 can communicate with iTerm2…</Text></Box>;
+      return <Box><Spinner /><Text> Verificando se o it2 consegue se comunicar com o iTerm2…</Text></Box>;
     }
     function renderSuccess() {
-      return <Box flexDirection="column"><Text color="success">✓ iTerm2 split pane support is ready</Text><Text dimColor={true}>Teammates will now appear as split panes.</Text></Box>;
+      return <Box flexDirection="column"><Text color="success">✓ Suporte a painel dividido do iTerm2 está pronto</Text><Text dimColor={true}>Colegas de equipe agora aparecerão como painéis divididos.</Text></Box>;
     }
     function renderFailed() {
       const options_1 = [{
-        label: "Try again",
+        label: "Tentar de novo",
         value: "retry",
-        description: "Verify the connection again"
+        description: "Verificar a conexão de novo"
       }];
       if (tmuxAvailable) {
         options_1.push({
-          label: "Use tmux instead",
+          label: "Usar tmux ao invés",
           value: "tmux",
-          description: "Falls back to tmux for teammate panes"
+          description: "Volta pro tmux pra painéis de colegas de equipe"
         });
       }
       options_1.push({
-        label: "Cancel",
+        label: "Cancelar",
         value: "cancel",
-        description: "Skip teammate spawning for now"
+        description: "Pular spawning de colegas de equipe por enquanto"
       });
-      return <Box flexDirection="column" gap={1}><Text color="error">Verification failed</Text>{error && <Text dimColor={true}>{error}</Text>}<Text>Make sure:</Text><Box flexDirection="column" paddingLeft={2}><Text>· Python API is enabled in iTerm2 preferences</Text><Text>· You may need to restart iTerm2 after enabling</Text></Box><Box marginTop={1}><Select options={options_1} onChange={value_1 => {
+      return <Box flexDirection="column" gap={1}><Text color="error">Verificação falhou</Text>{error && <Text dimColor={true}>{error}</Text>}<Text>Certifica que:</Text><Box flexDirection="column" paddingLeft={2}><Text>· Python API está habilitada nas preferências do iTerm2</Text><Text>· Você pode precisar reiniciar o iTerm2 depois de habilitar</Text></Box><Box marginTop={1}><Select options={options_1} onChange={value_1 => {
             bb115: switch (value_1) {
               case "retry":
                 {
@@ -341,7 +341,7 @@ export function It2SetupPrompt(t0) {
   }
   let t15;
   if ($[29] !== exitState || $[30] !== step) {
-    t15 = step !== "installing" && step !== "verifying" && step !== "success" && <Text dimColor={true} italic={true}>{exitState.pending ? <>Press {exitState.keyName} again to exit</> : <>Esc to cancel</>}</Text>;
+    t15 = step !== "installing" && step !== "verifying" && step !== "success" && <Text dimColor={true} italic={true}>{exitState.pending ? <>Pressione {exitState.keyName} de novo pra sair</> : <>Esc pra cancelar</>}</Text>;
     $[29] = exitState;
     $[30] = step;
     $[31] = t15;

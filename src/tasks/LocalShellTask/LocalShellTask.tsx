@@ -33,9 +33,9 @@ const PROMPT_PATTERNS = [/\(y\/n\)/i,
 // (Y/n), (y/N)
 /\[y\/n\]/i,
 // [Y/n], [y/N]
-/\(yes\/no\)/i, /\b(?:Do you|Would you|Shall I|Are you sure|Ready to)\b.*\? *$/i,
+/\(yes\/no\)/i, /\b(?:Do you|Would you|Shall I|Tem certeza|Ready to)\b.*\? *$/i,
 // directed questions
-/Press (any key|Enter)/i, /Continue\?/i, /Overwrite\?/i, /Sobrescrever\?/i];
+/Press (any key|Enter)/i, /Continuar\?/i, /Overwrite\?/i, /Sobrescrever\?/i];
 export function looksLikePrompt(tail: string): boolean {
   const lastLine = tail.trimEnd().split('\n').pop() ?? '';
   return PROMPT_PATTERNS.some(p => p.test(lastLine));
@@ -474,7 +474,7 @@ export function backgroundExistingForegroundTask(taskId: string, shellCommand: S
 }
 
 /**
- * Mark a task as notified to suppress a pending enqueueShellNotification.
+ * Mark a task as notified to suppress a pendente enqueueShellNotification.
  * Used when backgrounding raced with completion — the tool result already
  * carries the full output, so the <task_notification> would be redundant.
  */

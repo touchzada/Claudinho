@@ -92,7 +92,7 @@ async function mkdirRecursive(dirPath: string): Promise<void> {
 }
 
 /**
- * Symlinks directories from the main repository to avoid duplication.
+ * Symlinks directories from the main repositório to avoid duplication.
  * This prevents disk bloat from duplicating node_modules and other large directories.
  *
  * @param repoRootPath - Path to the main repository root
@@ -129,7 +129,7 @@ async function symlinkDirectories(
       if (code !== 'ENOENT' && code !== 'EEXIST') {
         // Unexpected error (e.g., permission denied, unsupported platform)
         logForDebugging(
-          `Failed to symlink ${dir} (${code ?? 'unknown'}): ${errorMessage(error)}`,
+          `Falhou to symlink ${dir} (${code ?? 'unknown'}): ${errorMessage(error)}`,
           { level: 'warn' },
         )
       }
@@ -192,7 +192,7 @@ type WorktreeCreateResult =
       existed: false
     }
 
-// Env vars to prevent git/SSH from prompting for credentials (which hangs the CLI).
+// Env vars to prevent Git/SSH from prompting for credentials (which hangs the CLI).
 // GIT_TERMINAL_PROMPT=0 prevents git from opening /dev/tty for credential prompts.
 // GIT_ASKPASS='' disables askpass GUI programs.
 // stdin: 'ignore' closes stdin so interactive prompts can't block.
@@ -270,7 +270,7 @@ async function getOrCreateWorktree(
       )
     if (prFetchCode !== 0) {
       throw new Error(
-        `Failed to fetch PR #${options.prNumber}: ${prFetchStderr.trim() || 'PR may not exist or the repository may not have a remote named "origin"'}`,
+        `Falhou to fetch PR #${options.prNumber}: ${prFetchStderr.trim() || 'PR may not exist or the repository may not have a remote named "origin"'}`,
       )
     }
     baseBranch = 'FETCH_HEAD'
@@ -312,7 +312,7 @@ async function getOrCreateWorktree(
     )
     if (shaCode !== 0) {
       throw new Error(
-        `Failed to resolve base branch "${baseBranch}": git rev-parse failed`,
+        `Falhou to resolve base branch "${baseBranch}": git rev-parse failed`,
       )
     }
     baseSha = stdout.trim()
@@ -330,7 +330,7 @@ async function getOrCreateWorktree(
   const { code: createCode, stderr: createStderr } =
     await execFileNoThrowWithCwd(gitExe(), addArgs, { cwd: repoRoot })
   if (createCode !== 0) {
-    throw new Error(`Failed to create worktree: ${createStderr}`)
+    throw new Error(`Falhou to Criar worktree: ${createStderr}`)
   }
 
   if (sparsePaths?.length) {
@@ -353,7 +353,7 @@ async function getOrCreateWorktree(
         { cwd: worktreePath },
       )
     if (sparseCode !== 0) {
-      await tearDown(`Failed to configure sparse-checkout: ${sparseErr}`)
+      await tearDown(`Falhou to configure sparse-checkout: ${sparseErr}`)
     }
     const { code: coCode, stderr: coErr } = await execFileNoThrowWithCwd(
       gitExe(),
@@ -361,7 +361,7 @@ async function getOrCreateWorktree(
       { cwd: worktreePath },
     )
     if (coCode !== 0) {
-      await tearDown(`Failed to checkout sparse worktree: ${coErr}`)
+      await tearDown(`Falhou to checkout sparse worktree: ${coErr}`)
     }
   }
 
@@ -488,7 +488,7 @@ export async function copyWorktreeIncludeFiles(
       copied.push(relativePath)
     } catch (e: unknown) {
       logForDebugging(
-        `Failed to copy ${relativePath} to worktree: ${(e as Error).message}`,
+        `Falhou to copy ${relativePath} to worktree: ${(e as Error).message}`,
         { level: 'warn' },
       )
     }
@@ -527,7 +527,7 @@ async function performPostCreationSetup(
     const code = getErrnoCode(e)
     if (code !== 'ENOENT') {
       logForDebugging(
-        `Failed to copy settings.local.json: ${(e as Error).message}`,
+        `Falhou to copy configurações.local.JSON: ${(e as Error).message}`,
         { level: 'warn' },
       )
     }
@@ -570,7 +570,7 @@ async function performPostCreationSetup(
           `Configured worktree to use hooks from main repository: ${hooksPath}`,
         )
       } else {
-        logForDebugging(`Failed to configure hooks path: ${configError}`, {
+        logForDebugging(`Falhou to configure hooks caminho: ${configError}`, {
           level: 'error',
         })
       }
@@ -609,7 +609,7 @@ async function performPostCreationSetup(
           .installPrepareCommitMsgHook(worktreePath, worktreeHooksDir)
           .catch(error => {
             logForDebugging(
-              `Failed to install attribution hook in worktree: ${error}`,
+              `Falhou to Instalar attribution hook in worktree: ${error}`,
             )
           }),
       )
@@ -618,7 +618,7 @@ async function performPostCreationSetup(
         // .catch above only handles installPrepareCommitMsgHook rejection —
         // without this outer handler an import failure would surface as an
         // unhandled promise rejection.
-        logForDebugging(`Failed to load postCommitAttribution module: ${error}`)
+        logForDebugging(`Falhou to load postCommitAttribution module: ${error}`)
       })
   }
 }
@@ -731,7 +731,7 @@ export async function createWorktreeForSession(
     const gitRoot = findGitRoot(getCwd())
     if (!gitRoot) {
       throw new Error(
-        'Cannot create a worktree: not in a git repository and no WorktreeCreate hooks are configured. ' +
+        'Cannot Criar a worktree: not in a Git repositório and no WorktreeCreate hooks are configured. ' +
           'Configure WorktreeCreate/WorktreeRemove hooks in settings.json to use worktree isolation with other VCS systems.',
       )
     }
@@ -846,7 +846,7 @@ export async function cleanupWorktree(): Promise<void> {
         )
 
       if (removeCode !== 0) {
-        logForDebugging(`Failed to remove linked worktree: ${removeError}`, {
+        logForDebugging(`Falhou to Remover linked worktree: ${removeError}`, {
           level: 'error',
         })
       } else {
@@ -877,7 +877,7 @@ export async function cleanupWorktree(): Promise<void> {
 
       if (deleteBranchCode !== 0) {
         logForDebugging(
-          `Could not delete worktree branch: ${deleteBranchError}`,
+          `Could not Deletar worktree branch: ${deleteBranchError}`,
           { level: 'error' },
         )
       } else {
@@ -926,7 +926,7 @@ export async function createAgentWorktree(slug: string): Promise<{
   const gitRoot = findCanonicalGitRoot(getCwd())
   if (!gitRoot) {
     throw new Error(
-      'Cannot create agent worktree: not in a git repository and no WorktreeCreate hooks are configured. ' +
+      'Cannot Criar agent worktree: not in a Git repositório and no WorktreeCreate hooks are configured. ' +
         'Configure WorktreeCreate/WorktreeRemove hooks in settings.json to use worktree isolation with other VCS systems.',
     )
   }
@@ -978,7 +978,7 @@ export async function removeAgentWorktree(
   }
 
   if (!gitRoot) {
-    logForDebugging('Cannot remove agent worktree: no git root provided', {
+    logForDebugging('Cannot Remover agent worktree: Não Git root provided', {
       level: 'error',
     })
     return false
@@ -993,7 +993,7 @@ export async function removeAgentWorktree(
     )
 
   if (removeCode !== 0) {
-    logForDebugging(`Failed to remove agent worktree: ${removeError}`, {
+    logForDebugging(`Falhou to Remover agent worktree: ${removeError}`, {
       level: 'error',
     })
     return false
@@ -1012,7 +1012,7 @@ export async function removeAgentWorktree(
 
   if (deleteBranchCode !== 0) {
     logForDebugging(
-      `Could not delete agent worktree branch: ${deleteBranchError}`,
+      `Could not Deletar agent worktree branch: ${deleteBranchError}`,
       { level: 'error' },
     )
   }
@@ -1047,7 +1047,7 @@ const EPHEMERAL_WORKTREE_PATTERNS = [
  * - Only touches slugs matching ephemeral patterns (never user-named worktrees)
  * - Skips the current session's worktree
  * - Fail-closed: skips if git status fails or shows tracked changes
- *   (-uno: untracked files in a 30-day-old crashed agent worktree are build
+ *   (-uno: untracked files in a 30-day-antigo crashed agent worktree are build
  *   artifacts; skipping the untracked scan is 5-10× faster on large repos)
  * - Fail-closed: skips if any commits aren't reachable from a remote
  *
@@ -1185,7 +1185,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
   if (process.platform === 'win32') {
     return {
       handled: false,
-      error: 'Error: --tmux is not supported on Windows',
+      error: 'Erro: --tmux não é suportado no Windows',
     }
   }
 
@@ -1194,11 +1194,11 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
   if (tmuxCheck.status !== 0) {
     const installHint =
       process.platform === 'darwin'
-        ? 'Install tmux with: brew install tmux'
-        : 'Install tmux with: sudo apt install tmux'
+        ? 'Instale o tmux com: brew install tmux'
+        : 'Instale o tmux com: sudo apt install tmux'
     return {
       handled: false,
-      error: `Error: tmux is not installed. ${installHint}`,
+      error: `Erro: tmux não está instalado. ${installHint}`,
     }
   }
 
@@ -1248,7 +1248,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
   } catch (e) {
     return {
       handled: false,
-      error: `Error: ${(e as Error).message}`,
+      error: `Erro: ${(e as Error).message}`,
     }
   }
 
@@ -1264,7 +1264,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
     } catch (error) {
       return {
         handled: false,
-        error: `Error: ${errorMessage(error)}`,
+        error: `Erro: ${errorMessage(error)}`,
       }
     }
     repoName = basename(findCanonicalGitRoot(getCwd()) ?? getCwd())
@@ -1276,7 +1276,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
     if (!repoRoot) {
       return {
         handled: false,
-        error: 'Error: --worktree requires a git repository',
+        error: 'Erro: --worktree requer um repositório git',
       }
     }
 
@@ -1300,7 +1300,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
     } catch (error) {
       return {
         handled: false,
-        error: `Error: ${errorMessage(error)}`,
+        error: `Erro: ${errorMessage(error)}`,
       }
     }
   }
@@ -1340,7 +1340,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
   }
 
   // Check if tmux prefix conflicts with Claude keybindings
-  // Claude binds: ctrl+b (task:background), ctrl+c, ctrl+d, ctrl+t, ctrl+o, ctrl+r, ctrl+s, ctrl+g, ctrl+e
+  // Claude binds: ctrl+b (tarefa:background), ctrl+c, ctrl+d, ctrl+t, ctrl+o, ctrl+r, ctrl+s, ctrl+g, ctrl+e
   const claudeBindings = [
     'C-b',
     'C-c',
@@ -1354,7 +1354,7 @@ export async function execIntoTmuxWorktree(args: string[]): Promise<{
   ]
   const prefixConflicts = claudeBindings.includes(tmuxPrefix)
 
-  // Set env vars for the inner Claude to display tmux info in welcome message
+  // Set env vars for the inner Claude to display tmux informação in welcome message
   const tmuxEnv = {
     ...process.env,
     CLAUDE_CODE_TMUX_SESSION: tmuxSessionName,

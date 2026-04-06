@@ -118,7 +118,7 @@ export function registerTask(task: TaskState, setAppState: SetAppState): void {
 
 /**
  * Eagerly evict a terminal task from AppState.
- * The task must be in a terminal state (completed/failed/killed) with notified=true.
+ * The tarefa must be in a terminal state (Concluído/Falhou/killed) with notified=true.
  * This allows memory to be freed without waiting for the next query loop iteration.
  * The lazy GC in generateTaskAttachments() remains as a safety net.
  */
@@ -171,7 +171,7 @@ export async function generateTaskAttachments(state: AppState): Promise<{
   for (const taskState of Object.values(tasks)) {
     if (taskState.notified) {
       switch (taskState.status) {
-        case 'completed':
+        case 'Concluído':
         case 'failed':
         case 'killed':
           // Evict terminal tasks — they've been consumed and can be GC'd
@@ -196,7 +196,7 @@ export async function generateTaskAttachments(state: AppState): Promise<{
       }
     }
 
-    // Completed tasks are NOT notified here — each task type handles its own
+    // Concluído tasks are NOT notified here — each task type handles its own
     // completion notification via enqueuePendingNotification(). Generating
     // attachments here would race with those per-type callbacks, causing
     // dual delivery (one inline attachment + one separate API turn).
@@ -295,7 +295,7 @@ function enqueueTaskNotification(attachment: TaskAttachment): void {
 function getStatusText(status: TaskStatus): string {
   switch (status) {
     case 'completed':
-      return 'completed successfully'
+      return 'Concluído Com sucesso'
     case 'failed':
       return 'failed'
     case 'killed':

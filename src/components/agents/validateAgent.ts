@@ -14,19 +14,19 @@ export type AgentValidationResult = {
 
 export function validateAgentType(agentType: string): string | null {
   if (!agentType) {
-    return 'Agent type is required'
+    return 'Tipo de agente é obrigatório'
   }
 
   if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/.test(agentType)) {
-    return 'Agent type must start and end with alphanumeric characters and contain only letters, numbers, and hyphens'
+    return 'Tipo de agente deve começar e terminar com caracteres alfanuméricos e conter apenas letras, números e hífens'
   }
 
   if (agentType.length < 3) {
-    return 'Agent type must be at least 3 characters long'
+    return 'Tipo de agente deve ter pelo menos 3 caracteres'
   }
 
   if (agentType.length > 50) {
-    return 'Agent type must be less than 50 characters'
+    return 'Tipo de agente deve ter menos de 50 caracteres'
   }
 
   return null
@@ -42,7 +42,7 @@ export function validateAgent(
 
   // Validate agent type
   if (!agent.agentType) {
-    errors.push('Agent type is required')
+    errors.push('Tipo de agente é obrigatório')
   } else {
     const typeError = validateAgentType(agent.agentType)
     if (typeError) {
@@ -62,24 +62,24 @@ export function validateAgent(
 
   // Validate description
   if (!agent.whenToUse) {
-    errors.push('Description (description) is required')
+    errors.push('Descrição (description) é obrigatória')
   } else if (agent.whenToUse.length < 10) {
     warnings.push(
-      'Description should be more descriptive (at least 10 characters)',
+      'Descrição deve ser mais descritiva (pelo menos 10 caracteres)',
     )
   } else if (agent.whenToUse.length > 5000) {
-    warnings.push('Description is very long (over 5000 characters)')
+    warnings.push('Descrição é muito longa (mais de 5000 caracteres)')
   }
 
   // Validate tools
   if (agent.tools !== undefined && !Array.isArray(agent.tools)) {
-    errors.push('Tools must be an array')
+    errors.push('Tools devem ser um array')
   } else {
     if (agent.tools === undefined) {
-      warnings.push('Agent has access to all tools')
+      warnings.push('Agente tem acesso a todas as ferramentas')
     } else if (agent.tools.length === 0) {
       warnings.push(
-        'No tools selected - agent will have very limited capabilities',
+        'Nenhuma ferramenta selecionada - agente terá capacidades muito limitadas',
       )
     }
 
@@ -87,18 +87,18 @@ export function validateAgent(
     const resolvedTools = resolveAgentTools(agent, availableTools, false)
 
     if (resolvedTools.invalidTools.length > 0) {
-      errors.push(`Invalid tools: ${resolvedTools.invalidTools.join(', ')}`)
+      errors.push(`Ferramentas inválidas: ${resolvedTools.invalidTools.join(', ')}`)
     }
   }
 
   // Validate system prompt
   const systemPrompt = agent.getSystemPrompt()
   if (!systemPrompt) {
-    errors.push('System prompt is required')
+    errors.push('Prompt do sistema é obrigatório')
   } else if (systemPrompt.length < 20) {
-    errors.push('System prompt is too short (minimum 20 characters)')
+    errors.push('Prompt do sistema é muito curto (mínimo 20 caracteres)')
   } else if (systemPrompt.length > 10000) {
-    warnings.push('System prompt is very long (over 10,000 characters)')
+    warnings.push('Prompt do sistema é muito longo (mais de 10.000 caracteres)')
   }
 
   return {

@@ -142,7 +142,7 @@ export async function resumeAgentBackground({
     }
     if (!forkParentSystemPrompt) {
       throw new Error(
-        'Cannot resume fork agent: unable to reconstruct parent system prompt',
+        'Cannot resume fork agent: Não foi possível reconstruct parent system prompt',
       )
     }
   }

@@ -32,7 +32,7 @@ export type Output = z.infer<OutputSchema>
 
 export const TaskListTool = buildTool({
   name: TASK_LIST_TOOL_NAME,
-  searchHint: 'list all tasks',
+  searchHint: 'list todos tasks',
   maxResultSizeChars: 100_000,
   async description() {
     return DESCRIPTION

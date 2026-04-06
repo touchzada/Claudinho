@@ -75,7 +75,7 @@ export function ApproveApiKey(t0) {
   }
   let t5;
   if ($[8] === Symbol.for("react.memo_cache_sentinel")) {
-    t5 = <Text>Do you want to use this API key?</Text>;
+    t5 = <Text>Você quer to use this API key?</Text>;
     $[8] = t5;
   } else {
     t5 = $[8];

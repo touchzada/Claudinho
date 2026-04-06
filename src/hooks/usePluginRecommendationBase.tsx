@@ -87,7 +87,7 @@ export async function installPluginAndNotify(pluginId: string, pluginName: strin
     addNotification({
       key: `${keyPrefix}-installed`,
       jsx: <Text color="success">
-          {figures.tick} {pluginName} installed · restart to apply
+          {figures.tick} {pluginName} installed · restart to Aplicar
         </Text>,
       priority: 'immediate',
       timeoutMs: 5000

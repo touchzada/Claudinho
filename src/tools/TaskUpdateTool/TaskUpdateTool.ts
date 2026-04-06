@@ -87,7 +87,7 @@ export type Output = z.infer<OutputSchema>
 
 export const TaskUpdateTool = buildTool({
   name: TASK_UPDATE_TOOL_NAME,
-  searchHint: 'update a task',
+  searchHint: 'Atualizar a tarefa',
   maxResultSizeChars: 100_000,
   async description() {
     return DESCRIPTION

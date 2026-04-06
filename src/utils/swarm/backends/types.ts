@@ -195,7 +195,7 @@ export type TeammateIdentity = {
   teamName: string
   /** Assigned color for UI differentiation */
   color?: AgentColorName
-  /** Whether plan mode approval is required before implementation */
+  /** Whether plan mode approval is Obrigatório before implementation */
   planModeRequired?: boolean
 }
 

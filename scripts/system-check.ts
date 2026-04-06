@@ -358,7 +358,7 @@ function checkOllamaProcessorMode(): CheckResult {
   })
 
   if (result.status !== 0) {
-    const detail = (result.stderr || result.stdout || 'Unable to run ollama ps').trim()
+    const detail = (result.stderr || result.stdout || 'Não foi possível run ollama ps').trim()
     return pass('Ollama processor mode', `Native CLI check failed (${detail}). Assuming valid Docker/remote backend since HTTP ping passed.`)
   }
 

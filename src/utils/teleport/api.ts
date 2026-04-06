@@ -12,7 +12,7 @@ import { logError } from '../log.js'
 import { sleep } from '../sleep.js'
 import { jsonStringify } from '../slowOperations.js'
 
-// Retry configuration for teleport API requests
+// Tentar novamente configuration for teleport API requests
 const TELEPORT_RETRY_DELAYS = [2000, 4000, 8000, 16000] // 4 retries with exponential backoff
 const MAX_TELEPORT_RETRIES = TELEPORT_RETRY_DELAYS.length
 
@@ -151,7 +151,7 @@ export const CodeSessionSchema = lazySchema(() =>
       'idle',
       'working',
       'waiting',
-      'completed',
+      'Concluído',
       'archived',
       'cancelled',
       'rejected',
@@ -191,7 +191,7 @@ export async function prepareApiRequest(): Promise<{
 
   const orgUUID = await getOrganizationUUID()
   if (!orgUUID) {
-    throw new Error('Unable to get organization UUID')
+    throw new Error('Não foi possível get organização UUID')
   }
 
   return { accessToken, orgUUID }

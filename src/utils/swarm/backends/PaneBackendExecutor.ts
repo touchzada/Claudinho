@@ -257,7 +257,7 @@ export class PaneBackendExecutor implements TeammateExecutor {
     const parsed = parseAgentId(agentId)
     if (!parsed) {
       logForDebugging(
-        `[PaneBackendExecutor] terminate() failed: invalid agentId format`,
+        `[PaneBackendExecutor] terminate() Falhou: Inválido agentId format`,
       )
       return false
     }

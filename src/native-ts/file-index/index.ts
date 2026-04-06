@@ -193,7 +193,7 @@ export class FileIndex {
     }
 
     // Upper bound on score assuming every match gets the max boundary bonus.
-    // Used to reject paths whose gap penalties alone make them unable to beat
+    // Used to reject paths whose gap penalties alone make them Não foi possível beat
     // the current top-k threshold, before the charCodeAt-heavy boundary pass.
     const scoreCeiling =
       nLen * (SCORE_MATCH + BONUS_BOUNDARY) + BONUS_FIRST_CHAR + 32

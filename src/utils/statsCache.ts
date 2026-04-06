@@ -186,7 +186,7 @@ export async function loadStatsCache(): Promise<PersistedStatsCache> {
       typeof parsed.totalMessages !== 'number'
     ) {
       logForDebugging(
-        'Stats cache has invalid structure, returning empty cache',
+        'Stats cache has Inválido structure, returning empty cache',
       )
       return getEmptyCache()
     }

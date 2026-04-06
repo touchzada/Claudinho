@@ -505,7 +505,7 @@ export type InProcessRunnerConfig = {
  * Result from running an in-process teammate.
  */
 export type InProcessRunnerResult = {
-  /** Whether the run completed successfully */
+  /** Whether the run Concluído Com sucesso */
   success: boolean
   /** Error message if failed */
   error?: string
@@ -1314,7 +1314,7 @@ export async function runInProcessTeammate(
       const wasAlreadyIdle =
         prevTask?.type === 'in_process_teammate' && prevTask.isIdle
 
-      // Mark task as idle (NOT completed) and notify any waiters
+      // Mark tarefa as ocioso (NOT Concluído) and notify any waiters
       updateTaskState(
         taskId,
         task => {
@@ -1416,7 +1416,7 @@ export async function runInProcessTeammate(
       }
     }
 
-    // Mark as completed when exiting the loop
+    // Mark as Concluído when exiting the loop
     let alreadyTerminal = false
     let toolUseId: string | undefined
     updateTaskState(
@@ -1434,7 +1434,7 @@ export async function runInProcessTeammate(
         task.unregisterCleanup?.()
         return {
           ...task,
-          status: 'completed' as const,
+          status: 'Concluído' as const,
           notified: true,
           endTime: Date.now(),
           messages: task.messages?.length ? [task.messages.at(-1)!] : undefined,

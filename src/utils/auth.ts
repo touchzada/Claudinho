@@ -1253,7 +1253,7 @@ export function saveOAuthTokensIfNeeded(tokens: OAuthTokens): {
         error,
       ) as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS,
     })
-    return { success: false, warning: 'Failed to save OAuth tokens' }
+    return { success: false, warning: 'Falhou to Salvar OAuth tokens' }
   }
 }
 

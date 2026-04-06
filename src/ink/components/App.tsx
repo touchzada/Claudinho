@@ -86,7 +86,7 @@ type Props = {
   readonly dispatchKeyboardEvent: (parsedKey: ParsedKey) => void;
 };
 
-// Multi-click detection thresholds. 500ms is the macOS default; a small
+// Multi-Clique detection thresholds. 500ms is the macOS default; a small
 // position tolerance allows for trackpad jitter between clicks.
 const MULTI_CLICK_TIMEOUT_MS = 500;
 const MULTI_CLICK_DISTANCE = 1;
@@ -625,7 +625,7 @@ export function handleMouseEvent(app: App, m: ParsedMouse): void {
   }
 
   // Release: end the drag even for non-zero button codes. Some terminals
-  // encode release with the motion bit or button=3 "no button" (carried
+  // encode release with the motion bit or button=3 "Não button" (carried
   // over from pre-SGR X10 encoding) — filtering those would orphan
   // isDragging=true and leave drag-to-scroll's timer running until the
   // scroll boundary. Only act on non-left releases when we ARE dragging

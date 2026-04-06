@@ -143,7 +143,7 @@ async function waitForTaskCompletion(taskId: string, getAppState: () => {
 }
 export const TaskOutputTool: Tool<InputSchema, TaskOutputToolOutput> = buildTool({
   name: TASK_OUTPUT_TOOL_NAME,
-  searchHint: 'read output/logs from a background task',
+  searchHint: 'ler saída/logs de uma tarefa em segundo plano',
   maxResultSizeChars: 100_000,
   shouldDefer: true,
   // Backwards-compatible aliases for renamed tools
@@ -188,7 +188,7 @@ export const TaskOutputTool: Tool<InputSchema, TaskOutputToolOutput> = buildTool
     if (!task_id) {
       return {
         result: false,
-        message: 'Task ID is required',
+        message: 'ID da tarefa é obrigatório',
         errorCode: 1
       };
     }
@@ -197,7 +197,7 @@ export const TaskOutputTool: Tool<InputSchema, TaskOutputToolOutput> = buildTool
     if (!task) {
       return {
         result: false,
-        message: `No task found with ID: ${task_id}`,
+        message: `Nenhuma tarefa encontrada com ID: ${task_id}`,
         errorCode: 2
       };
     }
@@ -214,7 +214,7 @@ export const TaskOutputTool: Tool<InputSchema, TaskOutputToolOutput> = buildTool
     const appState = toolUseContext.getAppState();
     const task = appState.tasks?.[task_id] as TaskState | undefined;
     if (!task) {
-      throw new Error(`No task found with ID: ${task_id}`);
+      throw new Error(`Nenhuma tarefa encontrada com ID: ${task_id}`);
     }
     if (!block) {
       // Non-blocking: return current state
@@ -330,8 +330,8 @@ export const TaskOutputTool: Tool<InputSchema, TaskOutputToolOutput> = buildTool
     return <Box flexDirection="column">
           {progressData?.taskDescription && <Text>&nbsp;&nbsp;{progressData.taskDescription}</Text>}
           <Text>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waiting for task{' '}
-            <Text dimColor>(esc to give additional instructions)</Text>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aguardando tarefa{' '}
+            <Text dimColor>(esc pra dar instruções adicionais)</Text>
           </Text>
         </Box>;
   },
@@ -474,7 +474,7 @@ function TaskOutputResultDisplay(t0) {
       }
       let t3;
       if ($[27] !== expandShortcut) {
-        t3 = <MessageResponse><Text dimColor={true}>Read output ({expandShortcut} to expand)</Text></MessageResponse>;
+        t3 = <MessageResponse><Text dimColor={true}>Ler saída ({expandShortcut} pra expandir)</Text></MessageResponse>;
         $[27] = expandShortcut;
         $[28] = t3;
       } else {
@@ -485,7 +485,7 @@ function TaskOutputResultDisplay(t0) {
     if (result.retrieval_status === "timeout" || task.status === "running") {
       let t3;
       if ($[29] === Symbol.for("react.memo_cache_sentinel")) {
-        t3 = <MessageResponse><Text dimColor={true}>Task is still running…</Text></MessageResponse>;
+        t3 = <MessageResponse><Text dimColor={true}>Tarefa ainda em execução…</Text></MessageResponse>;
         $[29] = t3;
       } else {
         t3 = $[29];
@@ -495,7 +495,7 @@ function TaskOutputResultDisplay(t0) {
     if (result.retrieval_status === "not_ready") {
       let t3;
       if ($[30] === Symbol.for("react.memo_cache_sentinel")) {
-        t3 = <MessageResponse><Text dimColor={true}>Task is still running…</Text></MessageResponse>;
+        t3 = <MessageResponse><Text dimColor={true}>Tarefa ainda em execução…</Text></MessageResponse>;
         $[30] = t3;
       } else {
         t3 = $[30];

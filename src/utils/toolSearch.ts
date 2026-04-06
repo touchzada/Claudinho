@@ -43,7 +43,7 @@ import { zodToJsonSchema } from './zodToJsonSchema.js'
 
 /**
  * Default percentage of context window at which to auto-enable tool search.
- * When MCP tool descriptions exceed this percentage (in tokens), tool search is enabled.
+ * When MCP tool descriptions exceed this percentage (in tokens), tool buscar is ativado.
  * Can be overridden via ENABLE_TOOL_SEARCH=auto:N where N is 0-100.
  */
 const DEFAULT_AUTO_TOOL_SEARCH_PERCENTAGE = 10 // 10%
@@ -94,12 +94,12 @@ function getAutoToolSearchPercentage(): number {
 
 /**
  * Approximate chars per token for MCP tool definitions (name + description + input schema).
- * Used as fallback when the token counting API is unavailable.
+ * Used as fallback when the token counting API is indisponível.
  */
 const CHARS_PER_TOKEN = 2.5
 
 /**
- * Get the token threshold for auto-enabling tool search for a given model.
+ * Get the token threshold for automático-enabling tool buscar for a given model.
  */
 function getAutoToolSearchTokenThreshold(model: string): number {
   const betas = getMergedBetas(model)
@@ -117,7 +117,7 @@ export function getAutoToolSearchCharThreshold(model: string): number {
 }
 
 /**
- * Get the total token count for all deferred tools using the token counting API.
+ * Get the total token count for todos deferred tools using the token counting API.
  * Memoized by deferred tool names — cache is invalidated when MCP servers connect/disconnect.
  * Returns null if the API is unavailable (caller should fall back to char heuristic).
  */
@@ -224,7 +224,7 @@ function getUnsupportedToolReferencePatterns(): string[] {
 }
 
 /**
- * Check if a model supports tool_reference blocks (required for tool search).
+ * Check if a model supports tool_reference blocks (Obrigatório for tool buscar).
  *
  * This uses a negative test: models are assumed to support tool_reference
  * UNLESS they match a pattern in the unsupported list. This ensures new
@@ -719,7 +719,7 @@ async function checkAutoThreshold(
   debugDescription: string
   metrics: Record<string, number>
 }> {
-  // Try exact token count first (cached, one API call per toolset change)
+  // Try exact token count primeiro (cached, one API call per toolset change)
   const deferredToolTokens = await getDeferredToolTokenCount(
     tools,
     getToolPermissionContext,

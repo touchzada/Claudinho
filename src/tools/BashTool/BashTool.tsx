@@ -445,7 +445,7 @@ export const BashTool = buildTool({
   async preparePermissionMatcher({
     command
   }) {
-    // Hook `if` filtering is "no match → skip hook" (deny-like semantics), so
+    // Hook `if` filtering is "Não match → Pular hook" (deny-like semantics), so
     // compound commands must fire the hook if ANY subcommand matches. Without
     // splitting, `ls && git push` would bypass a `Bash(git *)` security hook.
     const parsed = await parseForSecurity(command);

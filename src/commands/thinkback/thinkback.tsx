@@ -192,7 +192,7 @@ function ThinkbackInstaller({
           setState({
             phase: 'installing-marketplace'
           });
-          setProgressMessage('Updating marketplace…');
+          setProgressMessage('Atualizando marketplace…');
           logForDebugging(`Refreshing marketplace ${marketplaceName}`);
           await refreshMarketplace(marketplaceName, message_0 => {
             setProgressMessage(message_0);

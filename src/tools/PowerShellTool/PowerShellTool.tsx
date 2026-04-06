@@ -551,7 +551,7 @@ export const PowerShellTool = buildTool({
       // Interpret exit code using semantic rules. PS-native cmdlets (Select-String,
       // Compare-Object, Test-Path) exit 0 on no-match so they always hit the default
       // here. This primarily handles external .exe's (grep, rg, findstr, fc, robocopy)
-      // where non-zero can mean "no match" / "files copied" rather than failure.
+      // where non-zero can mean "Não match" / "files copied" rather than failure.
       const interpretation = interpretCommandResult(input.command, result.code, processedStdout, result.stderr || '');
 
       // getErrorParts() in toolErrors.ts already prepends 'Exit code N'

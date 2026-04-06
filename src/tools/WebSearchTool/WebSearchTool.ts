@@ -363,7 +363,7 @@ function makeOutputFromSearchResponse(
 
 export const WebSearchTool = buildTool({
   name: WEB_SEARCH_TOOL_NAME,
-  searchHint: 'search the web for current information',
+  searchHint: 'buscar the web for atual information',
   maxResultSizeChars: 100_000,
   shouldDefer: true,
   async description(input) {

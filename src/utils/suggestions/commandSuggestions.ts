@@ -538,7 +538,7 @@ export function applyCommandSuggestion(
     commandObj = shouldExecute ? getCommand(commandName, commands) : undefined
   } else {
     if (!isCommandMetadata(suggestion.metadata)) {
-      return // Invalid suggestion, nothing to apply
+      return // Inválido suggestion, nothing to Aplicar
     }
     commandName = getCommandName(suggestion.metadata)
     commandObj = suggestion.metadata

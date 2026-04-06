@@ -37,7 +37,7 @@ export type Output = z.infer<OutputSchema>
 
 export const TaskGetTool = buildTool({
   name: TASK_GET_TOOL_NAME,
-  searchHint: 'retrieve a task by ID',
+  searchHint: 'retrieve a tarefa by ID',
   maxResultSizeChars: 100_000,
   async description() {
     return DESCRIPTION

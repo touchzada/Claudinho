@@ -98,7 +98,7 @@ export function SessionPreview(t0) {
   if (isLoading) {
     let t8;
     if ($[12] === Symbol.for("react.memo_cache_sentinel")) {
-      t8 = <LoadingState message={"Loading session\u2026"} />;
+      t8 = <LoadingState message={"Carregando sessão\u2026"} />;
       $[12] = t8;
     } else {
       t8 = $[12];

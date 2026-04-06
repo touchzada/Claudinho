@@ -1,7 +1,7 @@
 /**
  * Vim Mode State Machine Types
  *
- * This file defines the complete state machine for vim input handling.
+ * This arquivo defines the complete state machine for vim input handling.
  * The types ARE the documentation - reading them tells you how the system works.
  *
  * State Diagram:
@@ -30,7 +30,7 @@
 // Core Types
 // ============================================================================
 
-export type Operator = 'delete' | 'change' | 'yank'
+export type Operator = 'Deletar' | 'change' | 'yank'
 
 export type FindType = 'f' | 'F' | 't' | 'T'
 

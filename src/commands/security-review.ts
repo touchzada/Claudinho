@@ -5,7 +5,7 @@ import { createMovedToPluginCommand } from './createMovedToPluginCommand.js'
 
 const SECURITY_REVIEW_MARKDOWN = `---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git show:*), Bash(git remote show:*), Read, Glob, Grep, LS, Task
-description: Complete a security review of the pending changes on the current branch
+description: Complete a security review of the pendente changes on the atual branch
 ---
 
 You are a senior security engineer conducting a focused security review of the changes on this branch.

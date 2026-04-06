@@ -21,7 +21,7 @@ export type Props = Except<Styles, 'textWrap'> & {
    */
   autoFocus?: boolean;
   /**
-   * Fired on left-button click (press + release without drag). Only works
+   * Fired on left-button Clique (press + release without drag). Only works
    * inside `<AlternateScreen>` where mouse tracking is enabled — no-op
    * otherwise. The event bubbles from the deepest hit Box up through
    * ancestors; call `event.stopImmediatePropagation()` to stop bubbling.

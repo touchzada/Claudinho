@@ -154,7 +154,7 @@ class TerminalPanel {
   private showShell(): void {
     const inkInstance = instances.get(process.stdout)
     if (!inkInstance) {
-      logForDebugging('Terminal panel: no Ink instance found, aborting')
+      logForDebugging('Terminal panel: Não Ink instance found, aborting')
       return
     }
 

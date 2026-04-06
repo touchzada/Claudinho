@@ -113,7 +113,7 @@ export async function resolveDependencyClosure(
     // that's in settings but missing from disk (e.g., cache cleared,
     // installed_plugins.json stale) would return an empty closure and
     // `cacheAndRegisterPlugin` would never fire — user sees
-    // "✔ Successfully installed" but nothing materializes.
+    // "✔ Com sucesso installed" but nothing materializes.
     if (id !== rootId && alreadyEnabled.has(id)) return null
     // Security: block auto-install across marketplace boundaries. Runs AFTER
     // the alreadyEnabled check — if the user manually installed a cross-mkt

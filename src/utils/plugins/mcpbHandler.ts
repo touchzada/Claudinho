@@ -501,7 +501,7 @@ async function downloadMcpb(
           const percent = Math.round(
             (progressEvent.loaded / progressEvent.total) * 100,
           )
-          onProgress(`Downloading... ${percent}%`)
+          onProgress(`Baixando... ${percent}%`)
         }
       },
     })

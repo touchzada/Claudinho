@@ -41,7 +41,7 @@ export function RemoteCallout({
     description: 'You can always enable it later with /remote-control.',
     value: 'dismiss'
   }];
-  return <PermissionDialog title="Remote Control">
+  return <PermissionDialog title="Controle Remoto">
       <Box flexDirection="column" paddingX={2} paddingY={1}>
         <Box marginBottom={1} flexDirection="column">
           <Text>

@@ -277,7 +277,7 @@ export async function update() {
   if (!latestVersion) {
     logForDebugging('update: Failed to get latest version from npm registry')
     process.stderr.write(chalk.red('Failed to check for updates') + '\n')
-    process.stderr.write('Unable to fetch latest version from npm registry\n')
+    process.stderr.write('Não foi possível fetch latest versão from npm registry\n')
     process.stderr.write('\n')
     process.stderr.write('Possible causes:\n')
     process.stderr.write('  • Network connectivity issues\n')

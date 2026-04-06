@@ -12,9 +12,10 @@ import {
   getMaxBashTimeoutMs,
 } from '../../utils/timeouts.js'
 import {
-  getUndercoverInstructions,
-  isUndercover,
-} from '../../utils/undercover.js'
+  getCamaleaoInstructions,
+  getCamaleaoInstructionsInline,
+  isCamaleaoCached,
+} from '../../utils/camaleao.js'
 import { AGENT_TOOL_NAME } from '../AgentTool/constants.js'
 import { FILE_EDIT_TOOL_NAME } from '../FileEditTool/constants.js'
 import { FILE_READ_TOOL_NAME } from '../FileReadTool/prompt.js'
@@ -40,17 +41,12 @@ function getBackgroundUsageNote(): string | null {
 }
 
 function getCommitAndPRInstructions(): string {
-  // Defense-in-depth: undercover instructions must survive even if the user
-  // has disabled git instructions entirely. Attribution stripping and model-ID
-  // hiding are mechanical and work regardless, but the explicit "don't blow
-  // your cover" instructions are the last line of defense against the model
-  // volunteering an internal codename in a commit message.
-  const undercoverSection =
-    process.env.USER_TYPE === 'ant' && isUndercover()
-      ? getUndercoverInstructions() + '\n'
-      : ''
+  // Modo camaleao: camuflagem de origem IA em repos publicos
+  const camaleaoSection = isCamaleaoCached()
+    ? getCamaleaoInstructions() + '\n'
+    : ''
 
-  if (!shouldIncludeGitInstructions()) return undercoverSection
+  if (!shouldIncludeGitInstructions()) return camaleaoSection
 
   // For ant users, use the short version pointing to skills
   if (process.env.USER_TYPE === 'ant') {
@@ -65,7 +61,7 @@ Before creating a pull request, run \`/simplify\` to review your changes, then t
 
 `
       : ''
-    return `${undercoverSection}# Git operations
+    return `${camaleaoSection}# Git operations
 
 ${skillsSection}IMPORTANT: NEVER skip hooks (--no-verify, --no-gpg-sign, etc) unless the user explicitly requests it.
 

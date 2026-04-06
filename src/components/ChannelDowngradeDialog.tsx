@@ -51,7 +51,7 @@ export function ChannelDowngradeDialog(t0) {
   }
   let t4;
   if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
-    t4 = <Text dimColor={true}>How would you like to handle this?</Text>;
+    t4 = <Text dimColor={true}>How Você gostaria to handle this?</Text>;
     $[6] = t4;
   } else {
     t4 = $[6];

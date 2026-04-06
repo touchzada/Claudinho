@@ -107,6 +107,6 @@ function truncateJson(value: unknown, maxLength: number): string {
     }
     return str.slice(0, maxLength - 3) + '...'
   } catch {
-    return '[unable to serialize]'
+    return '[Não foi possível serialize]'
   }
 }

@@ -46,7 +46,7 @@ export function saveGithubModelsToken(token: string): {
   warning?: string
 } {
   if (isBareMode()) {
-    return { success: false, warning: 'Bare mode: secure storage is disabled.' }
+    return { success: false, warning: 'Bare mode: secure storage is desativado.' }
   }
   const trimmed = token.trim()
   if (!trimmed) {

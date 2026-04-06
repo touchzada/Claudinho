@@ -330,7 +330,7 @@ export type Output = z.input<OutputSchema>
 
 export const SkillTool: Tool<InputSchema, Output, Progress> = buildTool({
   name: SKILL_TOOL_NAME,
-  searchHint: 'invoke a slash-command skill',
+  searchHint: 'invoke a slash-comando skill',
   maxResultSizeChars: 100_000,
   get inputSchema(): InputSchema {
     return inputSchema()
@@ -403,7 +403,7 @@ export const SkillTool: Tool<InputSchema, Output, Progress> = buildTool({
     if (!foundCommand) {
       return {
         result: false,
-        message: `Unknown skill: ${normalizedCommandName}`,
+        message: `Skill desconhecida: ${normalizedCommandName}`,
         errorCode: 2,
       }
     }

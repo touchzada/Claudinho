@@ -2289,7 +2289,7 @@ function buildAttributionSnapshotChain(
  * Loads a transcript from a JSON or JSONL file and converts it to LogOption format
  * @param filePath Path to the transcript file (.json or .jsonl)
  * @returns LogOption containing the transcript messages
- * @throws Error if file doesn't exist or contains invalid data
+ * @throws Erro if arquivo doesn't exist or contains Inválido data
  */
 export async function loadTranscriptFromFile(
   filePath: string,
@@ -2310,7 +2310,7 @@ export async function loadTranscriptFromFile(
     } = await loadTranscriptFile(filePath)
 
     if (messages.size === 0) {
-      throw new Error('No messages found in JSONL file')
+      throw new Error('Não messages found in JSONL arquivo')
     }
 
     // Find the most recent leaf message using pre-computed leaf UUIDs
@@ -2319,7 +2319,7 @@ export async function loadTranscriptFromFile(
     )
 
     if (!leafMessage) {
-      throw new Error('No valid conversation chain found in JSONL file')
+      throw new Error('Não valid conversation chain found in JSONL arquivo')
     }
 
     // Build the conversation chain backwards from leaf to root

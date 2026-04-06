@@ -43,7 +43,7 @@ function MarketplaceList(t0) {
           const config = await loadKnownMarketplacesConfig();
           const names = Object.keys(config);
           if (names.length === 0) {
-            onComplete("No marketplaces configured");
+            onComplete("Não marketplaces configured");
           } else {
             onComplete(`Configured marketplaces:\n${names.map(_temp).join("\n")}`);
           }

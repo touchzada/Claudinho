@@ -93,7 +93,7 @@ export type FileWriteToolInput = InputSchema
 
 export const FileWriteTool = buildTool({
   name: FILE_WRITE_TOOL_NAME,
-  searchHint: 'create or overwrite files',
+  searchHint: 'Criar or overwrite files',
   maxResultSizeChars: 100_000,
   strict: true,
   async description() {

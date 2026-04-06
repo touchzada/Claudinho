@@ -96,7 +96,7 @@ export function getSSLErrorHint(error: unknown): string | null {
   if (!details?.isSSLError) {
     return null
   }
-  return `SSL certificate error (${details.code}). If you are behind a corporate proxy or TLS-intercepting firewall, set NODE_EXTRA_CA_CERTS to your CA bundle path, or ask IT to allowlist *.anthropic.com. Run /doctor for details.`
+  return `Erro de certificado SSL (${details.code}). Se você está atrás de um proxy corporativo ou firewall com interceptação TLS, define NODE_EXTRA_CA_CERTS pro caminho do seu pacote de CA, ou pede pro TI liberar *.anthropic.com. Roda /doctor pra mais detalhes.`
 }
 
 /**
@@ -206,7 +206,7 @@ export function formatAPIError(error: APIError): string {
 
     // Handle timeout errors
     if (code === 'ETIMEDOUT') {
-      return 'Request timed out. Check your internet connection and proxy settings'
+      return 'Tempo de requisição esgotado. Verifica sua conexão com a internet e configurações de proxy'
     }
 
     // Handle SSL/TLS errors with specific messages
@@ -215,21 +215,21 @@ export function formatAPIError(error: APIError): string {
         case 'UNABLE_TO_VERIFY_LEAF_SIGNATURE':
         case 'UNABLE_TO_GET_ISSUER_CERT':
         case 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY':
-          return 'Unable to connect to API: SSL certificate verification failed. Check your proxy or corporate SSL certificates'
+          return 'Não foi possível conectar à API: falha na verificação do certificado SSL. Verifica seu proxy ou certificados SSL corporativos'
         case 'CERT_HAS_EXPIRED':
-          return 'Unable to connect to API: SSL certificate has expired'
+          return 'Não foi possível conectar à API: certificado SSL expirou'
         case 'CERT_REVOKED':
-          return 'Unable to connect to API: SSL certificate has been revoked'
+          return 'Não foi possível conectar à API: certificado SSL foi revogado'
         case 'DEPTH_ZERO_SELF_SIGNED_CERT':
         case 'SELF_SIGNED_CERT_IN_CHAIN':
-          return 'Unable to connect to API: Self-signed certificate detected. Check your proxy or corporate SSL certificates'
+          return 'Não foi possível conectar à API: certificado auto-assinado detectado. Verifica seu proxy ou certificados SSL corporativos'
         case 'ERR_TLS_CERT_ALTNAME_INVALID':
         case 'HOSTNAME_MISMATCH':
-          return 'Unable to connect to API: SSL certificate hostname mismatch'
+          return 'Não foi possível conectar à API: incompatibilidade de hostname do certificado SSL'
         case 'CERT_NOT_YET_VALID':
-          return 'Unable to connect to API: SSL certificate is not yet valid'
+          return 'Não foi possível conectar à API: certificado SSL ainda não é válido'
         default:
-          return `Unable to connect to API: SSL error (${code})`
+          return `Não foi possível conectar à API: erro SSL (${code})`
       }
     }
   }
@@ -237,9 +237,9 @@ export function formatAPIError(error: APIError): string {
   if (error.message === 'Connection error.') {
     // If we have a code but it's not SSL, include it for debugging
     if (connectionDetails?.code) {
-      return `Unable to connect to API (${connectionDetails.code})`
+      return `Não foi possível conectar à API (${connectionDetails.code})`
     }
-    return 'Unable to connect to API. Check your internet connection'
+    return 'Não foi possível conectar à API. Verifica sua conexão com a internet'
   }
 
   // Guard: when deserialized from JSONL (e.g. --resume), the error object may
@@ -248,7 +248,7 @@ export function formatAPIError(error: APIError): string {
   if (!error.message) {
     return (
       extractNestedErrorMessage(error) ??
-      `API error (status ${error.status ?? 'unknown'})`
+      `Erro de API (status ${error.status ?? 'desconhecido'})`
     )
   }
 

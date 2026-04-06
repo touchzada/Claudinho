@@ -73,7 +73,7 @@ function generateUniqueTeamName(providedName: string): string {
 
 export const TeamCreateTool: Tool<InputSchema, Output> = buildTool({
   name: TEAM_CREATE_TOOL_NAME,
-  searchHint: 'create a multi-agent swarm team',
+  searchHint: 'Criar a multi-agent swarm equipe',
   maxResultSizeChars: 100_000,
   shouldDefer: true,
 

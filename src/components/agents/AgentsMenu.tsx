@@ -553,7 +553,7 @@ export function AgentsMenu(t0) {
         }
         let t18;
         if ($[109] === Symbol.for("react.memo_cache_sentinel")) {
-          t18 = <AgentNavigationFooter instructions="Press Enter or Esc to go back" />;
+          t18 = <AgentNavigationFooter instructions="Pressione Enter ou Esc pra voltar" />;
           $[109] = t18;
         } else {
           t18 = $[109];
@@ -573,10 +573,10 @@ export function AgentsMenu(t0) {
         let t13;
         if ($[112] === Symbol.for("react.memo_cache_sentinel")) {
           t13 = [{
-            label: "Yes, delete",
+            label: "Sim, deletar",
             value: "yes"
           }, {
-            label: "No, cancel",
+            label: "Não, cancelar",
             value: "no"
           }];
           $[112] = t13;
@@ -598,7 +598,7 @@ export function AgentsMenu(t0) {
         }
         let t15;
         if ($[115] !== modeState.agent.agentType) {
-          t15 = <Text>Are you sure you want to delete the agent{" "}<Text bold={true}>{modeState.agent.agentType}</Text>?</Text>;
+          t15 = <Text>Tem certeza que quer deletar o agente{" "}<Text bold={true}>{modeState.agent.agentType}</Text>?</Text>;
           $[115] = modeState.agent.agentType;
           $[116] = t15;
         } else {
@@ -606,7 +606,7 @@ export function AgentsMenu(t0) {
         }
         let t16;
         if ($[117] !== modeState.agent.source) {
-          t16 = <Box marginTop={1}><Text dimColor={true}>Source: {modeState.agent.source}</Text></Box>;
+          t16 = <Box marginTop={1}><Text dimColor={true}>Fonte: {modeState.agent.source}</Text></Box>;
           $[117] = modeState.agent.source;
           $[118] = t16;
         } else {
@@ -652,7 +652,7 @@ export function AgentsMenu(t0) {
         }
         let t20;
         if ($[127] !== t14 || $[128] !== t15 || $[129] !== t16 || $[130] !== t19) {
-          t20 = <Dialog title="Delete agent" onCancel={t14} color="error">{t15}{t16}{t19}</Dialog>;
+          t20 = <Dialog title="Deletar agente" onCancel={t14} color="error">{t15}{t16}{t19}</Dialog>;
           $[127] = t14;
           $[128] = t15;
           $[129] = t16;
@@ -663,7 +663,7 @@ export function AgentsMenu(t0) {
         }
         let t21;
         if ($[132] === Symbol.for("react.memo_cache_sentinel")) {
-          t21 = <AgentNavigationFooter instructions={"Press \u2191\u2193 to navigate, Enter to select, Esc to cancel"} />;
+          t21 = <AgentNavigationFooter instructions={"Pressione ↑↓ pra navegar, Enter pra selecionar, Esc pra cancelar"} />;
           $[132] = t21;
         } else {
           t21 = $[132];
@@ -699,7 +699,7 @@ export function AgentsMenu(t0) {
         }
         const freshAgent = t13;
         const agentToEdit = freshAgent || modeState.agent;
-        const t14 = `Edit agent: ${agentToEdit.agentType}`;
+        const t14 = `Editar agente: ${agentToEdit.agentType}`;
         let t15;
         if ($[140] !== modeState.previousMode) {
           t15 = () => setModeState(modeState.previousMode);

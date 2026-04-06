@@ -315,7 +315,7 @@ export function AddWorkspaceDirectory(t0) {
   }
   let t12;
   if ($[27] !== onCancel || $[28] !== t10 || $[29] !== t11) {
-    t12 = <Dialog title="Add directory to workspace" onCancel={onCancel} color="permission" isCancelActive={false} inputGuide={t10}>{t11}</Dialog>;
+    t12 = <Dialog title="Adicionar diretório to workspace" onCancel={onCancel} color="permission" isCancelActive={false} inputGuide={t10}>{t11}</Dialog>;
     $[27] = onCancel;
     $[28] = t10;
     $[29] = t11;

@@ -15,7 +15,7 @@ function HistorySearchInput(t0) {
     onChange,
     historyFailedMatch
   } = t0;
-  const t1 = historyFailedMatch ? "no matching prompt:" : "search prompts:";
+  const t1 = historyFailedMatch ? "Não matching prompt:" : "search prompts:";
   let t2;
   if ($[0] !== t1) {
     t2 = <Text dimColor={true}>{t1}</Text>;

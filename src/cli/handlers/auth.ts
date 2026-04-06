@@ -101,7 +101,7 @@ export async function installOAuthTokens(tokens: OAuthTokens): Promise<void> {
     const apiKey = await createAndStoreApiKey(tokens.accessToken)
     if (!apiKey) {
       throw new Error(
-        'Unable to create API key. The server accepted the request but did not return a key.',
+        'Não foi possível Criar API key. The server accepted the request but did not return a key.',
       )
     }
   }

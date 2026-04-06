@@ -256,7 +256,7 @@ export function Doctor(t0) {
   if (!diagnostic) {
     let t10;
     if ($[16] === Symbol.for("react.memo_cache_sentinel")) {
-      t10 = <Pane><Text dimColor={true}>Checking installation status…</Text></Pane>;
+      t10 = <Pane><Text dimColor={true}>Verificando installation status…</Text></Pane>;
       $[16] = t10;
     } else {
       t10 = $[16];

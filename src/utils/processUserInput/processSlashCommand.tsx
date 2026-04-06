@@ -310,7 +310,7 @@ export async function processSlashCommand(inputString: string, precedingInputBlo
   const parsed = parseSlashCommand(inputString);
   if (!parsed) {
     logEvent('tengu_input_slash_missing', {});
-    const errorMessage = 'Commands are in the form `/command [args]`';
+    const errorMessage = 'Comandos são no formato `/comando [args]`';
     return {
       messages: [createSyntheticUserCaveatMessage(), ...attachmentMessages, createUserMessage({
         content: prepareUserContent({
@@ -344,7 +344,7 @@ export async function processSlashCommand(inputString: string, precedingInputBlo
       logEvent('tengu_input_slash_invalid', {
         input: commandName as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
       });
-      const unknownMessage = `Unknown skill: ${commandName}`;
+      const unknownMessage = `Skill desconhecida: ${commandName}`;
       return {
         messages: [createSyntheticUserCaveatMessage(), ...attachmentMessages, createUserMessage({
           content: prepareUserContent({
@@ -354,7 +354,7 @@ export async function processSlashCommand(inputString: string, precedingInputBlo
         }),
         // gh-32591: preserve args so the user can copy/resubmit without
         // retyping. System warning is UI-only (filtered before API).
-        ...(parsedArgs ? [createSystemMessage(`Args from unknown skill: ${parsedArgs}`, 'warning')] : [])],
+        ...(parsedArgs ? [createSystemMessage(`Args da skill desconhecida: ${parsedArgs}`, 'warning')] : [])],
         shouldQuery: false,
         resultText: unknownMessage
       };
@@ -450,7 +450,7 @@ export async function processSlashCommand(inputString: string, precedingInputBlo
   }
 
   // For invalid commands, preserve both the user message and error
-  if (newMessages.length === 2 && newMessages[1]!.type === 'user' && typeof newMessages[1]!.message.content === 'string' && newMessages[1]!.message.content.startsWith('Unknown command:')) {
+  if (newMessages.length === 2 && newMessages[1]!.type === 'user' && typeof newMessages[1]!.message.content === 'string' && newMessages[1]!.message.content.startsWith('Comando desconhecido:')) {
     // Don't log as invalid if it looks like a common file path
     const looksLikeFilePath = inputString.startsWith('/var') || inputString.startsWith('/tmp') || inputString.startsWith('/private');
     if (!looksLikeFilePath) {
@@ -783,7 +783,7 @@ function formatCommandInput(command: CommandBase, args: string): string {
  * Formats the metadata for a skill loading message.
  * Used by the Skill tool and for subagent skill preloading.
  */
-export function formatSkillLoadingMetadata(skillName: string, _progressMessage: string = 'loading'): string {
+export function formatSkillLoadingMetadata(skillName: string, _progressMessage: string = 'Carregando'): string {
   // Use skill name only - UserCommandMessage renders as "Skill(name)"
   return [`<${COMMAND_MESSAGE_TAG}>${skillName}</${COMMAND_MESSAGE_TAG}>`, `<${COMMAND_NAME_TAG}>${skillName}</${COMMAND_NAME_TAG}>`, `<skill-format>true</skill-format>`].join('\n');
 }
@@ -817,7 +817,7 @@ function formatCommandLoadingMetadata(command: CommandBase & PromptCommand, args
 export async function processPromptSlashCommand(commandName: string, args: string, commands: Command[], context: ToolUseContext, imageContentBlocks: ContentBlockParam[] = []): Promise<SlashCommandResult> {
   const command = findCommand(commandName, commands);
   if (!command) {
-    throw new MalformedCommandError(`Unknown command: ${commandName}`);
+    throw new MalformedCommandError(`Comando desconhecido: ${commandName}`);
   }
   if (command.type !== 'prompt') {
     throw new Error(`Unexpected ${command.type} command. Expected 'prompt' command. Use /${commandName} directly in the main conversation.`);

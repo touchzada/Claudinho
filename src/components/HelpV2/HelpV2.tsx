@@ -79,7 +79,7 @@ export function HelpV2(t0) {
   const customCommands = t3;
   let t4;
   if ($[8] === Symbol.for("react.memo_cache_sentinel")) {
-    t4 = <Tab key="general" title="geral"><General /></Tab>;
+    t4 = <Tab key="general" title="Geral"><General /></Tab>;
     $[8] = t4;
   } else {
     t4 = $[8];

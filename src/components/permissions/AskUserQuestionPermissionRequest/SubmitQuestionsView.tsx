@@ -48,7 +48,7 @@ export function SubmitQuestionsView(t0) {
   }
   let t3;
   if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
-    t3 = <PermissionRequestTitle title="Review your answers" color="text" />;
+    t3 = <PermissionRequestTitle title="Revise suas respostas" color="text" />;
     $[5] = t3;
   } else {
     t3 = $[5];

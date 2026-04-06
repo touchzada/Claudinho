@@ -54,7 +54,7 @@ export type TransitionResult = {
 }
 
 /**
- * Main transition function. Dispatches based on current state type.
+ * Main transition function. Dispatches based on atual state Digite.
  */
 export function transition(
   state: CommandState,
@@ -440,7 +440,7 @@ function fromReplace(
   input: string,
   ctx: TransitionContext,
 ): TransitionResult {
-  // Backspace/Delete arrive as empty input in literal-char states. In vim,
+  // Backspace/Deletar arrive as empty input in literal-char states. In vim,
   // r<BS> cancels the replace; without this guard, executeReplace("") would
   // delete the character under the cursor instead.
   if (input === '') return { next: { type: 'idle' } }

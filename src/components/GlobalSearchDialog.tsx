@@ -216,7 +216,7 @@ export function GlobalSearchDialog(t0) {
   }
   let t12;
   if ($[18] !== isSearching) {
-    t12 = q_0 => isSearching ? "Searching\u2026" : q_0 ? "No matches" : "Type to search\u2026";
+    t12 = q_0 => isSearching ? "Buscando\u2026" : q_0 ? "Nenhum resultado" : "Digite pra buscar\u2026";
     $[18] = isSearching;
     $[19] = t12;
   } else {

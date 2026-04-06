@@ -119,7 +119,7 @@ export function SkillsMenu(t0) {
     }
     let t5;
     if ($[8] !== handleCancel) {
-      t5 = <Dialog title="Skills" subtitle="No skills found" onCancel={handleCancel} hideInputGuide={true}>{t3}{t4}</Dialog>;
+      t5 = <Dialog title="Skills" subtitle="Nenhuma skill encontrada" onCancel={handleCancel} hideInputGuide={true}>{t3}{t4}</Dialog>;
       $[8] = handleCancel;
       $[9] = t5;
     } else {

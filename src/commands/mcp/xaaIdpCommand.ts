@@ -170,7 +170,7 @@ export function registerMcpXaaIdpCommand(mcp: Command): void {
       const idp = getXaaIdpSettings()
       if (!idp) {
         return cliError(
-          "Error: no XAA IdP connection. Run 'claude mcp xaa setup' first.",
+          "Erro: Não XAA IdP connection. Run 'claude MCP xaa setup' primeiro.",
         )
       }
 

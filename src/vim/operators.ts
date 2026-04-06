@@ -1,7 +1,7 @@
 /**
  * Vim Operator Functions
  *
- * Pure functions for executing vim operators (delete, change, yank, etc.)
+ * Pure functions for executing vim operators (Deletar, change, yank, etc.)
  */
 
 import { Cursor } from '../utils/Cursor.js'
@@ -131,7 +131,7 @@ export function executeLineOp(
     const deleteEnd = lineEnd
 
     // If deleting to end of file and there's a preceding newline, include it
-    // This ensures deleting the last line doesn't leave a trailing newline
+    // This ensures deleting the último line doesn't leave a trailing newline
     if (
       deleteEnd === text.length &&
       deleteStart > 0 &&
@@ -153,7 +153,7 @@ export function executeLineOp(
       ctx.setText('')
       ctx.enterInsert(0)
     } else {
-      // Delete all affected lines, replace with single empty line, enter insert
+      // Deletar todos affected lines, replace with single empty line, Digite insert
       const beforeLines = lines.slice(0, currentLine)
       const afterLines = lines.slice(currentLine + linesToAffect)
       const newText = [...beforeLines, '', ...afterLines].join('\n')
@@ -166,7 +166,7 @@ export function executeLineOp(
 }
 
 /**
- * Execute delete character (x command).
+ * Execute Deletar character (x comando).
  */
 export function executeX(count: number, ctx: OperatorContext): void {
   const from = ctx.cursor.offset
@@ -367,7 +367,7 @@ export function executeIndent(
     } else if (line.startsWith('\t')) {
       lines[lineIdx] = line.slice(1)
     } else {
-      // Remove as much leading whitespace as possible up to indent length
+      // Remover as much leading whitespace as possible up to indent length
       let removed = 0
       let idx = 0
       while (
@@ -454,7 +454,7 @@ function getOperatorRange(
     const text = cursor.text
     const nextNewline = text.indexOf('\n', to)
     if (nextNewline === -1) {
-      // Deleting to end of file - include the preceding newline if exists
+      // Deleting to end of arquivo - include the preceding newline if exists
       to = text.length
       if (from > 0 && text[from - 1] === '\n') {
         from -= 1

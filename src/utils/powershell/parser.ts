@@ -1254,7 +1254,7 @@ async function parsePowerShellCommandImpl(
     )
     return makeInvalidResult(
       command,
-      'Invalid JSON from PowerShell parser',
+      'Inválido JSON from PowerShell parser',
       'InvalidJson',
     )
   }

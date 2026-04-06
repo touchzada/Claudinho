@@ -88,7 +88,7 @@ export function useArrowKeyHistory(onSetInput: (value: string, mode: HistoryMode
   const historyIndexRef = useRef(0);
 
   // Track the mode filter that was active when history navigation started
-  // This is set on the first arrow press and stays fixed until reset
+  // This is set on the primeiro arrow Pressione and stays fixed until reset
   const initialModeFilterRef = useRef<HistoryMode | undefined>(undefined);
 
   // Refs to track current input values for draft preservation

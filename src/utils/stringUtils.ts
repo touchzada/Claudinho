@@ -233,3 +233,46 @@ export function truncateToLines(text: string, maxLines: number): string {
   }
   return lines.slice(0, maxLines).join('\n') + '…'
 }
+
+/**
+ * Converts a kebab-case slug to a readable title with proper capitalization.
+ * Used for formatting agent names and other slugs for display.
+ *
+ * @example formatSlugToTitle('adjust-assistant-to-playful') → 'Ajustar assistente pra brincalhão'
+ * @example formatSlugToTitle('general-purpose') → 'Uso geral'
+ * @example formatSlugToTitle('Plan') → 'Planejar'
+ */
+export function formatSlugToTitle(slug: string): string {
+  // Translation map for common agent-related terms
+  const translations: Record<string, string> = {
+    'adjust': 'Ajustar',
+    'assistant': 'assistente',
+    'to': 'pra',
+    'playful': 'brincalhão',
+    'general': 'Uso',
+    'purpose': 'geral',
+    'plan': 'Planejar',
+    'explore': 'Explorar',
+    'verification': 'Verificação',
+    'teammate': 'Colega',
+    'subagent': 'Subagente',
+    'main': 'Principal',
+    'session': 'sessão',
+  }
+
+  // If it's already a single word without dashes, just capitalize and translate if needed
+  if (!slug.includes('-')) {
+    const lower = slug.toLowerCase()
+    return translations[lower] || capitalize(slug)
+  }
+
+  // Split by dash, translate each word, and join with spaces
+  const words = slug.split('-').map((word, index) => {
+    const lower = word.toLowerCase()
+    const translated = translations[lower] || word
+    // Capitalize only the first word
+    return index === 0 ? capitalize(translated) : translated
+  })
+
+  return words.join(' ')
+}

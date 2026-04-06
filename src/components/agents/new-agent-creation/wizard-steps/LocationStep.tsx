@@ -68,7 +68,7 @@ export function LocationStep() {
   }
   let t5;
   if ($[8] !== t3 || $[9] !== t4) {
-    t5 = <WizardDialogLayout subtitle="Choose location" footerText={t2}><Box><Select key="location-select" options={locationOptions} onChange={t3} onCancel={t4} /></Box></WizardDialogLayout>;
+    t5 = <WizardDialogLayout subtitle="Escolher location" footerText={t2}><Box><Select key="location-select" options={locationOptions} onChange={t3} onCancel={t4} /></Box></WizardDialogLayout>;
     $[8] = t3;
     $[9] = t4;
     $[10] = t5;

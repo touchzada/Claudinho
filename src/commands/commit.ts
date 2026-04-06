@@ -1,7 +1,7 @@
 import type { Command } from '../commands.js'
 import { getAttributionTexts } from '../utils/attribution.js'
 import { executeShellCommandsInPrompt } from '../utils/promptShellExecution.js'
-import { getUndercoverInstructions, isUndercover } from '../utils/undercover.js'
+import { getCamaleaoInstructions, isCamaleao, setCamaleaoCache, isCamaleaoCached } from '../utils/camaleao.js'
 
 const ALLOWED_TOOLS = [
   'Bash(git add:*)',
@@ -10,11 +10,14 @@ const ALLOWED_TOOLS = [
 ]
 
 function getPromptContent(): string {
-  const { commit: commitAttribution } = getAttributionTexts()
+  const attributionTexts = getAttributionTexts()
+  let commitAttribution = attributionTexts.commit
 
+  // Camaleao: camuflagem de origem IA em repos publicos
   let prefix = ''
-  if (process.env.USER_TYPE === 'ant' && isUndercover()) {
-    prefix = getUndercoverInstructions() + '\n'
+  if (isCamaleaoCached()) {
+    prefix = getCamaleaoInstructions() + '\n'
+    commitAttribution = ''
   }
 
   return `${prefix}## Context
@@ -63,6 +66,9 @@ const command = {
   progressMessage: 'creating commit',
   source: 'builtin',
   async getPromptForCommand(_args, context) {
+    // Primar o cache async do camaleao
+    setCamaleaoCache(await isCamaleao())
+
     const promptContent = getPromptContent()
     const finalContent = await executeShellCommandsInPrompt(
       promptContent,

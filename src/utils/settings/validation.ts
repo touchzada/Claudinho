@@ -54,7 +54,7 @@ export type ValidationError = {
   message: string
   /** Expected value or type */
   expected?: string
-  /** The actual invalid value that was provided */
+  /** The actual Inválido value that was provided */
   invalidValue?: unknown
   /** Suggestion for fixing the error */
   suggestion?: string
@@ -148,7 +148,7 @@ export function formatZodError(
         receivedType === 'null' &&
         path === ''
       ) {
-        message = 'Invalid or malformed JSON'
+        message = 'Inválido or malformed JSON'
       } else {
         message = `Expected ${issue.expected}, but received ${receivedType}`
       }

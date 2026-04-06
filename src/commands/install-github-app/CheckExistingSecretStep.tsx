@@ -108,7 +108,7 @@ export function CheckExistingSecretStep(t0) {
   }
   let t10;
   if ($[17] === Symbol.for("react.memo_cache_sentinel")) {
-    t10 = <Box marginBottom={1}><Text>Would you like to:</Text></Box>;
+    t10 = <Box marginBottom={1}><Text>Você gostaria to:</Text></Box>;
     $[17] = t10;
   } else {
     t10 = $[17];

@@ -57,7 +57,7 @@ export function sendChromeMessage(message: string): void {
 }
 
 export async function runChromeNativeHost(): Promise<void> {
-  log('Initializing...')
+  log('Inicializando...')
 
   const host = new ChromeNativeHost()
   const messageReader = new ChromeMessageReader()

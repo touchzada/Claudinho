@@ -36,7 +36,7 @@ export type ListOutput = z.infer<OutputSchema>
 
 export const CronListTool = buildTool({
   name: CRON_LIST_TOOL_NAME,
-  searchHint: 'list active cron jobs',
+  searchHint: 'list ativo cron jobs',
   maxResultSizeChars: 100_000,
   shouldDefer: true,
   get inputSchema(): InputSchema {

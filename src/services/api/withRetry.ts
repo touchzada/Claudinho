@@ -578,7 +578,7 @@ export function parseMaxTokensContextOverflowError(error: APIError):
   if (!match[1] || !match[2] || !match[3]) {
     logError(
       new Error(
-        'Unable to parse max_tokens from max_tokens exceed context limit error message',
+        'Não foi possível parse max_tokens from max_tokens exceed context limit Erro message',
       ),
     )
     return undefined

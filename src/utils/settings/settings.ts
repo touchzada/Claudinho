@@ -212,7 +212,7 @@ function parseSettingsFileUncached(path: string): {
 
     const data = safeParseJSON(content, false)
 
-    // Filter invalid permission rules before schema validation so one bad
+    // filtrar Inválido permissão rules before schema validation so one bad
     // rule doesn't cause the entire settings file to be rejected.
     const ruleWarnings = filterInvalidPermissionRules(data, path)
 

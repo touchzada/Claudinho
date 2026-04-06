@@ -243,7 +243,7 @@ async function processSessionFiles(
 
       // Skip sessions with malformed timestamps — some transcripts on disk
       // have entries missing the timestamp field (e.g. partial/remote writes).
-      // new Date(undefined) produces an Invalid Date, and toDateString() would
+      // novo Date(undefined) produces an Inválido Date, and toDateString() would
       // throw RangeError: Invalid Date on .toISOString().
       if (isNaN(firstTimestamp.getTime()) || isNaN(lastTimestamp.getTime())) {
         logForDebugging(

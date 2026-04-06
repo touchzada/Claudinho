@@ -85,7 +85,7 @@ export function renderToolUseProgressMessage(progressMessagesForMessage: Progres
       </MessageResponse>;
   }
   return <MessageResponse height={1}>
-      <Text dimColor>{progressMessage ?? `Processing… ${progress}`}</Text>
+      <Text dimColor>{progressMessage ?? `Processando… ${progress}`}</Text>
     </MessageResponse>;
 }
 export function renderToolResultMessage(output: string | MCPToolResult, _progressMessagesForMessage: ProgressMessage<ToolProgressData>[], {

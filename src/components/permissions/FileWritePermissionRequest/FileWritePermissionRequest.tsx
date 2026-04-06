@@ -118,7 +118,7 @@ export function FileWritePermissionRequest(props) {
   }
   let t11;
   if ($[11] !== actionText || $[12] !== t10) {
-    t11 = <Text>Do you want to {actionText} {t10}?</Text>;
+    t11 = <Text>Você quer to {actionText} {t10}?</Text>;
     $[11] = actionText;
     $[12] = t10;
     $[13] = t11;

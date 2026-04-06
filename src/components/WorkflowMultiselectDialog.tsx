@@ -25,13 +25,13 @@ const WORKFLOWS: WorkflowOption[] = [{
 }];
 function renderInputGuide(exitState: ExitState): React.ReactNode {
   if (exitState.pending) {
-    return <Text>Press {exitState.keyName} again to exit</Text>;
+    return <Text>Pressione {exitState.keyName} de novo pra sair</Text>;
   }
   return <Byline>
-      <KeyboardShortcutHint shortcut="↑↓" action="navigate" />
-      <KeyboardShortcutHint shortcut="Space" action="toggle" />
-      <KeyboardShortcutHint shortcut="Enter" action="confirm" />
-      <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="cancel" />
+      <KeyboardShortcutHint shortcut="↑↓" action="navegar" />
+      <KeyboardShortcutHint shortcut="Space" action="alternar" />
+      <KeyboardShortcutHint shortcut="Enter" action="confirmar" />
+      <ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="cancelar" />
     </Byline>;
 }
 export function WorkflowMultiselectDialog(t0) {
@@ -102,7 +102,7 @@ export function WorkflowMultiselectDialog(t0) {
   }
   let t7;
   if ($[9] !== showError) {
-    t7 = showError && <Box><Text color="error">You must select at least one workflow to continue</Text></Box>;
+    t7 = showError && <Box><Text color="error">Você precisa selecionar pelo menos um workflow pra continuar</Text></Box>;
     $[9] = showError;
     $[10] = t7;
   } else {
@@ -110,7 +110,7 @@ export function WorkflowMultiselectDialog(t0) {
   }
   let t8;
   if ($[11] !== t6 || $[12] !== t7) {
-    t8 = <Dialog title="Select GitHub workflows to install" subtitle="We'll create a workflow file in your repository for each one you select." onCancel={handleCancel} inputGuide={renderInputGuide}>{t4}{t6}{t7}</Dialog>;
+    t8 = <Dialog title="Selecione workflows do GitHub pra instalar" subtitle="Vamos criar um arquivo de workflow no seu repositório pra cada um que você selecionar." onCancel={handleCancel} inputGuide={renderInputGuide}>{t4}{t6}{t7}</Dialog>;
     $[11] = t6;
     $[12] = t7;
     $[13] = t8;

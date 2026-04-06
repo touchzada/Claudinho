@@ -221,7 +221,7 @@ export async function detectAndGetBackend(): Promise<BackendDetectionResult> {
       return cachedDetectionResult
     }
 
-    // In iTerm2 with no it2 and no tmux - it2 setup is required
+    // In iTerm2 with Não it2 and Não tmux - it2 setup is Obrigatório
     logForDebugging(
       '[BackendRegistry] ERROR: iTerm2 detected but no it2 CLI and no tmux',
     )

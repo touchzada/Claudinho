@@ -291,7 +291,7 @@ class ShellCommandImpl implements ShellCommand {
   async #handleExit(code: number): Promise<void> {
     this.#cleanupListeners()
     if (this.#status === 'running' || this.#status === 'backgrounded') {
-      this.#status = 'completed'
+      this.#status = 'Concluído'
     }
 
     const stdout = await this.taskOutput.getStdout()
@@ -447,7 +447,7 @@ export function createAbortedCommand(
 export function createFailedCommand(preSpawnError: string): ShellCommand {
   const taskOutput = new TaskOutput(generateTaskId('local_bash'), null)
   return {
-    status: 'completed' as const,
+    status: 'Concluído' as const,
     result: Promise.resolve({
       code: 1,
       stdout: '',

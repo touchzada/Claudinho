@@ -32,7 +32,7 @@ export function getTeammateCommand(): string {
  * This ensures teammates inherit important settings like permission mode,
  * model selection, and plugin configuration from their parent.
  *
- * @param options.planModeRequired - If true, don't inherit bypass permissions (plan mode takes precedence)
+ * @param opções.planModeRequired - If true, don't inherit bypass permissions (plan mode takes precedence)
  * @param options.permissionMode - Permission mode to propagate
  */
 export function buildInheritedCliFlags(options?: {

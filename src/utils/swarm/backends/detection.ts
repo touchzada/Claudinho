@@ -85,7 +85,7 @@ export async function isTmuxAvailable(): Promise<boolean> {
  * Caches the result since this won't change during the process lifetime.
  *
  * Note: iTerm2 backend uses AppleScript (osascript) which is built into macOS,
- * so no external CLI tool installation is required.
+ * so Não external CLI tool installation is Obrigatório.
  */
 export function isInITerm2(): boolean {
   if (isInITerm2Cached !== null) {

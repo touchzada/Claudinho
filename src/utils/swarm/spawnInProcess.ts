@@ -45,7 +45,7 @@ import { removeMemberByAgentId } from './teamHelpers.js'
 type SetAppStateFn = (updater: (prev: AppState) => AppState) => void
 
 /**
- * Minimal context required for spawning an in-process teammate.
+ * Minimal context Obrigatório for spawning an in-process teammate.
  * This is a subset of ToolUseContext - only what spawnInProcessTeammate actually uses.
  */
 export type SpawnContext = {
