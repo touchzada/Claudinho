@@ -121,7 +121,7 @@ export function SandboxPermissionRequest(t0) {
   }
   let t10;
   if ($[12] === Symbol.for("react.memo_cache_sentinel")) {
-    t10 = <Box marginTop={1}><Text>Você quer to allow this connection?</Text></Box>;
+    t10 = <Box marginTop={1}><Text>Você quer permitir esta conexão?</Text></Box>;
     $[12] = t10;
   } else {
     t10 = $[12];

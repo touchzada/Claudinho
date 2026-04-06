@@ -238,7 +238,7 @@ export function formatTotalCost(): string {
     `Total cost:            ${costDisplay}\n` +
       `Total duration (API):  ${formatDuration(getTotalAPIDuration())}
 Total duration (wall): ${formatDuration(getTotalDuration())}
-Total code changes:    ${getTotalLinesAdded()} ${getTotalLinesAdded() === 1 ? 'line' : 'lines'} added, ${getTotalLinesRemoved()} ${getTotalLinesRemoved() === 1 ? 'line' : 'lines'} removed
+Total code changes:    ${getTotalLinesAdded()} ${getTotalLinesAdded() === 1 ? 'linha' : 'linhas'} adicionadas, ${getTotalLinesRemoved()} ${getTotalLinesRemoved() === 1 ? 'linha' : 'linhas'} removidas
 ${modelUsageDisplay}`,
   )
 }

@@ -103,7 +103,7 @@ export function ClaudeInChromeOnboarding(t0) {
   }
   let t11;
   if ($[17] !== onDone || $[18] !== t10) {
-    t11 = <Dialog title="Claude in Chrome (Beta)" onCancel={onDone} color="chromeYellow">{t10}</Dialog>;
+    t11 = <Dialog title="Claude no Chrome (Beta)" onCancel={onDone} color="chromeYellow">{t10}</Dialog>;
     $[17] = onDone;
     $[18] = t10;
     $[19] = t11;

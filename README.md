@@ -1,4 +1,4 @@
-ESSE PROJETO É BASEADO NO OPENCLAUDE!
+ESSE PROJETO É O CLAUDINHO!
 <img width="1919" height="1027" alt="print1" src="https://github.com/user-attachments/assets/96ae02ff-9cd5-4fba-a255-2ed2ff7255ab" />
 <img width="1908" height="345" alt="print2" src="https://github.com/user-attachments/assets/116a57c2-b49a-4ede-b75c-4bb6d2996e99" />
 <img width="1902" height="816" alt="print3" src="https://github.com/user-attachments/assets/7615b6d3-ed40-4851-9d76-b4c93a0d199b" />

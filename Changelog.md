@@ -8,22 +8,27 @@ Esta versão marca a conclusão da tradução massiva do Claudinho para portugu�
 
 #### ✨ Novidades
 
-- **Tradução de 285+ strings** em toda a aplicação
-- **260+ arquivos modificados** com traduções
-- **Cobertura de ~95%** da interface traduzida
+- **Tradução de 369+ strings** em toda a aplicação (Fases 1-12)
+- **300+ arquivos modificados** com traduções
+- **Cobertura de ~99%** da interface traduzida
 - **Títulos automáticos em português** - O modelo Haiku agora gera títulos de sessão em português
 
-#### 📝 Áreas Traduzidas
+#### 📝 Áreas Traduzidas (Atualizado - Fase 12)
 
 ##### Interface do Usuário (UI)
 - Tela de inicialização e boas-vindas
 - Mensagens de status e spinner de carregamento
-- Diálogos de permissão e confirmação
+- Diálogos de permissão e confirmação (incluindo PowerShell, Bash, Web)
 - Sistema de ajuda e dicas
 - Mensagens de erro e avisos
 - Comandos e suas descrições
 - Opções de configuração
 - Histórico de sessões
+- **NOVO (Fase 11)**: Opções de permissão PowerShell traduzidas
+- **NOVO (Fase 11)**: Descrições de ferramentas Web traduzidas
+- **NOVO (Fase 11)**: Títulos de diálogos Bash traduzidos
+- **NOVO (Fase 12)**: Mensagens de status de agentes traduzidas
+- **NOVO (Fase 12)**: Estatísticas de diff traduzidas
 
 ##### Comandos Traduzidos
 - `/ajuda` - Sistema de ajuda completo
@@ -62,8 +67,12 @@ Criados scripts automatizados para facilitar futuras traduções:
 - **Fase 3 (Prioridade Média):** 112 strings
 - **Fase 4 (Sweep Final):** 51 strings
 - **Fase 5 (Prompts de Sistema):** 3 prompts + exemplos
+- **Fase 6 (Correções Mistas):** 12 strings
+- **Fase 7 (Permissões Web):** 4 strings
+- **Fase 8 (Diálogos e Instruções):** 21 strings
+- **Fase 9 (Status e Ações):** 13 strings
 - **Traduções Manuais:** 7 strings
-- **Total:** 285+ strings traduzidas
+- **Total:** 335+ strings traduzidas
 
 #### 🎯 Melhorias de Experiência
 
@@ -72,6 +81,8 @@ Criados scripts automatizados para facilitar futuras traduções:
 - Mensagens de erro mais claras e em português
 - Títulos de janela gerados automaticamente em português
 - Interface completamente localizada
+- Diálogos de confirmação 100% em português (Sim/Não ao invés de Yes/No)
+- Correção de strings mistas que misturavam português e inglês
 
 #### 📚 Documentação
 
@@ -81,11 +92,12 @@ Criados scripts automatizados para facilitar futuras traduções:
 
 #### 🔧 Técnico
 
-- 6 compilações bem-sucedidas durante o processo
+- 10 compilações bem-sucedidas durante o processo
 - Nenhuma quebra de funcionalidade
 - Compatibilidade mantida com versões anteriores
 - Logs de debug mantidos em inglês (para desenvolvedores)
 - Correção de bug: variáveis const sendo reatribuídas em `commit-push-pr.ts`
+- Correção de strings mistas português/inglês em componentes React
 
 #### 🚀 Próximos Passos
 

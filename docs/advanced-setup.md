@@ -1,4 +1,4 @@
-# Configuração Avançada do OpenClaude
+# Configuração Avançada do Claudinho
 
 Este guia é para quem quer builds do código fonte, Bun, perfis locais, diagnósticos e mais controle sobre o comportamento do sistema.
 
@@ -50,7 +50,7 @@ export OPENAI_MODEL=gpt-4o
 `codexplan` usa GPT-5.4 no backend Codex com alto raciocínio.
 `codexspark` usa GPT-5.3 Codex Spark para voltas mais rápidas.
 
-Se você já usa o Codex CLI, o OpenClaude lê `~/.codex/auth.json` automaticamente. Você também pode apontar outro caminho com `CODEX_AUTH_JSON_PATH` ou definir o token direto com `CODEX_API_KEY`.
+Se você já usa o Codex CLI, o Claudinho lê `~/.codex/auth.json` automaticamente. Você também pode apontar outro caminho com `CODEX_AUTH_JSON_PATH` ou definir o token direto com `CODEX_API_KEY`.
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -59,7 +59,7 @@ export OPENAI_MODEL=codexplan
 # opcional se você já tem ~/.codex/auth.json
 export CODEX_API_KEY=sua-chave-aqui
 
-openclaude
+claudinho
 ```
 
 ### DeepSeek
@@ -108,7 +108,7 @@ Ou use o lançador por perfil:
 bun run dev:atomic-chat
 ```
 
-Baixe o Atomic Chat em [atomic.chat](https://atomic.chat/). O app precisa estar rodando com um modelo carregado antes de lançar o OpenClaude.
+Baixe o Atomic Chat em [atomic.chat](https://atomic.chat/). O app precisa estar rodando com um modelo carregado antes de lançar o Claudinho.
 
 ### LM Studio
 

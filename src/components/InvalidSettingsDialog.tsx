@@ -76,7 +76,7 @@ export function InvalidSettingsDialog(t0) {
   }
   let t6;
   if ($[9] !== onExit || $[10] !== t2 || $[11] !== t5) {
-    t6 = <Dialog title="Settings Error" onCancel={onExit} color="warning">{t2}{t3}{t5}</Dialog>;
+    t6 = <Dialog title="Erro de Configurações" onCancel={onExit} color="warning">{t2}{t3}{t5}</Dialog>;
     $[9] = onExit;
     $[10] = t2;
     $[11] = t5;

@@ -2214,7 +2214,7 @@ export async function bashToolHasPermission(
       const decisionReason = {
         type: 'other' as const,
         reason:
-          'Comandos compostos com cd e git requerem aprovação pra prevenir ataques de repositório bare',
+          'Comandos que combinam cd e git precisam de aprovação por segurança',
       }
       return {
         behavior: 'ask',

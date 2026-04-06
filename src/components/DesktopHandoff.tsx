@@ -86,7 +86,7 @@ export function DesktopHandoff(t0) {
         setState("opening");
         const result = await openCurrentSessionInDesktop();
         if (!result.success) {
-          setError(result.error ?? "Failed to open Claude Desktop");
+          setError(result.error ?? "Falha ao abrir o Claude Desktop");
           setState("error");
           return;
         }

@@ -36,7 +36,7 @@ const DEFAULT_PLACEHOLDERS: Record<FeedbackType, string> = {
  * Shared component for permission prompts with optional feedback input.
  *
  * Handles:
- * - "Você quer to proceed?" question with optional Tab hint
+ * - "Você quer prosseguir?" question with optional Tab hint
  * - Feature flag check for feedback capability
  * - Input mode toggling (Tab to expand feedback input)
  * - Analytics events for feedback interactions

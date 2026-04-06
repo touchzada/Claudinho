@@ -106,7 +106,7 @@ Se você quer mexer no código, contribuir pro projeto ou rodar a versão mais r
 
 ```bash
 # 1. Baixa o código do repositório
-git clone https://github.com/Gitlawb/claudinho.git
+git clone https://github.com/touchzada/Claudinho.git
 cd claudinho
 
 # 2. Instala as dependências (precisa ter o Bun)
@@ -827,9 +827,9 @@ npm install -g @touchzada/claudinho@latest
 
 ## Links úteis
 
-- **Repositório:** <https://github.com/Gitlawb/claudinho>
-- **Reportar bugs:** <https://github.com/Gitlawb/claudinho/issues>
-- **Documentação original (em inglês):** <https://github.com/Gitlawb/claudinho/blob/main/README.md>
+- **Repositório:** <https://github.com/touchzada/Claudinho>
+- **Reportar bugs:** <https://github.com/touchzada/Claudinho/issues>
+- **Documentação original (em inglês):** <https://github.com/touchzada/Claudinho/blob/main/README.md>
 
 ---
 

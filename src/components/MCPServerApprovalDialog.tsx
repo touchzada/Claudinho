@@ -79,13 +79,13 @@ export function MCPServerApprovalDialog(t0) {
   let t5;
   if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
     t5 = [{
-      label: "Use this and all future MCP servers in this project",
+      label: "Usar este e todos os futuros servidores MCP neste projeto",
       value: "yes_all"
     }, {
-      label: "Use this MCP server",
+      label: "Usar este servidor MCP",
       value: "yes"
     }, {
-      label: "Continue without using this MCP server",
+      label: "Continuar sem usar este servidor MCP",
       value: "no"
     }];
     $[6] = t5;

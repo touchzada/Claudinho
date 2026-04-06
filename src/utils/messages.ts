@@ -3972,7 +3972,7 @@ You have exited auto mode. The user may now want to interact more directly. You 
       // is only emitted post-compaction, where the original spawn message is gone.
       if (attachment.status === 'running') {
         const parts = [
-          `Background agent "${attachment.description}" (${attachment.taskId}) is still running.`,
+          `Agente em segundo plano "${attachment.description}" (${attachment.taskId}) ainda está executando.`,
         ]
         if (attachment.deltaSummary) {
           parts.push(`Progress: ${attachment.deltaSummary}`)
@@ -5499,7 +5499,7 @@ export function wrapCommandText(
 ): string {
   switch (origin?.kind) {
     case 'task-notification':
-      return `A background agent completed a task:\n${raw}`
+      return `Um agente em segundo plano concluiu uma tarefa:\n${raw}`
     case 'coordinator':
       return `The coordinator sent a message while you were working:\n${raw}\n\nAddress this before completing your current task.`
     case 'channel':

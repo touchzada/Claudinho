@@ -1,12 +1,12 @@
 /**
- * OpenClaude startup screen — filled-block text logo with sunset gradient.
+ * Claudinho startup screen — filled-block text logo with sunset gradient.
  * Called once at CLI startup before the Ink UI renders.
  *
  * Logo customization: edit src/components/logoConfig.json
- * Run: openclaude logo-preview (preview), openclaude logo-edit (interactive editor)
+ * Run: claudinho logo-preview (preview), claudinho logo-edit (interactive editor)
  * Safety backup: StartupScreen.ts.bak.original (copy of the original)
  *
- * Addresses: https://github.com/Gitlawb/openclaude/issues/55
+ * Addresses: https://github.com/touchzada/Claudinho/issues/55
  */
 
 declare const MACRO: { VERSION: string; DISPLAY_VERSION?: string }

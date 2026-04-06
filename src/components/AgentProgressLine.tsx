@@ -48,7 +48,7 @@ export function AgentProgressLine(t0) {
         return lastToolInfo || "Initializing\u2026";
       }
       if (isBackgrounded) {
-        return taskDescription ?? "Running in the background";
+        return taskDescription ?? "Rodando em segundo plano";
       }
       return "Done";
     };

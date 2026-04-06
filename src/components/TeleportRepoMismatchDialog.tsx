@@ -86,7 +86,7 @@ export function TeleportRepoMismatchDialog(t0) {
   }
   let t4;
   if ($[15] !== onCancel || $[16] !== t3) {
-    t4 = <Dialog title="Teleport to Repo" onCancel={onCancel} color="background">{t3}</Dialog>;
+    t4 = <Dialog title="Teleportar para Repositório" onCancel={onCancel} color="background">{t3}</Dialog>;
     $[15] = onCancel;
     $[16] = t3;
     $[17] = t4;

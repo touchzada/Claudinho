@@ -1,4 +1,4 @@
-# Início Rápido do OpenClaude no macOS e Linux
+# Início Rápido do Claudinho no macOS e Linux
 
 Este guia usa um terminal padrão como iTerm, Terminal, bash ou zsh.
 
@@ -21,7 +21,7 @@ node --version
 npm --version
 ```
 
-## 2. Instale o OpenClaude
+## 2. Instale o Claudinho
 
 ```bash
 npm install -g @touchzada/claudinho
@@ -93,13 +93,13 @@ Verifique o básico:
 - certifique-se que o Ollama tá rodando
 - certifique-se que o modelo foi baixado com `ollama pull`
 
-## 6. Atualizando o OpenClaude
+## 6. Atualizando o Claudinho
 
 ```bash
 npm install -g @touchzada/claudinho@latest
 ```
 
-## 7. Desinstalando o OpenClaude
+## 7. Desinstalando o Claudinho
 
 ```bash
 npm uninstall -g @touchzada/claudinho

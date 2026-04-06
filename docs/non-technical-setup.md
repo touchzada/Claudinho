@@ -1,4 +1,4 @@
-# OpenClaude para Usuários Não Técnicos
+# Claudinho para Usuários Não Técnicos
 
 Este guia é para quem quer o caminho mais fácil de configuração.
 
@@ -6,9 +6,9 @@ Você não precisa compilar código. Não precisa usar Bun. Não precisa entende
 
 Se você sabe copiar e colar comandos num terminal, consegue configurar isso.
 
-## O que o OpenClaude Faz
+## O que o Claudinho Faz
 
-O OpenClaude permite usar um assistente de IA no terminal com diferentes provedores:
+O Claudinho permite usar um assistente de IA no terminal com diferentes provedores:
 
 - OpenAI (ChatGPT)
 - DeepSeek
@@ -28,9 +28,9 @@ Você precisa de:
 
 ## Caminho Mais Rápido
 
-1. Instale o OpenClaude com npm
+1. Instale o Claudinho com npm
 2. Defina 3 variáveis de ambiente
-3. Rode `openclaude`
+3. Rode `claudinho`
 
 ## Escolha seu Sistema Operacional
 
@@ -62,7 +62,7 @@ Escolha se:
 
 ## O que é Sucesso
 
-Depois de rodar `openclaude`, o terminal deve iniciar e esperar sua mensagem.
+Depois de rodar `claudinho`, o terminal deve iniciar e esperar sua mensagem.
 
 A partir daí, você pode pedir para:
 
@@ -73,13 +73,13 @@ A partir daí, você pode pedir para:
 
 ## Problemas Comuns
 
-### Comando `openclaude` não encontrado
+### Comando `claudinho` não encontrado
 
 **Causa:** O npm instalou, mas o terminal não reconheceu ainda.
 **Solução:**
 1. Feche o terminal
 2. Abra um novo terminal
-3. Rode `openclaude` de novo
+3. Rode `claudinho` de novo
 
 ### Chave de API inválida
 
@@ -87,7 +87,7 @@ A partir daí, você pode pedir para:
 **Solução:**
 1. Gere uma chave nova no site do provedor
 2. Cole com cuidado
-3. Rode `openclaude` de novo
+3. Rode `claudinho` de novo
 
 ### Ollama não funciona
 

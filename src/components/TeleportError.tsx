@@ -152,11 +152,11 @@ export function TeleportError(t0) {
         }
         let t10;
         if ($[17] === Symbol.for("react.memo_cache_sentinel")) {
-          t10 = <Dialog title="Log in to Claude" onCancel={onCancel}>{t9}<Select options={[{
-              label: "Login with Claude account",
+          t10 = <Dialog title="Fazer login no Claude" onCancel={onCancel}>{t9}<Select options={[{
+              label: "Fazer login com conta Claude",
               value: "login"
             }, {
-              label: "Exit",
+              label: "Sair",
               value: "exit"
             }]} onChange={handleLoginDialogSelect} /></Dialog>;
           $[17] = t10;

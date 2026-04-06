@@ -4,6 +4,10 @@ import { Box, Text } from '../ink.js'
 import type { InputEvent } from '../ink/events/input-event.js'
 import { listSessions } from '../utils/sessionHistory.js'
 import { getCwd } from '../utils/cwd.js'
+// Importando a versão do package.json (resolveJsonModule habilitado)
+import * as pkg from '../../package.json'
+
+const APP_VERSION = (pkg as unknown as { version: string }).version
 
 interface SessionInfo {
   sessionId: string
@@ -153,7 +157,7 @@ export function SessionPickerDialog({ onNew, onResume, onSkip }: Props) {
       <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={2} paddingY={1} width={72}>
         <Text bold={true}>
           <Text color="cyan"> Bem-vindo ao Claudinho</Text>{' '}
-          <Text dimColor={true}>v0.1.7</Text>
+          <Text dimColor={true}>v{APP_VERSION}</Text>
         </Text>
         <Text color="gray" dimColor={true}>
           {'  '}────────────────────────────────────────────────────

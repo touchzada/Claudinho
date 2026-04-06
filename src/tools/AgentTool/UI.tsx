@@ -345,7 +345,7 @@ export function renderToolResultMessage(data: Output, progressMessagesForMessage
     return <Box flexDirection="column">
         <MessageResponse height={1}>
           <Text>
-            Backgrounded agent
+            Agente em segundo plano
             {!isTranscriptMode && <Text dimColor>
                 {' ('}
                 <Byline>

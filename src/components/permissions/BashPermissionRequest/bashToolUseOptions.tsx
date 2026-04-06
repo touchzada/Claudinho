@@ -62,15 +62,15 @@ export function bashToolUseOptions({
   if (yesInputMode) {
     options.push({
       type: 'input',
-      label: 'Yes',
+      label: 'Sim',
       value: 'yes',
-      placeholder: 'and tell Claude what to do next',
+      placeholder: 'e diga ao Claude o que fazer a seguir',
       onChange: onAcceptFeedbackChange,
       allowEmptySubmitToCancel: true
     });
   } else {
     options.push({
-      label: 'Yes',
+      label: 'Sim',
       value: 'yes'
     });
   }
@@ -85,9 +85,9 @@ export function bashToolUseOptions({
     if (editablePrefix !== undefined && onEditablePrefixChange && !hasNonBashSuggestions && suggestions.length > 0) {
       options.push({
         type: 'input',
-        label: 'Yes, and don\u2019t ask again for',
+        label: 'Sim, e não pergunte novamente para',
         value: 'yes-prefix-edited',
-        placeholder: 'command prefix (e.g., npm run:*)',
+        placeholder: 'prefixo do comando (ex: npm run:*)',
         initialValue: editablePrefix,
         onChange: onEditablePrefixChange,
         allowEmptySubmitToCancel: true,
@@ -115,9 +115,9 @@ export function bashToolUseOptions({
     if ("external" === 'ant' && !editablePrefixShown && isClassifierPermissionsEnabled() && onClassifierDescriptionChange && !initialClassifierDescriptionEmpty && !descriptionAlreadyExists(classifierDescription ?? '', existingAllowDescriptions) && decisionReason?.type !== 'classifier') {
       options.push({
         type: 'input',
-        label: 'Yes, and don\u2019t ask again for',
+        label: 'Sim, e não pergunte novamente para',
         value: 'yes-classifier-reviewed',
-        placeholder: 'describe what to allow...',
+        placeholder: 'descreva o que permitir...',
         initialValue: classifierDescription ?? '',
         onChange: onClassifierDescriptionChange,
         allowEmptySubmitToCancel: true,
@@ -130,15 +130,15 @@ export function bashToolUseOptions({
   if (noInputMode) {
     options.push({
       type: 'input',
-      label: 'No',
+      label: 'Não',
       value: 'no',
-      placeholder: 'and tell Claude what to do differently',
+      placeholder: 'e diga ao Claude o que fazer diferente',
       onChange: onRejectFeedbackChange,
       allowEmptySubmitToCancel: true
     });
   } else {
     options.push({
-      label: 'No',
+      label: 'Não',
       value: 'no'
     });
   }

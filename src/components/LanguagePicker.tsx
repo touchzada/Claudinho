@@ -43,7 +43,7 @@ export function LanguagePicker(t0) {
   const handleSubmit = t2;
   let t3;
   if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
-    t3 = <Text>Enter your preferred response and voice language:</Text>;
+    t3 = <Text>Digite seu idioma preferido para respostas e voz:</Text>;
     $[4] = t3;
   } else {
     t3 = $[4];

@@ -165,7 +165,7 @@ async function executeForkedSlashCommand(command: CommandBase & PromptCommand, a
       })) {
         agentMessages.push(message);
       }
-      const resultText = extractResultText(agentMessages, 'Command completed');
+      const resultText = extractResultText(agentMessages, 'Comando concluído');
       logForDebugging(`Background forked command /${commandName} completed (agent ${agentId})`);
       enqueueResult(`<scheduled-task-result command="/${commandName}">\n${resultText}\n</scheduled-task-result>`);
     })().catch(err => {
@@ -269,7 +269,7 @@ async function executeForkedSlashCommand(command: CommandBase & PromptCommand, a
     // Clear the progress display
     setToolJSX(null);
   }
-  let resultText = extractResultText(agentMessages, 'Command completed');
+  let resultText = extractResultText(agentMessages, 'Comando concluído');
   logForDebugging(`Forked slash command /${command.name} completed with agent ${agentId}`);
 
   // Prepend debug log for ant users so it appears inside the command output

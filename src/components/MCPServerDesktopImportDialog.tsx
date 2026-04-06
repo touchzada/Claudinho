@@ -174,7 +174,7 @@ export function MCPServerDesktopImportDialog(t0) {
   }
   let t16;
   if ($[28] !== handleEscCancel || $[29] !== t10 || $[30] !== t11 || $[31] !== t15) {
-    t16 = <Dialog title="Import MCP Servers from Claude Desktop" subtitle={t10} color="success" onCancel={handleEscCancel} hideInputGuide={true}>{t11}{t12}{t15}</Dialog>;
+    t16 = <Dialog title="Importar Servidores MCP do Claude Desktop" subtitle={t10} color="success" onCancel={handleEscCancel} hideInputGuide={true}>{t11}{t12}{t15}</Dialog>;
     $[28] = handleEscCancel;
     $[29] = t10;
     $[30] = t11;

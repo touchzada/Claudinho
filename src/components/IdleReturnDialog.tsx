@@ -55,7 +55,7 @@ export function IdleReturnDialog(t0) {
   if ($[7] === Symbol.for("react.memo_cache_sentinel")) {
     t6 = {
       value: "continue" as const,
-      label: "Continue this conversation"
+      label: "Continuar esta conversa"
     };
     $[7] = t6;
   } else {

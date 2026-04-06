@@ -1918,7 +1918,7 @@ export function checkReadOnlyConstraints(
     return {
       behavior: 'passthrough',
       message:
-        'Compound commands with cd and git require permission checks for enhanced security',
+        'Comandos que combinam cd e git precisam de verificação de segurança',
     }
   }
 
@@ -1931,7 +1931,7 @@ export function checkReadOnlyConstraints(
     return {
       behavior: 'passthrough',
       message:
-        'Git commands in directories with bare repository structure require permission checks for enhanced security',
+        'Comandos git em diretórios com estrutura de repositório bare precisam de verificação de segurança',
     }
   }
 

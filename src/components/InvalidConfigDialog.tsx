@@ -81,10 +81,10 @@ function InvalidConfigDialog(t0) {
   let t6;
   if ($[11] === Symbol.for("react.memo_cache_sentinel")) {
     t6 = [{
-      label: "Exit and fix manually",
+      label: "Sair e corrigir manualmente",
       value: "exit"
     }, {
-      label: "Reset with default configuration",
+      label: "Resetar com configuração padrão",
       value: "reset"
     }];
     $[11] = t6;
@@ -102,7 +102,7 @@ function InvalidConfigDialog(t0) {
   }
   let t8;
   if ($[15] !== onExit || $[16] !== t4 || $[17] !== t7) {
-    t8 = <Dialog title="Configuration Error" color="error" onCancel={onExit}>{t4}{t7}</Dialog>;
+    t8 = <Dialog title="Erro de Configuração" color="error" onCancel={onExit}>{t4}{t7}</Dialog>;
     $[15] = onExit;
     $[16] = t4;
     $[17] = t7;

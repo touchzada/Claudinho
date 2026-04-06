@@ -73,7 +73,7 @@ export function WebFetchPermissionRequest(t0) {
   let t4;
   if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
     t4 = {
-      label: "Yes",
+      label: "Sim",
       value: "yes"
     };
     $[4] = t4;
@@ -88,7 +88,7 @@ export function WebFetchPermissionRequest(t0) {
       let t6;
       if ($[7] !== t5) {
         t6 = {
-          label: <Text>Yes, and don't ask again for {t5}</Text>,
+          label: <Text>Sim, e não pergunte novamente para {t5}</Text>,
           value: "yes-dont-ask-again-domain"
         };
         $[7] = t5;
@@ -101,7 +101,7 @@ export function WebFetchPermissionRequest(t0) {
     let t5;
     if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
       t5 = {
-        label: <Text>No, and tell Claude what to do differently <Text bold={true}>(esc)</Text></Text>,
+        label: <Text>Não, e diga ao Claude o que fazer diferente <Text bold={true}>(esc)</Text></Text>,
         value: "no"
       };
       $[9] = t5;
@@ -211,7 +211,7 @@ export function WebFetchPermissionRequest(t0) {
   }
   let t11;
   if ($[27] === Symbol.for("react.memo_cache_sentinel")) {
-    t11 = <Text>Você quer to allow Claude to fetch this content?</Text>;
+    t11 = <Text>Você quer permitir que o Claude busque este conteúdo?</Text>;
     $[27] = t11;
   } else {
     t11 = $[27];

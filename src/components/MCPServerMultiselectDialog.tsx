@@ -99,7 +99,7 @@ export function MCPServerMultiselectDialog(t0) {
   }
   let t7;
   if ($[14] !== handleEscRejectAll || $[15] !== t3 || $[16] !== t6) {
-    t7 = <Dialog title={t3} subtitle="Select any you wish to enable." color="warning" onCancel={handleEscRejectAll} hideInputGuide={true}>{t4}{t6}</Dialog>;
+    t7 = <Dialog title={t3} subtitle="Selecione os que você deseja ativar." color="warning" onCancel={handleEscRejectAll} hideInputGuide={true}>{t4}{t6}</Dialog>;
     $[14] = handleEscRejectAll;
     $[15] = t3;
     $[16] = t6;

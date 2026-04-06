@@ -127,7 +127,7 @@ export function AutoModeOptInDialog(t0) {
   }
   let t10;
   if ($[15] !== onDecline || $[16] !== t9) {
-    t10 = <Dialog title="Enable auto mode?" color="warning" onCancel={onDecline}>{t3}{t9}</Dialog>;
+    t10 = <Dialog title="Ativar modo automático?" color="warning" onCancel={onDecline}>{t3}{t9}</Dialog>;
     $[15] = onDecline;
     $[16] = t9;
     $[17] = t10;

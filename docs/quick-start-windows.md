@@ -1,4 +1,4 @@
-# Início Rápido do OpenClaude no Windows
+# Início Rápido do Claudinho no Windows
 
 Este guia usa o PowerShell do Windows.
 
@@ -17,7 +17,7 @@ npm --version
 
 Se aparecer um número como `v20.x` ou maior, tá pronto. Se não, reinstale e reinicie o terminal.
 
-## 2. Instale o OpenClaude
+## 2. Instale o Claudinho
 
 ```powershell
 npm install -g @touchzada/claudinho
@@ -89,13 +89,13 @@ Verifique o básico:
 - certifique-se que o Ollama tá rodando
 - certifique-se que o modelo foi baixado com `ollama pull`
 
-## 6. Atualizando o OpenClaude
+## 6. Atualizando o Claudinho
 
 ```powershell
 npm install -g @touchzada/claudinho@latest
 ```
 
-## 7. Desinstalando o OpenClaude
+## 7. Desinstalando o Claudinho
 
 ```powershell
 npm uninstall -g @touchzada/claudinho
