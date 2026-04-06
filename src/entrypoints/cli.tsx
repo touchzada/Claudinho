@@ -6,8 +6,13 @@ import {
 import {
   applyProfileEnvToProcessEnv,
   buildStartupEnvFromProfile,
+  loadProfileFile,
   redactSecretValueForDisplay,
 } from '../utils/providerProfile.js'
+import {
+  buildStartupEnvWithProviderOverride,
+  parseProviderOverrideFromArgv,
+} from '../utils/providerCliOverride.js'
 
 // Bugfix for corepack auto-pinning, which adds yarnpkg to peoples' package.jsons
 // eslint-disable-next-line custom-rules/no-top-level-side-effects
@@ -85,7 +90,7 @@ function getProviderValidationError(
   }
 
   if (request.transport === 'codex_responses') {
-    const credentials = resolveCodexApiCredentials(env)
+    const credentials = resolveCodexApiCredentials(process.env)
     if (!credentials.apiKey) {
       const authHint = credentials.authPath
         ? ` or put auth.json at ${credentials.authPath}`
@@ -136,6 +141,14 @@ async function main(): Promise<void> {
     return;
   }
 
+  let providerOverride: ReturnType<typeof parseProviderOverrideFromArgv> = null
+  try {
+    providerOverride = parseProviderOverrideFromArgv(args)
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error))
+    process.exit(1)
+  }
+
   {
     const { enableConfigs } = await import('../utils/config.js')
     enableConfigs()
@@ -145,9 +158,17 @@ async function main(): Promise<void> {
     hydrateGithubModelsTokenFromSecureStorage()
   }
 
-  const startupEnv = await buildStartupEnvFromProfile({
-    processEnv: process.env,
-  })
+  const persisted = loadProfileFile()
+  const startupEnv = providerOverride
+    ? await buildStartupEnvWithProviderOverride({
+        provider: providerOverride,
+        processEnv: process.env,
+        persisted,
+      })
+    : await buildStartupEnvFromProfile({
+        processEnv: process.env,
+        persisted,
+      })
   if (startupEnv !== process.env) {
     const startupProfileError = getProviderValidationError(startupEnv)
     if (startupProfileError) {
