@@ -153,6 +153,15 @@ export function SessionHud({ compact = false }: Props): React.ReactElement {
       }).format(localeDate),
     [localeDate],
   );
+  const dateLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(localeDate),
+    [localeDate],
+  );
   const weekdayLabel = useMemo(
     () => normalizeWeekday(new Intl.DateTimeFormat('pt-BR', { weekday: 'short' }).format(localeDate)),
     [localeDate],
@@ -163,6 +172,9 @@ export function SessionHud({ compact = false }: Props): React.ReactElement {
     <Box flexDirection="row">
       <Text color="#6b7280">{'\u23f0'} </Text>
       <Text color="#93c5fd">{timeLabel}</Text>
+
+      <Text color="#4b5563"> {'\u00b7'} </Text>
+      <Text color="#9ca3af">{dateLabel}</Text>
 
       <Text color="#4b5563"> {'\u00b7'} </Text>
       <Text color="#9ca3af">{weekdayLabel}</Text>

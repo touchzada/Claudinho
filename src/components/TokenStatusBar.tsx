@@ -9,7 +9,6 @@ import {
 
 const SPINNER_CHARS = ['\u280b', '\u2819', '\u2839', '\u2838', '\u283c', '\u2834', '\u2826', '\u2827', '\u2807', '\u280f'];
 const FADEOUT_MS = 5_000;
-const SESSION_STARTED_AT = Date.now();
 const THINKING_PHRASES = [
   'processando...',
   'pensando...',
@@ -68,6 +67,13 @@ interface Props {
   messages: Message[];
   isLoading: boolean;
   typingSignal?: string;
+}
+
+function safeElapsedMs(endMs: number, startMs: number | null): number {
+  if (startMs == null || !Number.isFinite(startMs) || startMs <= 0) return 0;
+  const delta = endMs - startMs;
+  if (!Number.isFinite(delta) || delta < 0) return 0;
+  return delta;
 }
 
 function formatDuration(ms: number): string {
@@ -235,10 +241,11 @@ export function TokenStatusBar({
   isLoading,
   typingSignal = '',
 }: Props): React.ReactElement | null {
+  const sessionStartedAtRef = useRef(Date.now());
   const [now, setNow] = useState(() => Date.now());
   const [totalActiveMs, setTotalActiveMs] = useState(0);
   const [isTypingActive, setIsTypingActive] = useState(false);
-  const activeStartedAtRef = useRef<number | null>(isLoading ? Date.now() : null);
+  const activeStartedAtRef = useRef<number | null>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousTypingSignalRef = useRef<string>(typingSignal);
 
@@ -273,7 +280,8 @@ export function TokenStatusBar({
     }
 
     if (activeStartedAtRef.current != null) {
-      setTotalActiveMs(prev => prev + (Date.now() - activeStartedAtRef.current!));
+      const delta = safeElapsedMs(Date.now(), activeStartedAtRef.current);
+      setTotalActiveMs(prev => prev + delta);
       activeStartedAtRef.current = null;
     }
   }, [isSessionActive]);
@@ -313,12 +321,11 @@ export function TokenStatusBar({
 
   if (usedTokens === 0 && messages.length === 0 && !isLoading) return null;
 
-  const activeInFlightMs =
-    isSessionActive && activeStartedAtRef.current != null
-      ? now - activeStartedAtRef.current
-      : 0;
-  const activeMs = totalActiveMs + activeInFlightMs;
-  const sessionMs = Math.max(0, now - SESSION_STARTED_AT);
+  const activeInFlightMs = isSessionActive
+    ? safeElapsedMs(now, activeStartedAtRef.current)
+    : 0;
+  const sessionMs = Math.max(0, now - sessionStartedAtRef.current);
+  const activeMs = Math.min(sessionMs, Math.max(0, totalActiveMs + activeInFlightMs));
   const idleMs = Math.max(0, sessionMs - activeMs);
 
   const contextState = exceeded || rawPct >= 90
