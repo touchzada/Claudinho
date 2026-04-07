@@ -1,5 +1,26 @@
 ﻿# Changelog - Claudinho
 
+## [Unreleased]
+
+### Fase 33: Tradução de Descrições de Skills e Agents (07/04/2026)
+- Traduzidas descrições (campo `description:`) de 20 agents e 8 skills
+- Apenas o campo de descrição foi traduzido (o que aparece pro usuário)
+- Conteúdo interno (instruções) permanece em inglês pra melhor performance da IA
+- **Agents traduzidos (20)**:
+  - backend-specialist, frontend-specialist, debugger, security-auditor
+  - devops-engineer, performance-optimizer, database-architect, test-engineer
+  - code-archaeologist, documentation-writer, mobile-developer, game-developer
+  - seo-specialist, product-manager, explorer-agent, orchestrator
+  - penetration-tester, product-owner, project-planner, qa-automation-engineer
+- **Skills traduzidas (8)**:
+  - clean-code, lint-and-validate, api-patterns, database-design
+  - frontend-design, mcp-builder, mobile-design, i18n-localization
+- Arquivos: `C:\Users\Bruno\.claude\agents\*.md` e `C:\Users\Bruno\.claude\skills\**\SKILL.md`
+- **IMPORTANTE**: Traduções aplicadas diretamente nos arquivos de configuração dos agents/skills
+- Não requer recompilação do Claudinho (são arquivos de configuração externos)
+
+---
+
 ## [v0.1.13] - 2026-04-07
 ### Ajustes recentes de UX, provider e traducao
 
@@ -28,6 +49,15 @@
 - Traducoes em mensagens de hooks e status
 - Traducoes em Bash/WebFetch (`rodar em segundo plano`, `Buscando...`, etc.)
 - Textos de validacao de caminho no Bash ficaram mais claros para pedido de aprovacao manual
+
+#### Plan mode e ultraplan local
+- `/plan` agora usa o fluxo nativo de plan mode do projeto e mostra o plano atual da sessao quando existir
+- Adicionado `/plan deep <prompt>` para disparar um planejamento local mais profundo, com foco em arquitetura, seguranca, performance, testes e manutenibilidade
+- Adicionado `/plan list` para listar os arquivos de plano salvos
+- Adicionado `/plan open` para abrir o plano atual no editor
+- Adicionado `/plan open <slug>` para abrir um plano especifico por nome de arquivo/slug
+- Adicionado `/plan off` (tambem aceita `disable` e `exit`) para sair explicitamente do plan mode
+- Mensagens do comando foram ajustadas para deixar mais claro quando o plan mode foi ligado, desligado ou quando ainda nao existe plano salvo na sessao
 
 ---
 

@@ -1,11 +1,11 @@
 import type { Command } from '../../commands.js'
 
-const plan = {
+const plan: Command = {
   type: 'local-jsx',
   name: 'plan',
-  description: 'Ativar modo planejamento ou ver o plano da sessão atual',
-  argumentHint: '[open|<description>]',
+  description: 'Ativar ou desativar plan mode, inspecionar o plano atual ou iniciar planejamento profundo',
+  argumentHint: '[deep <prompt>|list|open [slug]|off]',
   load: () => import('./plan.js'),
-} satisfies Command
+}
 
 export default plan
