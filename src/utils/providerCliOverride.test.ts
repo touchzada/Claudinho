@@ -75,6 +75,39 @@ describe('buildStartupEnvWithProviderOverride', () => {
     assert.equal(env.OPENAI_BASE_URL, OPENROUTER_BASE_URL)
   })
 
+  test('openrouter override reuses key from non-openai persisted profile', async () => {
+    const env = await buildStartupEnvWithProviderOverride({
+      provider: 'openrouter',
+      processEnv: {},
+      persisted: {
+        profile: 'codex',
+        createdAt: new Date().toISOString(),
+        env: {
+          OPENAI_API_KEY: 'sk-test-12345678',
+          OPENAI_BASE_URL: 'https://chatgpt.com/backend-api/codex',
+          OPENAI_MODEL: 'codexplan',
+        },
+      },
+    })
+
+    assert.equal(env.OPENAI_API_KEY, 'sk-test-12345678')
+    assert.equal(env.OPENAI_BASE_URL, OPENROUTER_BASE_URL)
+    assert.equal(env.OPENAI_MODEL, OPENROUTER_DEFAULT_MODEL)
+  })
+
+  test('openrouter override accepts OPENROUTER_API_KEY fallback', async () => {
+    const env = await buildStartupEnvWithProviderOverride({
+      provider: 'openrouter',
+      processEnv: {
+        OPENROUTER_API_KEY: 'sk-or-test-12345678',
+      },
+      persisted: null,
+    })
+
+    assert.equal(env.OPENAI_API_KEY, 'sk-or-test-12345678')
+    assert.equal(env.OPENAI_BASE_URL, OPENROUTER_BASE_URL)
+  })
+
   test('codex override configures codex transport env', async () => {
     const env = await buildStartupEnvWithProviderOverride({
       provider: 'codex',
@@ -92,4 +125,3 @@ describe('buildStartupEnvWithProviderOverride', () => {
     assert.equal(env.CHATGPT_ACCOUNT_ID, 'acc_test')
   })
 })
-

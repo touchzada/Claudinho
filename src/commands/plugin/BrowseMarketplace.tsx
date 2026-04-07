@@ -221,7 +221,7 @@ export function BrowseMarketplace({
               setViewState('plugin-details');
             }
           } else {
-            setError(`Plugin "${targetPlugin}" not found in any marketplace`);
+            setError(`Plugin "${targetPlugin}" não encontrado em nenhum marketplace`);
           }
         } else if (targetMarketplace) {
           // Navigate directly to the specified marketplace

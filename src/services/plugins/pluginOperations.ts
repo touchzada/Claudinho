@@ -1066,7 +1066,7 @@ async function performPluginUpdate({
     }
 
     const scopeDesc = projectPath ? `${scope} (${projectPath})` : scope
-    const message = `Plugin "${pluginName}" updated from ${oldVersion || 'unknown'} to ${newVersion} for scope ${scopeDesc}. Restart to apply changes.`
+    const message = `Plugin "${pluginName}" atualizado de ${oldVersion || 'desconhecido'} para ${newVersion} no escopo ${scopeDesc}. Reinicie pra aplicar as mudanças.`
 
     return {
       success: true,

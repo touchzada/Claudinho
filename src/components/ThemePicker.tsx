@@ -131,6 +131,15 @@ export function ThemePicker(t0) {
     }, {
       label: "Modo claro (só cores ANSI)",
       value: "light-ansi"
+    }, {
+      label: "Nerd Terminal (verde Matrix)",
+      value: "nerd"
+    }, {
+      label: "Nerd v2 (Spider-Man x Supernatural x V de Vingança)",
+      value: "nerd-v2"
+    }, {
+      label: "Nerd v3 (Spider-Man x Supernatural x V de Vingança)",
+      value: "nerd-v3"
     }];
     $[7] = t10;
   } else {

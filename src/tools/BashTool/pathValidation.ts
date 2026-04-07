@@ -619,10 +619,10 @@ function validateCommandPaths(
   if (validator && !validator(args)) {
     return {
       behavior: 'ask',
-      message: `${command} with flags requires manual approval to ensure path safety. For security, Claude Code cannot automatically validate ${command} commands that use flags, as some flags like --target-directory=PATH can bypass path validation.`,
+      message: `Este comando ${command} usa opções avançadas. Preciso da sua aprovação pra garantir que os arquivos serão movidos/copiados pro lugar certo.`,
       decisionReason: {
         type: 'other',
-        reason: `${command} command with flags requires manual approval`,
+        reason: `Comando ${command} com opções avançadas - precisa de aprovação`,
       },
     }
   }
@@ -645,11 +645,11 @@ function validateCommandPaths(
   if (compoundCommandHasCd && operationType !== 'read') {
     return {
       behavior: 'ask',
-      message: `Commands that change directories and perform write operations require explicit approval to ensure paths are evaluated correctly. For security, Claude Code cannot automatically determine the final working directory when 'cd' is used in compound commands.`,
+      message: `Este comando muda de pasta e depois tenta modificar arquivos. Preciso da sua aprovação pra garantir que os arquivos certos serão modificados.`,
       decisionReason: {
         type: 'other',
         reason:
-          'Compound command contains cd with write operation - manual approval required to prevent path resolution bypass',
+          'Comando muda de pasta e modifica arquivos - precisa de aprovação',
       },
     }
   }
@@ -935,11 +935,11 @@ function validateOutputRedirections(
   if (compoundCommandHasCd && redirections.length > 0) {
     return {
       behavior: 'ask',
-      message: `Comandos que mudam de diretório e escrevem via redirecionamento de saída requerem aprovação explícita pra garantir que os caminhos sejam avaliados corretamente. Por segurança, o Claudinho não pode determinar automaticamente o diretório de trabalho final quando 'cd' é usado em comandos compostos.`,
+      message: `Este comando muda de pasta e depois tenta escrever em um arquivo. Por segurança, preciso da sua aprovação pra garantir que o arquivo seja criado no lugar certo.`,
       decisionReason: {
         type: 'other',
         reason:
-          'Comando composto contém cd com redirecionamento de saída - aprovação manual necessária pra prevenir bypass de resolução de caminho',
+          'Comando muda de pasta e escreve arquivo - precisa de aprovação pra garantir segurança',
       },
     }
   }
@@ -1029,10 +1029,10 @@ export function checkPathConstraints(
     return {
       behavior: 'ask',
       message:
-        'Process substitution (>(...) or <(...)) can execute arbitrary commands and requires manual approval',
+        'Este comando usa uma sintaxe avançada que pode executar outros comandos. Preciso da sua aprovação pra garantir que é seguro.',
       decisionReason: {
         type: 'other',
-        reason: 'Process substitution requires manual approval',
+        reason: 'Comando usa sintaxe avançada - precisa de aprovação',
       },
     }
   }
@@ -1052,10 +1052,10 @@ export function checkPathConstraints(
   if (hasDangerousRedirection) {
     return {
       behavior: 'ask',
-      message: 'Shell expansion syntax in paths requires manual approval',
+      message: 'Este comando usa variáveis no caminho do arquivo. Preciso da sua aprovação pra garantir que o arquivo será criado no lugar certo.',
       decisionReason: {
         type: 'other',
-        reason: 'Shell expansion syntax in paths requires manual approval',
+        reason: 'Comando usa variáveis no caminho - precisa de aprovação',
       },
     }
   }

@@ -55,6 +55,22 @@ function isLocalProviderUrl(baseUrl: string | undefined): boolean {
   }
 }
 
+function isOpenRouterProviderUrl(baseUrl: string | undefined): boolean {
+  return (baseUrl ?? '').toLowerCase().includes('openrouter.ai')
+}
+
+function hydrateOpenRouterApiKeyAlias(
+  env: NodeJS.ProcessEnv = process.env,
+): void {
+  if (env.OPENAI_API_KEY) return
+  if (!isOpenRouterProviderUrl(env.OPENAI_BASE_URL)) return
+
+  const openRouterKey = env.OPENROUTER_API_KEY?.trim()
+  if (openRouterKey) {
+    env.OPENAI_API_KEY = openRouterKey
+  }
+}
+
 function getProviderValidationError(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
@@ -84,8 +100,13 @@ function getProviderValidationError(
     model: env.OPENAI_MODEL,
     baseUrl: env.OPENAI_BASE_URL,
   })
+  const effectiveOpenAIKey =
+    env.OPENAI_API_KEY ??
+    (isOpenRouterProviderUrl(request.baseUrl)
+      ? env.OPENROUTER_API_KEY
+      : undefined)
 
-  if (env.OPENAI_API_KEY === 'SUA_CHAVE') {
+  if (effectiveOpenAIKey === 'SUA_CHAVE') {
     return 'Invalid OPENAI_API_KEY: placeholder value SUA_CHAVE detected. Set a real key or unset for local providers.'
   }
 
@@ -106,7 +127,7 @@ function getProviderValidationError(
     return null
   }
 
-  if (!env.OPENAI_API_KEY && !isLocalProviderUrl(request.baseUrl)) {
+  if (!effectiveOpenAIKey && !isLocalProviderUrl(request.baseUrl)) {
     const hasGithubToken = !!(env.GITHUB_TOKEN?.trim() || env.GH_TOKEN?.trim())
     if (useGithub && hasGithubToken) {
       return null
@@ -170,16 +191,21 @@ async function main(): Promise<void> {
         persisted,
       })
   if (startupEnv !== process.env) {
+    hydrateOpenRouterApiKeyAlias(startupEnv)
     const startupProfileError = getProviderValidationError(startupEnv)
     if (startupProfileError) {
+      const startupSource = providerOverride
+        ? `--provider ${providerOverride}`
+        : 'saved provider profile'
       console.error(
-        `Warning: ignoring saved provider profile. ${startupProfileError}`,
+        `Warning: ignoring ${startupSource}. ${startupProfileError}`,
       )
     } else {
       applyProfileEnvToProcessEnv(process.env, startupEnv)
     }
   }
 
+  hydrateOpenRouterApiKeyAlias(process.env)
   validateProviderEnvOrExit()
 
   // Print the gradient startup screen before the Ink UI loads

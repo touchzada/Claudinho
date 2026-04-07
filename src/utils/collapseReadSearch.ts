@@ -982,35 +982,35 @@ export function getSearchReadSummaryText(
     if (memoryReadCount > 0) {
       const verb = isActive
         ? parts.length === 0
-          ? 'Recalling'
-          : 'recalling'
+          ? 'Lembrando'
+          : 'lembrando'
         : parts.length === 0
-          ? 'Recalled'
-          : 'recalled'
+          ? 'Lembrei'
+          : 'lembrei'
       parts.push(
-        `${verb} ${memoryReadCount} ${memoryReadCount === 1 ? 'memory' : 'memories'}`,
+        `${verb} ${memoryReadCount} ${memoryReadCount === 1 ? 'memória' : 'memórias'}`,
       )
     }
     if (memorySearchCount > 0) {
       const verb = isActive
         ? parts.length === 0
-          ? 'Searching'
-          : 'searching'
+          ? 'Buscando'
+          : 'buscando'
         : parts.length === 0
-          ? 'Searched'
-          : 'searched'
-      parts.push(`${verb} memories`)
+          ? 'Busquei'
+          : 'busquei'
+      parts.push(`${verb} memórias`)
     }
     if (memoryWriteCount > 0) {
       const verb = isActive
         ? parts.length === 0
-          ? 'Writing'
-          : 'writing'
+          ? 'Escrevendo'
+          : 'escrevendo'
         : parts.length === 0
-          ? 'Wrote'
-          : 'wrote'
+          ? 'Escrevi'
+          : 'escrevi'
       parts.push(
-        `${verb} ${memoryWriteCount} ${memoryWriteCount === 1 ? 'memory' : 'memories'}`,
+        `${verb} ${memoryWriteCount} ${memoryWriteCount === 1 ? 'memória' : 'memórias'}`,
       )
     }
     // Team memory operations
@@ -1046,19 +1046,19 @@ export function getSearchReadSummaryText(
   if (listCount > 0) {
     const listVerb = isActive
       ? parts.length === 0
-        ? 'Listing'
-        : 'listing'
+        ? 'Listando'
+        : 'listando'
       : parts.length === 0
-        ? 'Listed'
-        : 'listed'
+        ? 'Listei'
+        : 'listei'
     parts.push(
-      `${listVerb} ${listCount} ${listCount === 1 ? 'directory' : 'directories'}`,
+      `${listVerb} ${listCount} ${listCount === 1 ? 'diretório' : 'diretórios'}`,
     )
   }
 
   if (replCount > 0) {
-    const replVerb = isActive ? "REPL'ing" : "REPL'd"
-    parts.push(`${replVerb} ${replCount} ${replCount === 1 ? 'time' : 'times'}`)
+    const replVerb = isActive ? "Rodando código" : "Rodei código"
+    parts.push(`${replVerb} ${replCount} ${replCount === 1 ? 'vez' : 'vezes'}`)
   }
 
   const text = parts.join(', ')

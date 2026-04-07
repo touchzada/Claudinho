@@ -35,7 +35,7 @@ export function TeamMemCountParts(t0) {
     const nodes = [];
     let count = hasPrecedingParts ? 1 : 0;
     if (tmReadCount > 0) {
-      const verb = isActiveGroup ? count === 0 ? "Recalling" : "recalling" : count === 0 ? "Recalled" : "recalled";
+      const verb = isActiveGroup ? count === 0 ? "Lembrando" : "lembrando" : count === 0 ? "Lembrei" : "lembrei";
       if (count > 0) {
         let t2;
         if ($[6] === Symbol.for("react.memo_cache_sentinel")) {

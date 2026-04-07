@@ -95,7 +95,7 @@ function convertStatusMessage(msg: SDKStatusMessage): SystemMessage | null {
     subtype: 'informational',
     content:
       msg.status === 'compacting'
-        ? 'Compacting conversation…'
+        ? 'Compactando conversa…'
         : `Status: ${msg.status}`,
     level: 'info',
     uuid: msg.uuid,
@@ -131,7 +131,7 @@ function convertCompactBoundaryMessage(
   return {
     type: 'system',
     subtype: 'compact_boundary',
-    content: 'Conversation compacted',
+    content: 'Conversa compactada',
     level: 'info',
     uuid: msg.uuid,
     timestamp: new Date().toISOString(),

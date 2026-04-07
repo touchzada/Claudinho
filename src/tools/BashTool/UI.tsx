@@ -74,7 +74,7 @@ export function BackgroundHint(t0) {
   }
   let t4;
   if ($[7] !== shortcut) {
-    t4 = <Box paddingLeft={5}><Text dimColor={true}><KeyboardShortcutHint shortcut={shortcut} action="run in background" parens={true} /></Text></Box>;
+    t4 = <Box paddingLeft={5}><Text dimColor={true}><KeyboardShortcutHint shortcut={shortcut} action="rodar em segundo plano" parens={true} /></Text></Box>;
     $[7] = shortcut;
     $[8] = t4;
   } else {

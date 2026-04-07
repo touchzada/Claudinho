@@ -2507,7 +2507,7 @@ export function REPL({
             setSpinnerMessage(event.hookType === 'pre_compact' ? 'Running PreCompact hooks\u2026' : event.hookType === 'post_compact' ? 'Running PostCompact hooks\u2026' : 'Running SessionStart hooks\u2026');
             break;
           case 'compact_start':
-            setSpinnerMessage('Compacting conversation');
+            setSpinnerMessage('Compactando conversa');
             break;
           case 'compact_end':
             setSpinnerMessage(null);
@@ -2894,7 +2894,13 @@ export function REPL({
       // isLoading is derived from queryGuard — tryStart() above already
       // transitioned dispatching→running, so no setter call needed here.
       resetTimingRefs();
-      setMessages(oldMessages => [...oldMessages, ...newMessages]);
+      const hasCompactBoundary = newMessages.some(isCompactBoundaryMessage);
+      if (hasCompactBoundary) {
+        // /compact should replace visible transcript with the post-compact segment.
+        setMessages(() => [...newMessages]);
+      } else {
+        setMessages(oldMessages => [...oldMessages, ...newMessages]);
+      }
       responseLengthRef.current = 0;
       if (feature('TOKEN_BUDGET')) {
         const parsedBudget = input ? parseTokenBudget(input) : null;

@@ -95,6 +95,9 @@ export const THEME_NAMES = [
   'dark-daltonized',
   'light-ansi',
   'dark-ansi',
+  'nerd',
+  'nerd-v2',
+  'nerd-v3',
 ] as const
 
 /** A renderable theme. Always resolvable to a concrete color palette. */
@@ -595,6 +598,190 @@ const darkDaltonizedTheme: Theme = {
   rainbow_violet_shimmer: 'rgb(230,180,210)',
 }
 
+/**
+ * Nerd v1 — Retro Hacker Terminal
+ *
+ * Verdes fosforescentes em fundo preto, amber accents, cyan highlights.
+ * Estilo Matrix, terminais Unix dos anos 90, monitores CRT verdes.
+ * Mood: "terminal hacker do filme classico"
+ */
+const nerdTheme: Theme = {
+  autoAccept: 'rgb(0,255,100)', // Matrix green
+  bashBorder: 'rgb(0,255,0)', // Terminal green border
+  claude: 'rgb(0,230,0)', // Green text for Claude output
+  claudeShimmer: 'rgb(0,255,80)', // Brighter green shimmer
+  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(0,255,255)', // Cyan spinner
+  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(100,255,255)', // Bright cyan shimmer
+  permission: 'rgb(0,255,200)', // Cyan-teal
+  permissionShimmer: 'rgb(100,255,240)',
+  planMode: 'rgb(0,180,180)', // Dark cyan
+  ide: 'rgb(0,200,200)', // Cyan
+  promptBorder: 'rgb(0,150,0)', // Dim green
+  promptBorderShimmer: 'rgb(0,200,0)',
+  text: 'rgb(0,230,0)', // Classic terminal green
+  inverseText: 'rgb(0,0,0)',
+  inactive: 'rgb(60,100,60)', // Dim green
+  inactiveShimmer: 'rgb(80,130,80)',
+  subtle: 'rgb(40,80,40)', // Barely visible green
+  suggestion: 'rgb(0,255,200)', // Cyan
+  remember: 'rgb(0,255,255)', // Cyan
+  background: 'rgb(0,180,0)', // Bright green accents
+  success: 'rgb(0,255,0)', // Maximum green
+  error: 'rgb(255,0,0)', // Red error
+  warning: 'rgb(255,170,0)', // Amber
+  merged: 'rgb(0,255,200)', // Cyan
+  warningShimmer: 'rgb(255,210,80)',
+  diffAdded: 'rgb(0,80,0)',
+  diffRemoved: 'rgb(80,0,0)',
+  diffAddedDimmed: 'rgb(0,40,0)',
+  diffRemovedDimmed: 'rgb(40,0,0)',
+  diffAddedWord: 'rgb(0,200,0)',
+  diffRemovedWord: 'rgb(255,80,80)',
+  red_FOR_SUBAGENTS_ONLY: 'rgb(255,60,60)',
+  blue_FOR_SUBAGENTS_ONLY: 'rgb(0,150,255)',
+  green_FOR_SUBAGENTS_ONLY: 'rgb(0,255,0)',
+  yellow_FOR_SUBAGENTS_ONLY: 'rgb(255,255,0)',
+  purple_FOR_SUBAGENTS_ONLY: 'rgb(180,0,255)',
+  orange_FOR_SUBAGENTS_ONLY: 'rgb(255,140,0)',
+  pink_FOR_SUBAGENTS_ONLY: 'rgb(255,0,180)',
+  cyan_FOR_SUBAGENTS_ONLY: 'rgb(0,255,255)',
+  professionalBlue: 'rgb(0,150,200)',
+  chromeYellow: 'rgb(255,200,0)',
+  clawd_body: 'rgb(0,230,0)', // Terminal green body
+  clawd_background: 'rgb(0,0,0)', // Void black
+  userMessageBackground: 'rgb(10,30,10)', // Very dark green
+  userMessageBackgroundHover: 'rgb(15,40,15)',
+  messageActionsBackground: 'rgb(5,20,20)',
+  selectionBg: 'rgb(0,80,40)',
+  bashMessageBackgroundColor: 'rgb(0,5,0)',
+  memoryBackgroundColor: 'rgb(0,40,20)',
+  rate_limit_fill: 'rgb(0,200,0)',
+  rate_limit_empty: 'rgb(0,50,0)',
+  fastMode: 'rgb(255,100,0)',
+  fastModeShimmer: 'rgb(255,180,80)',
+  briefLabelYou: 'rgb(0,200,200)',
+  briefLabelClaude: 'rgb(0,230,0)',
+  rainbow_red: 'rgb(255,50,50)',
+  rainbow_orange: 'rgb(255,150,50)',
+  rainbow_yellow: 'rgb(255,255,0)',
+  rainbow_green: 'rgb(50,255,50)',
+  rainbow_blue: 'rgb(50,150,255)',
+  rainbow_indigo: 'rgb(100,50,255)',
+  rainbow_violet: 'rgb(200,50,255)',
+  rainbow_red_shimmer: 'rgb(255,130,130)',
+  rainbow_orange_shimmer: 'rgb(255,200,130)',
+  rainbow_yellow_shimmer: 'rgb(255,255,130)',
+  rainbow_green_shimmer: 'rgb(130,255,130)',
+  rainbow_blue_shimmer: 'rgb(130,230,255)',
+  rainbow_indigo_shimmer: 'rgb(180,130,255)',
+  rainbow_violet_shimmer: 'rgb(255,130,255)',
+}
+
+/**
+ * Nerd v2 — Spider-Man x Supernatural x V de Vinganca
+ *
+ * Paleta misturando:
+ * - Spider-Man: vermelho escarlate (196,30,58), azul aranha (26,41,128)
+ * - Supernatural: olhos amarelos demoniacos (255,215,0), ectoplasma verde (0,200,83),
+ *   asfalto noturno (27,27,47), Impala (preto 10,10,18)
+ * - V de Vinganca: roxo Scarlet Carson (139,0,100), vermelho sangue (178,34,34),
+ *   preto/cinza escuro, rosa palido (212,112,140)
+ *
+ * Mood: "terminal do underground do Brooklyn a meia-noite"
+ */
+const nerdV2Theme: Theme = {
+  // Spider-Man red + azuis como cores hero
+  autoAccept: 'rgb(139,0,100)', // Roxo Scarlet Carson (V de Vinganca)
+  bashBorder: 'rgb(196,30,58)', // Spider-Man red
+  claude: 'rgb(255,215,0)', // Supernatural demon eyes = Claude output
+  claudeShimmer: 'rgb(255,235,100)', // Brighter demon shimmer
+  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(26,41,128)', // Spider-Man blue spinner
+  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(56,71,158)', // Spider-Man blue shimmer
+  permission: 'rgb(212,112,140)', // V rosa palido = permission
+  permissionShimmer: 'rgb(232,152,180)',
+  planMode: 'rgb(27,27,47)', // Impala dark blue-gray
+  ide: 'rgb(100,120,180)', // Muted blue-gray
+  promptBorder: 'rgb(196,30,58)', // Spider-Man red border
+  promptBorderShimmer: 'rgb(226,60,88)', // Brighter red shimmer
+  text: 'rgb(150,150,170)', // Cool gray text (night terminal feel)
+  inverseText: 'rgb(0,0,0)',
+  inactive: 'rgb(80,70,100)', // Dark muted purple-gray
+  inactiveShimmer: 'rgb(110,100,130)',
+  subtle: 'rgb(60,55,80)', // Very subtle purple
+  suggestion: 'rgb(212,112,140)', // Rosa palido V
+  remember: 'rgb(200,80,120)', // Rosa mais intenso
+  background: 'rgb(0,200,83)', // Supernatural ectoplasm green
+  success: 'rgb(0,200,83)', // Supernatural ectoplasm green
+  error: 'rgb(196,30,58)', // Spider-Man red error
+  warning: 'rgb(255,215,0)', // Supernatural demon eyes
+  merged: 'rgb(139,0,100)', // V roxo
+  warningShimmer: 'rgb(255,235,100)',
+  diffAdded: 'rgb(0,60,20)', // Dark ectoplasm green
+  diffRemoved: 'rgb(60,10,15)', // Dark Spider-Man red
+  diffAddedDimmed: 'rgb(0,30,10)',
+  diffRemovedDimmed: 'rgb(30,5,8)',
+  diffAddedWord: 'rgb(0,160,60)', // Brighter ectoplasm
+  diffRemovedWord: 'rgb(220,50,70)', // Brighter Spider-Man red
+  red_FOR_SUBAGENTS_ONLY: 'rgb(196,30,58)', // Spider-Man red
+  blue_FOR_SUBAGENTS_ONLY: 'rgb(26,41,128)', // Spider-Man blue
+  green_FOR_SUBAGENTS_ONLY: 'rgb(0,200,83)', // Supernatural green
+  yellow_FOR_SUBAGENTS_ONLY: 'rgb(255,215,0)', // Supernatural demon eyes
+  purple_FOR_SUBAGENTS_ONLY: 'rgb(139,0,100)', // V roxo
+  orange_FOR_SUBAGENTS_ONLY: 'rgb(178,34,34)', // Firebricks (sangue)
+  pink_FOR_SUBAGENTS_ONLY: 'rgb(212,112,140)', // Rosa V
+  cyan_FOR_SUBAGENTS_ONLY: 'rgb(100,160,200)', // Night sky
+  professionalBlue: 'rgb(26,41,128)', // Spider-Man blue
+  chromeYellow: 'rgb(255,215,0)', // Supernatural demon eyes
+  // TUI V2 colors
+  clawd_body: 'rgb(150,150,170)', // Cool gray body text
+  clawd_background: 'rgb(6,6,12)', // Near-black with hint of blue (night sky)
+  userMessageBackground: 'rgb(15,15,30)', // Very dark blue (Impala at night)
+  userMessageBackgroundHover: 'rgb(25,25,45)',
+  messageActionsBackground: 'rgb(12,12,22)',
+  selectionBg: 'rgb(139,0,70)', // V roxo escuro selection
+  bashMessageBackgroundColor: 'rgb(10,10,18)',
+
+  memoryBackgroundColor: 'rgb(10,10,25)', // Dark night blue
+  rate_limit_fill: 'rgb(255,215,0)', // Demon eyes rate limit
+  rate_limit_empty: 'rgb(80,60,10)', // Dark amber
+  fastMode: 'rgb(196,30,58)', // Spider-Man red fast mode
+  fastModeShimmer: 'rgb(236,70,98)',
+  briefLabelYou: 'rgb(26,41,128)', // Spider-Man blue
+  briefLabelClaude: 'rgb(255,215,0)', // Supernatural demon eyes
+  rainbow_red: 'rgb(196,30,58)', // Spider-Man red
+  rainbow_orange: 'rgb(178,34,34)', // Firebrick
+  rainbow_yellow: 'rgb(255,215,0)', // Supernatural eyes
+  rainbow_green: 'rgb(0,200,83)', // Ectoplasm
+  rainbow_blue: 'rgb(26,41,128)', // Spider-Man blue
+  rainbow_indigo: 'rgb(75,0,130)', // Deep indigo
+  rainbow_violet: 'rgb(139,0,100)', // V roxo
+  rainbow_red_shimmer: 'rgb(236,70,98)',
+  rainbow_orange_shimmer: 'rgb(218,74,74)',
+  rainbow_yellow_shimmer: 'rgb(255,235,100)',
+  rainbow_green_shimmer: 'rgb(50,230,110)',
+  rainbow_blue_shimmer: 'rgb(56,71,158)',
+  rainbow_indigo_shimmer: 'rgb(115,40,170)',
+  rainbow_violet_shimmer: 'rgb(179,40,140)',
+}
+
+/**
+ * Nerd v3 - variante protegida do tema fandom (Spider-Man x Supernatural x V de Vinganca)
+ * Mantem a identidade do v2 com contraste um pouco mais forte.
+ */
+const nerdV3Theme: Theme = {
+  ...nerdV2Theme,
+  text: 'rgb(172,172,195)',
+  promptBorder: 'rgb(215,45,75)',
+  promptBorderShimmer: 'rgb(240,82,112)',
+  suggestion: 'rgb(225,135,165)',
+  clawd_background: 'rgb(4,4,10)',
+  userMessageBackground: 'rgb(12,12,26)',
+  userMessageBackgroundHover: 'rgb(22,22,40)',
+  selectionBg: 'rgb(160,0,82)',
+  fastMode: 'rgb(215,45,75)',
+  fastModeShimmer: 'rgb(245,95,125)',
+}
+
 export function getTheme(themeName: ThemeName): Theme {
   switch (themeName) {
     case 'light':
@@ -607,6 +794,12 @@ export function getTheme(themeName: ThemeName): Theme {
       return lightDaltonizedTheme
     case 'dark-daltonized':
       return darkDaltonizedTheme
+    case 'nerd':
+      return nerdTheme
+    case 'nerd-v2':
+      return nerdV2Theme
+    case 'nerd-v3':
+      return nerdV3Theme
     default:
       return darkTheme
   }

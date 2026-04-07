@@ -294,7 +294,7 @@ export function useManagePlugins({
     if (!enabled || !needsRefresh) return
     addNotification({
       key: 'plugin-reload-pending',
-      text: 'Plugins changed. Run /reload-plugins to activate.',
+      text: 'Plugins alterados. Execute /reload-plugins pra ativar.',
       color: 'suggestion',
       priority: 'low',
     })

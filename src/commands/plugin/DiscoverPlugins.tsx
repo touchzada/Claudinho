@@ -212,11 +212,11 @@ export function DiscoverPlugins({
               setViewState('plugin-details');
             }
           } else {
-            setError(`Plugin "${targetPlugin}" not found in any marketplace`);
+            setError(`Plugin "${targetPlugin}" não encontrado em nenhum marketplace`);
           }
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load plugins');
+        setError(err instanceof Error ? err.message : 'Falha ao carregar plugins');
       } finally {
         setLoading(false);
       }

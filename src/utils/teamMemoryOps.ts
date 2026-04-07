@@ -54,35 +54,35 @@ export function appendTeamMemorySummaryParts(
   if (teamReadCount > 0) {
     const verb = isActive
       ? parts.length === 0
-        ? 'Recalling'
-        : 'recalling'
+        ? 'Lembrando'
+        : 'lembrando'
       : parts.length === 0
-        ? 'Recalled'
-        : 'recalled'
+        ? 'Lembrei'
+        : 'lembrei'
     parts.push(
-      `${verb} ${teamReadCount} team ${teamReadCount === 1 ? 'memory' : 'memories'}`,
+      `${verb} ${teamReadCount} ${teamReadCount === 1 ? 'memória' : 'memórias'} do time`,
     )
   }
   if (teamSearchCount > 0) {
     const verb = isActive
       ? parts.length === 0
-        ? 'Searching'
-        : 'searching'
+        ? 'Buscando'
+        : 'buscando'
       : parts.length === 0
-        ? 'Searched'
-        : 'searched'
-    parts.push(`${verb} team memories`)
+        ? 'Busquei'
+        : 'busquei'
+    parts.push(`${verb} memórias do time`)
   }
   if (teamWriteCount > 0) {
     const verb = isActive
       ? parts.length === 0
-        ? 'Writing'
-        : 'writing'
+        ? 'Escrevendo'
+        : 'escrevendo'
       : parts.length === 0
-        ? 'Wrote'
-        : 'wrote'
+        ? 'Escrevi'
+        : 'escrevi'
     parts.push(
-      `${verb} ${teamWriteCount} team ${teamWriteCount === 1 ? 'memory' : 'memories'}`,
+      `${verb} ${teamWriteCount} ${teamWriteCount === 1 ? 'memória' : 'memórias'} do time`,
     )
   }
 }

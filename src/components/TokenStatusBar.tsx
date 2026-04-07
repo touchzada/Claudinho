@@ -9,11 +9,34 @@ import {
 
 const SPINNER_CHARS = ['\u280b', '\u2819', '\u2839', '\u2838', '\u283c', '\u2834', '\u2826', '\u2827', '\u2807', '\u280f'];
 const FADEOUT_MS = 5_000;
+const SESSION_STARTED_AT = Date.now();
+const SESSION_ACTIVITY = {
+  totalActiveMs: 0,
+  activeStartedAt: null as number | null,
+};
 const THINKING_PHRASES = [
-  'processando...',
-  'pensando...',
-  'analisando...',
-  'organizando resposta...',
+  'Claudiando...',
+  'Cerebrando...',
+  'Fritando neurônio...',
+  'Embananando...',
+  'Desembananando...',
+  'Bebopando...',
+  'Caramelizando...',
+  'Chacoalhando o servidor...',
+  'Cozinhando os dados...',
+  'Fermentando ideia...',
+  'Frescurando no código...',
+  'Zanzando nas variáveis...',
+  'Cutucando a nuvem...',
+  'Boogieando no heap...',
+  'Claudiando com raiva...',
+  'Catapultando tokens...',
+  'Borrifando código...',
+  'Cascateando na API...',
+  'Brewando café virtual...',
+  'Claudiando no modo turbo...',
+  'Emocionando o CPU...',
+  'Minguando tokens...',
 ];
 
 const BAR_WIDTH = 12;
@@ -241,11 +264,10 @@ export function TokenStatusBar({
   isLoading,
   typingSignal = '',
 }: Props): React.ReactElement | null {
-  const sessionStartedAtRef = useRef(Date.now());
   const [now, setNow] = useState(() => Date.now());
-  const [totalActiveMs, setTotalActiveMs] = useState(0);
+  const [totalActiveMs, setTotalActiveMs] = useState(() => SESSION_ACTIVITY.totalActiveMs);
   const [isTypingActive, setIsTypingActive] = useState(false);
-  const activeStartedAtRef = useRef<number | null>(null);
+  const activeStartedAtRef = useRef<number | null>(SESSION_ACTIVITY.activeStartedAt);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousTypingSignalRef = useRef<string>(typingSignal);
 
@@ -266,6 +288,12 @@ export function TokenStatusBar({
   useEffect(() => {
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      // Persist active time on unmount so remounts don't reset counters.
+      if (activeStartedAtRef.current != null) {
+        const delta = safeElapsedMs(Date.now(), activeStartedAtRef.current);
+        SESSION_ACTIVITY.totalActiveMs += delta;
+        SESSION_ACTIVITY.activeStartedAt = null;
+      }
     };
   }, []);
 
@@ -274,15 +302,22 @@ export function TokenStatusBar({
   useEffect(() => {
     if (isSessionActive) {
       if (activeStartedAtRef.current == null) {
-        activeStartedAtRef.current = Date.now();
+        const startedAt = Date.now();
+        activeStartedAtRef.current = startedAt;
+        SESSION_ACTIVITY.activeStartedAt = startedAt;
       }
       return;
     }
 
     if (activeStartedAtRef.current != null) {
       const delta = safeElapsedMs(Date.now(), activeStartedAtRef.current);
-      setTotalActiveMs(prev => prev + delta);
+      setTotalActiveMs(prev => {
+        const next = prev + delta;
+        SESSION_ACTIVITY.totalActiveMs = next;
+        return next;
+      });
       activeStartedAtRef.current = null;
+      SESSION_ACTIVITY.activeStartedAt = null;
     }
   }, [isSessionActive]);
 
@@ -319,12 +354,14 @@ export function TokenStatusBar({
     return () => clearInterval(timer);
   }, [pct]);
 
-  if (usedTokens === 0 && messages.length === 0 && !isLoading) return null;
+  if (usedTokens === 0 && messages.length === 0 && !isLoading) {
+    return null;
+  }
 
   const activeInFlightMs = isSessionActive
     ? safeElapsedMs(now, activeStartedAtRef.current)
     : 0;
-  const sessionMs = Math.max(0, now - sessionStartedAtRef.current);
+  const sessionMs = Math.max(0, now - SESSION_STARTED_AT);
   const activeMs = Math.min(sessionMs, Math.max(0, totalActiveMs + activeInFlightMs));
   const idleMs = Math.max(0, sessionMs - activeMs);
 
@@ -355,7 +392,7 @@ export function TokenStatusBar({
         )}
         <Text color="#4b5563"> {'\u00b7'} </Text>
         <Text color="#86efac">ativo {formatDuration(activeMs)}</Text>
-        <Text color="#4b5563"> </Text>
+        <Text color="#4b5563"> {'\u00b7'} </Text>
         <Text color="#6b7280">ocioso {formatDuration(idleMs)}</Text>
         <Text color="#4b5563"> {'\u00b7'} </Text>
         <Text color={contextState.color}>{contextState.label}</Text>

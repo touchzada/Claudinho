@@ -49,7 +49,7 @@ function MarketplaceList(t0) {
           }
         } catch (t3) {
           const err = t3;
-          onComplete(`Error loading marketplaces: ${errorMessage(err)}`);
+          onComplete(`Erro ao carregar marketplaces: ${errorMessage(err)}`);
         }
       };
       loadList();
@@ -65,7 +65,7 @@ function MarketplaceList(t0) {
   useEffect(t1, t2);
   let t3;
   if ($[3] === Symbol.for("react.memo_cache_sentinel")) {
-    t3 = <Text>Loading marketplaces...</Text>;
+    t3 = <Text>Carregando marketplaces...</Text>;
     $[3] = t3;
   } else {
     t3 = $[3];
@@ -223,7 +223,7 @@ function buildErrorRows(failedMarketplaces: Array<{
     rows.push({
       label: pluginName ?? error.source,
       message: formatErrorMessage(error),
-      guidance: 'Restart to retry loading plugins',
+      guidance: 'Reinicie pra tentar carregar plugins novamente',
       action: {
         kind: 'none'
       }
@@ -240,8 +240,8 @@ function buildErrorRows(failedMarketplaces: Array<{
     const scope = sourceInfo.isInPolicy ? 'managed' : sourceInfo.editableSources[0]?.scope;
     rows.push({
       label: m.name,
-      message: m.error ?? 'Installation failed',
-      guidance: action.kind === 'managed-only' ? 'Managed by your organization — contact your admin' : undefined,
+      message: m.error ?? 'Instalação falhou',
+      guidance: action.kind === 'managed-only' ? 'Gerenciado pela sua organização — contate seu admin' : undefined,
       action,
       scope
     });
@@ -916,7 +916,7 @@ export function PluginSettings(t0) {
   if (viewState.type === "help") {
     let t16;
     if ($[28] === Symbol.for("react.memo_cache_sentinel")) {
-      t16 = <Box flexDirection="column"><Text bold={true}>Plugin Command Usage:</Text><Text> </Text><Text dimColor={true}>Installation:</Text><Text> /plugin install - Browse and install plugins</Text><Text>{" "}{"/plugin install <marketplace> - Install from specific marketplace"}</Text><Text>{" /plugin install <plugin> - Install specific plugin"}</Text><Text>{" "}{"/plugin install <plugin>@<market> - Install plugin from marketplace"}</Text><Text> </Text><Text dimColor={true}>Management:</Text><Text> /plugin manage - Manage installed plugins</Text><Text>{" /plugin enable <plugin> - Enable a plugin"}</Text><Text>{" /plugin disable <plugin> - Disable a plugin"}</Text><Text>{" /plugin uninstall <plugin> - Uninstall a plugin"}</Text><Text> </Text><Text dimColor={true}>Marketplaces:</Text><Text> /plugin marketplace - Marketplace management menu</Text><Text> /plugin marketplace add - Add a marketplace</Text><Text>{" "}{"/plugin marketplace add <path/url> - Add marketplace directly"}</Text><Text> /plugin marketplace update - Update marketplaces</Text><Text>{" "}{"/plugin marketplace update <name> - Update specific marketplace"}</Text><Text> /plugin marketplace remove - Remove a marketplace</Text><Text>{" "}{"/plugin marketplace remove <name> - Remove specific marketplace"}</Text><Text> /plugin marketplace list - List all marketplaces</Text><Text> </Text><Text dimColor={true}>Validation:</Text><Text>{" "}{"/plugin validate <path> - Validate a manifest file or directory"}</Text><Text> </Text><Text dimColor={true}>Other:</Text><Text> /plugin - Main plugin menu</Text><Text> /plugin help - Show this help</Text><Text> /plugins - Alias for /plugin</Text></Box>;
+      t16 = <Box flexDirection="column"><Text bold={true}>Uso do Comando Plugin:</Text><Text> </Text><Text dimColor={true}>Instalação:</Text><Text> /plugin install - Navegar e instalar plugins</Text><Text>{" "}{"/plugin install <marketplace> - Instalar de marketplace específico"}</Text><Text>{" /plugin install <plugin> - Instalar plugin específico"}</Text><Text>{" "}{"/plugin install <plugin>@<market> - Instalar plugin de marketplace"}</Text><Text> </Text><Text dimColor={true}>Gerenciamento:</Text><Text> /plugin manage - Gerenciar plugins instalados</Text><Text>{" /plugin enable <plugin> - Ativar um plugin"}</Text><Text>{" /plugin disable <plugin> - Desativar um plugin"}</Text><Text>{" /plugin uninstall <plugin> - Desinstalar um plugin"}</Text><Text> </Text><Text dimColor={true}>Marketplaces:</Text><Text> /plugin marketplace - Menu de gerenciamento de marketplace</Text><Text> /plugin marketplace add - Adicionar um marketplace</Text><Text>{" "}{"/plugin marketplace add <path/url> - Adicionar marketplace diretamente"}</Text><Text> /plugin marketplace update - Atualizar marketplaces</Text><Text>{" "}{"/plugin marketplace update <name> - Atualizar marketplace específico"}</Text><Text> /plugin marketplace remove - Remover um marketplace</Text><Text>{" "}{"/plugin marketplace remove <name> - Remover marketplace específico"}</Text><Text> /plugin marketplace list - Listar todos os marketplaces</Text><Text> </Text><Text dimColor={true}>Validação:</Text><Text>{" "}{"/plugin validate <path> - Validar um arquivo ou diretório de manifesto"}</Text><Text> </Text><Text dimColor={true}>Outros:</Text><Text> /plugin - Menu principal de plugin</Text><Text> /plugin help - Mostrar esta ajuda</Text><Text> /plugins - Atalho pra /plugin</Text></Box>;
       $[28] = t16;
     } else {
       t16 = $[28];

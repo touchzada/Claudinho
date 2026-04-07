@@ -3998,11 +3998,11 @@ export async function executePreCompactHooks(
     if (result.succeeded) {
       if (result.output.trim()) {
         displayMessages.push(
-          `PreCompact [${result.command}] completed successfully: ${result.output.trim()}`,
+          `PreCompact [${result.command}] concluído com sucesso: ${result.output.trim()}`,
         )
       } else {
         displayMessages.push(
-          `PreCompact [${result.command}] completed successfully`,
+          `PreCompact [${result.command}] concluído com sucesso`,
         )
       }
     } else {
@@ -4064,11 +4064,11 @@ export async function executePostCompactHooks(
     if (result.succeeded) {
       if (result.output.trim()) {
         displayMessages.push(
-          `PostCompact [${result.command}] completed successfully: ${result.output.trim()}`,
+          `PostCompact [${result.command}] concluído com sucesso: ${result.output.trim()}`,
         )
       } else {
         displayMessages.push(
-          `PostCompact [${result.command}] completed successfully`,
+          `PostCompact [${result.command}] concluído com sucesso`,
         )
       }
     } else {

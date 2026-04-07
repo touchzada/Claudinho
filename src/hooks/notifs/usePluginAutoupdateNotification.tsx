@@ -59,7 +59,7 @@ export function usePluginAutoupdateNotification() {
       const displayNames = pluginNames.length <= 2 ? pluginNames.join(" and ") : `${pluginNames.length} plugins`;
       addNotification({
         key: "plugin-autoupdate-restart",
-        jsx: <><Text color="success">{pluginNames.length === 1 ? "Plugin" : "Plugins"} updated:{" "}{displayNames}</Text><Text dimColor={true}> · Run /reload-plugins to apply</Text></>,
+        jsx: <><Text color="success">{pluginNames.length === 1 ? "Plugin" : "Plugins"} atualizados:{" "}{displayNames}</Text><Text dimColor={true}> · Execute /reload-plugins pra aplicar</Text></>,
         priority: "low",
         timeoutMs: 10000
       });

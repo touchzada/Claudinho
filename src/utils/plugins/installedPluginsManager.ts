@@ -1179,7 +1179,7 @@ export async function migrateFromEnabledPlugins(): Promise<void> {
         const pluginInfo = await getPluginById(pluginId)
         if (!pluginInfo) {
           logForDebugging(
-            `Plugin ${pluginId} not found in any marketplace, skipping`,
+            `Plugin ${pluginId} não encontrado em nenhum marketplace, pulando`,
           )
           continue
         }

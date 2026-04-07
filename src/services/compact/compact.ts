@@ -1115,7 +1115,7 @@ function addErrorNotificationIfNeeded(
   ) {
     context.addNotification?.({
       key: 'error-compacting-conversation',
-      text: 'Error compacting conversation',
+      text: 'Erro ao compactar conversa',
       priority: 'immediate',
       color: 'error',
     })

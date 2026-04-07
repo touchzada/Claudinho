@@ -515,8 +515,8 @@ export async function marketplaceAddHandler(
 
     cliOk(
       alreadyMaterialized
-        ? `${figures.tick} Marketplace '${name}' already on disk — declared in ${scope} settings`
-        : `${figures.tick} Successfully added marketplace: ${name} (declared in ${scope} settings)`,
+        ? `${figures.tick} Marketplace '${name}' já está no disco — declarado nas configurações ${scope}`
+        : `${figures.tick} Marketplace adicionado com sucesso: ${name} (declarado nas configurações ${scope})`,
     )
   } catch (error) {
     handleMarketplaceError(error, 'add marketplace')

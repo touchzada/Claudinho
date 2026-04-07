@@ -1,5 +1,55 @@
 ﻿# Changelog - Claudinho
 
+## [v0.1.13] - 2026-04-07
+### Ajustes recentes de UX, provider e traducao
+
+#### Provider e startup
+- Corrigido `--provider openrouter` quando existe perfil salvo de outro provider (ex.: `codex`)
+- OpenRouter agora aceita fallback de `OPENROUTER_API_KEY` para `OPENAI_API_KEY` no startup/validacao
+- Mensagem de warning no bootstrap ficou mais precisa, indicando se o erro veio de `--provider` ou do perfil salvo
+
+#### Barra inferior e sessao
+- Ajustada persistencia de tempo ativo/ocioso entre remounts da UI, evitando reset inesperado
+- Melhorada exibicao da barra com separadores mais claros
+- Frases de pensamento/analise atualizadas para estilo mais informal
+- Removidos enfeites extras da HUD e mantida leitura mais limpa
+
+#### Compactacao e historico visivel
+- Corrigido comportamento visual do `/compact`: ao receber `compact_boundary`, a transcricao exibida passa a mostrar o segmento pos-compactacao
+- Mensagens de compactacao padronizadas em PT-BR (`Compactando conversa`, `Conversa compactada`, etc.)
+
+#### Tema customizado
+- Adicionados temas `nerd`, `nerd-v2` e `nerd-v3`
+- Theme Picker atualizado com as novas opcoes
+
+#### Plugins, mensagens e ferramentas (PT-BR)
+- Traducoes e ajustes de UX nos comandos de plugin (`/plugin`, marketplace, notificacoes, reload)
+- Traducoes em mensagens de memoria/recall e resumos colapsados
+- Traducoes em mensagens de hooks e status
+- Traducoes em Bash/WebFetch (`rodar em segundo plano`, `Buscando...`, etc.)
+- Textos de validacao de caminho no Bash ficaram mais claros para pedido de aprovacao manual
+
+---
+
+## [v0.1.12] - 2026-04-07
+### Fase 25: Verificação e Recompilação de Traduções
+
+#### Correção Aplicada
+- Recompilação e reinstalação do projeto para aplicar traduções já existentes
+- String "esc to interrupt" → "esc pra interromper" (já estava traduzida no código)
+
+#### Arquivos Verificados
+- `src/components/Spinner/SpinnerAnimationRow.tsx` (tradução confirmada)
+- `src/remote/sdkMessageAdapter.ts` (tradução confirmada)
+
+#### Instruções para Usuários
+- Após atualizar o código, sempre executar:
+  1. `bun run build` (compilar)
+  2. `npm link` (reinstalar)
+  3. Reiniciar o Claudinho para ver as mudanças
+
+---
+
 ## [v0.1.11] - 2026-04-06
 ### Provider UX + Startup CLI (`/provider` e `--provider`)
 

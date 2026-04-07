@@ -246,7 +246,7 @@ export function CollapsedReadSearchContent({
           </>}
         {message.relevantMemories?.map(m => <Box key={m.path} flexDirection="column" marginTop={1}>
             <Text dimColor>
-              {'  ⎿  '}Recalled {basename(m.path)}
+              {'  ⎿  '}Lembrei {basename(m.path)}
             </Text>
             <Box paddingLeft={5}>
               <Text>
@@ -417,7 +417,7 @@ export function CollapsedReadSearchContent({
   const memParts: React.ReactNode[] = [];
   if (memoryReadCount > 0) {
     const isFirst_5 = !hasPrecedingNonMem && memParts.length === 0;
-    const verb_2 = isActiveGroup ? isFirst_5 ? 'Recalling' : 'recalling' : isFirst_5 ? 'Recalled' : 'recalled';
+    const verb_2 = isActiveGroup ? isFirst_5 ? 'Lembrando' : 'lembrando' : isFirst_5 ? 'Lembrei' : 'lembrei';
     if (!isFirst_5) {
       memParts.push(<Text key="comma-mr">, </Text>);
     }

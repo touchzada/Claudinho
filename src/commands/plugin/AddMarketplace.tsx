@@ -87,7 +87,7 @@ export function AddMarketplace({
       setLoading(false);
       if (cliMode) {
         // In CLI mode, set result to trigger completion
-        setResult(`Successfully added marketplace: ${name}`);
+        setResult(`Marketplace adicionado com sucesso: ${name}`);
       } else {
         // In interactive mode, switch to browse view
         setViewState({

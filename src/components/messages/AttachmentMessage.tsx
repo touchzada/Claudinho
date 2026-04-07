@@ -175,8 +175,8 @@ export function AttachmentMessage({
           <Box flexDirection="row">
             <Box minWidth={2} />
             <Text dimColor>
-              Recalled <Text bold>{attachment.memories.length}</Text>{' '}
-              {attachment.memories.length === 1 ? 'memory' : 'memories'}
+              Lembrei <Text bold>{attachment.memories.length}</Text>{' '}
+              {attachment.memories.length === 1 ? 'memória' : 'memórias'}
               {!isTranscriptMode && <>
                   {' '}
                   <CtrlOToExpand />

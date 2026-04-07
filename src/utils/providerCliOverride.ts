@@ -2,6 +2,7 @@ import {
   buildLaunchEnv,
   type ProfileFile,
   type ProviderProfile,
+  sanitizeApiKey,
 } from './providerProfile.js'
 
 export const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1'
@@ -90,6 +91,19 @@ function resolveOpenRouterModel(persisted?: ProfileFile | null): string {
   return OPENROUTER_DEFAULT_MODEL
 }
 
+function resolveOpenRouterApiKey(options: {
+  processEnv: NodeJS.ProcessEnv
+  persisted?: ProfileFile | null
+}): string | undefined {
+  const fromProcess = sanitizeApiKey(
+    options.processEnv.OPENAI_API_KEY ??
+      options.processEnv.OPENROUTER_API_KEY,
+  )
+  if (fromProcess) return fromProcess
+
+  return sanitizeApiKey(options.persisted?.env?.OPENAI_API_KEY)
+}
+
 export async function buildStartupEnvWithProviderOverride(options: {
   provider: CliProviderOverride
   processEnv?: NodeJS.ProcessEnv
@@ -111,6 +125,9 @@ export async function buildStartupEnvWithProviderOverride(options: {
     delete env.CLAUDE_CODE_USE_GITHUB
     env.OPENAI_BASE_URL = OPENROUTER_BASE_URL
     env.OPENAI_MODEL = resolveOpenRouterModel(persisted)
+    env.OPENAI_API_KEY =
+      env.OPENAI_API_KEY ||
+      resolveOpenRouterApiKey({ processEnv, persisted })
 
     return env
   }
@@ -122,4 +139,3 @@ export async function buildStartupEnvWithProviderOverride(options: {
     processEnv,
   })
 }
-

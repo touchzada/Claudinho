@@ -4537,7 +4537,7 @@ export function createCompactBoundaryMessage(
   return {
     type: 'system',
     subtype: 'compact_boundary',
-    content: `Conversation compacted`,
+    content: `Conversa compactada`,
     isMeta: false,
     timestamp: new Date().toISOString(),
     uuid: randomUUID(),

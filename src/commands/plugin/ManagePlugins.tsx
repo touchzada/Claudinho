@@ -377,7 +377,7 @@ async function checkIfLocalPlugin(pluginName: string, marketplaceName: string): 
   const marketplace = await getMarketplace(marketplaceName);
   const entry = marketplace?.plugins.find(p => p.name === pluginName);
   if (entry && typeof entry.source === 'string') {
-    return `Local plugins cannot be updated remotely. To update, modify the source at: ${entry.source}`;
+    return `Plugins locais não podem ser atualizados remotamente. Pra atualizar, modifique a fonte em: ${entry.source}`;
   }
   return null;
 }
@@ -1002,7 +1002,7 @@ export function ManagePlugins({
 
     // Built-in plugins can only be enabled/disabled, not updated/uninstalled.
     if (isBuiltin && (operation === 'update' || operation === 'uninstall')) {
-      setProcessError('Built-in plugins cannot be updated or uninstalled.');
+      setProcessError('Plugins integrados não podem ser atualizados ou desinstalados.');
       return;
     }
 

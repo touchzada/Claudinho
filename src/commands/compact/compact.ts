@@ -240,11 +240,11 @@ function buildDisplayText(
   const dimmed = [
     ...(context.options.verbose
       ? []
-      : [`(${expandShortcut} to see full summary)`]),
+      : [`(${expandShortcut} pra ver resumo completo)`]),
     ...(userDisplayMessage ? [userDisplayMessage] : []),
     ...(upgradeMessage ? [upgradeMessage] : []),
   ]
-  return chalk.dim('Compacted ' + dimmed.join('\n'))
+  return chalk.dim('Compactado ' + dimmed.join('\n'))
 }
 
 async function getCacheSharingParams(
