@@ -90,6 +90,8 @@ const MEMORY_INSTRUCTION_PROMPT =
   'Codebase and user instructions are shown below. Be sure to adhere to these instructions. IMPORTANT: These instructions OVERRIDE any default behavior and you MUST follow them exactly as written.'
 // Recommended max character count for a memory file
 export const MAX_MEMORY_CHARACTER_COUNT = 40000
+const PROJECT_MEMORY_FILE_NAMES = ['CLAUDE.md', 'claudemd2.txt', 'claudemd.txt']
+const LOCAL_MEMORY_FILE_NAMES = ['CLAUDE.local.md']
 
 // File extensions that are allowed for @include directives
 // This prevents binary files (images, PDFs, etc.) from being loaded into memory
@@ -883,28 +885,30 @@ export const getMemoryFiles = memoize(
         pathInWorkingPath(dir, canonicalRoot) &&
         !pathInWorkingPath(dir, gitRoot)
 
-      // Try reading CLAUDE.md (Project) - only if projectSettings is enabled
+      // Try reading project memory files (Project) - only if projectSettings is enabled
       if (isSettingSourceEnabled('projectSettings') && !skipProject) {
-        const projectPath = join(dir, 'CLAUDE.md')
-        result.push(
-          ...(await processMemoryFile(
-            projectPath,
-            'Project',
-            processedPaths,
-            includeExternal,
-          )),
-        )
+        for (const fileName of PROJECT_MEMORY_FILE_NAMES) {
+          const projectPath = join(dir, fileName)
+          result.push(
+            ...(await processMemoryFile(
+              projectPath,
+              'Project',
+              processedPaths,
+              includeExternal,
+            )),
+          )
 
-        // Try reading .claude/CLAUDE.md (Project)
-        const dotClaudePath = join(dir, '.claude', 'CLAUDE.md')
-        result.push(
-          ...(await processMemoryFile(
-            dotClaudePath,
-            'Project',
-            processedPaths,
-            includeExternal,
-          )),
-        )
+          // Try reading .claude/<fileName> (Project)
+          const dotClaudePath = join(dir, '.claude', fileName)
+          result.push(
+            ...(await processMemoryFile(
+              dotClaudePath,
+              'Project',
+              processedPaths,
+              includeExternal,
+            )),
+          )
+        }
 
         // Try reading .claude/rules/*.md files (Project)
         const rulesDir = join(dir, '.claude', 'rules')
@@ -919,17 +923,19 @@ export const getMemoryFiles = memoize(
         )
       }
 
-      // Try reading CLAUDE.local.md (Local) - only if localSettings is enabled
+      // Try reading local memory files (Local) - only if localSettings is enabled
       if (isSettingSourceEnabled('localSettings')) {
-        const localPath = join(dir, 'CLAUDE.local.md')
-        result.push(
-          ...(await processMemoryFile(
-            localPath,
-            'Local',
-            processedPaths,
-            includeExternal,
-          )),
-        )
+        for (const fileName of LOCAL_MEMORY_FILE_NAMES) {
+          const localPath = join(dir, fileName)
+          result.push(
+            ...(await processMemoryFile(
+              localPath,
+              'Local',
+              processedPaths,
+              includeExternal,
+            )),
+          )
+        }
       }
     }
 
@@ -940,27 +946,29 @@ export const getMemoryFiles = memoize(
     if (isEnvTruthy(process.env.CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD)) {
       const additionalDirs = getAdditionalDirectoriesForClaudeMd()
       for (const dir of additionalDirs) {
-        // Try reading CLAUDE.md from the additional directory
-        const projectPath = join(dir, 'CLAUDE.md')
-        result.push(
-          ...(await processMemoryFile(
-            projectPath,
-            'Project',
-            processedPaths,
-            includeExternal,
-          )),
-        )
+        for (const fileName of PROJECT_MEMORY_FILE_NAMES) {
+          // Try reading project memory files from the additional directory
+          const projectPath = join(dir, fileName)
+          result.push(
+            ...(await processMemoryFile(
+              projectPath,
+              'Project',
+              processedPaths,
+              includeExternal,
+            )),
+          )
 
-        // Try reading .claude/CLAUDE.md from the additional directory
-        const dotClaudePath = join(dir, '.claude', 'CLAUDE.md')
-        result.push(
-          ...(await processMemoryFile(
-            dotClaudePath,
-            'Project',
-            processedPaths,
-            includeExternal,
-          )),
-        )
+          // Try reading .claude/<fileName> from the additional directory
+          const dotClaudePath = join(dir, '.claude', fileName)
+          result.push(
+            ...(await processMemoryFile(
+              dotClaudePath,
+              'Project',
+              processedPaths,
+              includeExternal,
+            )),
+          )
+        }
 
         // Try reading .claude/rules/*.md files from the additional directory
         const rulesDir = join(dir, '.claude', 'rules')
@@ -1253,34 +1261,38 @@ export async function getMemoryFilesForNestedDirectory(
 ): Promise<MemoryFileInfo[]> {
   const result: MemoryFileInfo[] = []
 
-  // Process project memory files (CLAUDE.md and .claude/CLAUDE.md)
+  // Process project memory files
   if (isSettingSourceEnabled('projectSettings')) {
-    const projectPath = join(dir, 'CLAUDE.md')
-    result.push(
-      ...(await processMemoryFile(
-        projectPath,
-        'Project',
-        processedPaths,
-        false,
-      )),
-    )
-    const dotClaudePath = join(dir, '.claude', 'CLAUDE.md')
-    result.push(
-      ...(await processMemoryFile(
-        dotClaudePath,
-        'Project',
-        processedPaths,
-        false,
-      )),
-    )
+    for (const fileName of PROJECT_MEMORY_FILE_NAMES) {
+      const projectPath = join(dir, fileName)
+      result.push(
+        ...(await processMemoryFile(
+          projectPath,
+          'Project',
+          processedPaths,
+          false,
+        )),
+      )
+      const dotClaudePath = join(dir, '.claude', fileName)
+      result.push(
+        ...(await processMemoryFile(
+          dotClaudePath,
+          'Project',
+          processedPaths,
+          false,
+        )),
+      )
+    }
   }
 
-  // Process local memory file (CLAUDE.local.md)
+  // Process local memory files
   if (isSettingSourceEnabled('localSettings')) {
-    const localPath = join(dir, 'CLAUDE.local.md')
-    result.push(
-      ...(await processMemoryFile(localPath, 'Local', processedPaths, false)),
-    )
+    for (const fileName of LOCAL_MEMORY_FILE_NAMES) {
+      const localPath = join(dir, fileName)
+      result.push(
+        ...(await processMemoryFile(localPath, 'Local', processedPaths, false)),
+      )
+    }
   }
 
   const rulesDir = join(dir, '.claude', 'rules')
@@ -1435,8 +1447,11 @@ export async function shouldShowClaudeMdExternalIncludesWarning(): Promise<boole
 export function isMemoryFilePath(filePath: string): boolean {
   const name = basename(filePath)
 
-  // CLAUDE.md or CLAUDE.local.md anywhere
-  if (name === 'CLAUDE.md' || name === 'CLAUDE.local.md') {
+  // Project/local memory filenames anywhere
+  if (
+    PROJECT_MEMORY_FILE_NAMES.includes(name) ||
+    LOCAL_MEMORY_FILE_NAMES.includes(name)
+  ) {
     return true
   }
 

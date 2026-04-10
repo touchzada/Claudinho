@@ -10,9 +10,9 @@ export function AgentNavigationFooter(t0) {
   const {
     instructions: t1
   } = t0;
-  const instructions = t1 === undefined ? "Press \u2191\u2193 to navigate \xB7 Enter to select \xB7 Esc to go back" : t1;
+  const instructions = t1 === undefined ? "Pressione \u2191\u2193 pra navegar \xB7 Enter pra selecionar \xB7 Esc pra voltar" : t1;
   const exitState = useExitOnCtrlCDWithKeybindings();
-  const t2 = exitState.pending ? `Press ${exitState.keyName} again to exit` : instructions;
+  const t2 = exitState.pending ? `Pressione ${exitState.keyName} novamente pra sair` : instructions;
   let t3;
   if ($[0] !== t2) {
     t3 = <Box marginLeft={2}><Text dimColor={true}>{t2}</Text></Box>;

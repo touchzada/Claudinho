@@ -31,7 +31,7 @@ function profile(profile: ProfileFile['profile'], env: ProfileFile['env']): Prof
   }
 }
 
-const missingCodexAuthPath = join(tmpdir(), 'openclaude-missing-codex-auth.json')
+const missingCodexAuthPath = join(tmpdir(), 'claudinho-missing-codex-auth.json')
 
 test('matching persisted ollama env is reused for ollama launch', async () => {
   const env = await buildLaunchEnv({
@@ -276,7 +276,7 @@ test('codex launch ignores placeholder codex env keys', async () => {
 })
 
 test('codex launch prefers auth account id over stale persisted value', async () => {
-  const codexHome = mkdtempSync(join(tmpdir(), 'openclaude-codex-'))
+  const codexHome = mkdtempSync(join(tmpdir(), 'claudinho-codex-'))
   try {
     writeFileSync(
       join(codexHome, 'auth.json'),
@@ -369,7 +369,7 @@ test('gemini profiles require a key', () => {
 })
 
 test('saveProfileFile writes a profile that loadProfileFile can read back', () => {
-  const cwd = mkdtempSync(join(tmpdir(), 'openclaude-profile-file-'))
+  const cwd = mkdtempSync(join(tmpdir(), 'claudinho-profile-file-'))
 
   try {
     const persisted = createProfileFile('openai', {
@@ -384,6 +384,27 @@ test('saveProfileFile writes a profile that loadProfileFile can read back', () =
       JSON.parse(readFileSync(filePath, 'utf8')).profile,
       'openai',
     )
+    assert.deepEqual(loadProfileFile({ cwd }), persisted)
+  } finally {
+    rmSync(cwd, { recursive: true, force: true })
+  }
+})
+
+test('loadProfileFile still reads the legacy openclaude profile name', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'claudinho-legacy-profile-file-'))
+
+  try {
+    const persisted = createProfileFile('gemini', {
+      GEMINI_API_KEY: 'gem-test',
+      GEMINI_MODEL: 'gemini-2.0-flash',
+    })
+
+    writeFileSync(
+      join(cwd, '.openclaude-profile.json'),
+      JSON.stringify(persisted, null, 2),
+      'utf8',
+    )
+
     assert.deepEqual(loadProfileFile({ cwd }), persisted)
   } finally {
     rmSync(cwd, { recursive: true, force: true })
@@ -443,12 +464,38 @@ test('buildStartupEnvFromProfile treats explicit falsey provider flags as user i
   assert.equal(env.GEMINI_API_KEY, undefined)
 })
 
+test('buildStartupEnvFromProfile lets persisted profile override manager-applied provider flags', async () => {
+  const processEnv = {
+    CLAUDE_CODE_USE_OPENAI: '1',
+    OPENAI_BASE_URL: 'https://chatgpt.com/backend-api/codex',
+    OPENAI_MODEL: 'gpt-5.4 (medium)',
+    CLAUDINHO_PROVIDER_PROFILE_ATIVO: '1',
+    CLAUDINHO_PROVIDER_PROFILE_ATIVO_ID: 'provedor_teste',
+    CODEX_AUTH_JSON_PATH: missingCodexAuthPath,
+  }
+
+  const env = await buildStartupEnvFromProfile({
+    persisted: profile('codex', {
+      OPENAI_BASE_URL: 'https://chatgpt.com/backend-api/codex',
+      OPENAI_MODEL: 'gpt-5.3-codex (high)',
+      CODEX_API_KEY: 'codex-persisted',
+      CHATGPT_ACCOUNT_ID: 'acct_persisted',
+    }),
+    processEnv,
+  })
+
+  assert.notEqual(env, processEnv)
+  assert.equal(env.OPENAI_MODEL, 'gpt-5.3-codex (high)')
+  assert.equal(env.CODEX_API_KEY, 'codex-persisted')
+  assert.equal(env.CHATGPT_ACCOUNT_ID, 'acct_persisted')
+})
+
 test('maskSecretForDisplay preserves only a short prefix and suffix', () => {
   assert.equal(maskSecretForDisplay('sk-secret-12345678'), 'sk-...5678')
   assert.equal(maskSecretForDisplay('AIzaSecret12345678'), 'AIza...5678')
 })
 
-test('redactSecretValueForDisplay masks poisoned display fields that equal configured secrets', () => {
+test('redactSecretValueForDisplay masks poisoned display fields that equal saved secrets', () => {
   const apiKey = 'sk-secret-12345678'
 
   assert.equal(

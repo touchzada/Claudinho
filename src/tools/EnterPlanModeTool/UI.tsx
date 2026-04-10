@@ -19,7 +19,7 @@ export function renderToolResultMessage(_output: Output, _progressMessagesForMes
       </Box>
       <Box paddingLeft={2}>
         <Text dimColor>
-          Claude is now exploring and designing an implementation approach.
+          Claudinho está explorando e projetando uma abordagem de implementação.
         </Text>
       </Box>
     </Box>;

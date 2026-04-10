@@ -319,6 +319,26 @@ function ModeIndicator({
   }
   const currentMode = toolPermissionContext?.mode;
   const hasActiveMode = !isDefaultMode(currentMode);
+  
+  // Timer para esconder o nome do modo após 2 segundos
+  const [showModeName, setShowModeName] = useState(true);
+  const prevModeRef = useRef(currentMode);
+  
+  useEffect(() => {
+    // Se o modo mudou, mostra o nome novamente
+    if (currentMode !== prevModeRef.current) {
+      setShowModeName(true);
+      prevModeRef.current = currentMode;
+      
+      // Esconde o nome após 2 segundos
+      const timer = setTimeout(() => {
+        setShowModeName(false);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentMode]);
+  
   const viewedTask = viewingAgentTaskId ? tasks[viewingAgentTaskId] : undefined;
   const isViewingTeammate = viewSelectionMode === 'viewing-agent' && viewedTask?.type === 'in_process_teammate';
   const isViewingCompletedTeammate = isViewingTeammate && viewedTask != null && viewedTask.status !== 'running';
@@ -346,12 +366,7 @@ function ModeIndicator({
   // Rendered before the tasks pill so a long pill label (e.g. ultraplan URL)
   // doesn't push the mode indicator off-screen.
   const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? <Text color={getModeColor(currentMode)} key="mode">
-        {permissionModeSymbol(currentMode)}{' '}
-        {permissionModeTitle(currentMode).toLowerCase()} on
-        {shouldShowModeHint && <Text dimColor>
-            {' '}
-            <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />
-          </Text>}
+        {permissionModeSymbol(currentMode)}{showModeName && ` ${permissionModeTitle(currentMode)}`}
       </Text> : null;
 
   // Build parts array - exclude BackgroundTaskStatus when we have teammate pills
@@ -504,7 +519,7 @@ function getSpinnerHintParts(isLoading: boolean, escShortcut: string, todosShort
   // teammates to cycle to
   const showToggleHint = hasTaskItems || hasTeammates;
   return [...(isLoading ? [<Text dimColor key="esc">
-            <KeyboardShortcutHint shortcut={escShortcut} action="interrupt" />
+            {escShortcut} para interromper
           </Text>] : []), ...(!isLoading && hasRunningAgentTasks && !isKillAgentsConfirmShowing ? [<Text dimColor key="kill-agents">
             <KeyboardShortcutHint shortcut={killAgentsShortcut} action="stop agents" />
           </Text>] : []), ...(showToggleHint ? [<Text dimColor key="toggle-tasks">

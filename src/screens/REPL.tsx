@@ -29,7 +29,7 @@ import { startPreventSleep, stopPreventSleep } from '../services/preventSleep.js
 import { useTerminalNotification } from '../ink/useTerminalNotification.js';
 import { hasCursorUpViewportYankBug } from '../ink/terminal.js';
 import { createFileStateCacheWithSizeLimit, mergeFileStateCaches, READ_FILE_STATE_CACHE_SIZE } from '../utils/fileStateCache.js';
-import { updateLastInteractionTime, getLastInteractionTime, getOriginalCwd, getProjectRoot, getSessionId, switchSession, setCostStateForRestore, getTurnHookDurationMs, getTurnHookCount, resetTurnHookDuration, getTurnToolDurationMs, getTurnToolCount, resetTurnToolDuration, getTurnClassifierDurationMs, getTurnClassifierCount, resetTurnClassifierDuration } from '../bootstrap/state.js';
+import { updateLastInteractionTime, getLastInteractionTime, getOriginalCwd, getProjectRoot, getSessionId, switchSession, setCostStateForRestore, getTurnHookDurationMs, getTurnHookCount, resetTurnHookDuration, getTurnToolDurationMs, getTurnToolCount, resetTurnToolDuration, getTurnClassifierDurationMs, getTurnClassifierCount, resetTurnClassifierDuration, getLastAPIRequest, getSessionDevMode } from '../bootstrap/state.js';
 import { asSessionId, asAgentId } from '../types/ids.js';
 import { logForDebugging } from '../utils/debug.js';
 import { QueryGuard } from '../utils/QueryGuard.js';
@@ -219,6 +219,7 @@ import { EffortCallout, shouldShowEffortCallout } from '../components/EffortCall
 import type { EffortValue } from '../utils/effort.js';
 import { RemoteCallout } from '../components/RemoteCallout.js';
 import { getAPIProvider } from '../utils/model/providers.js';
+import { resolveProviderRequest } from '../services/api/providerConfig.js';
 /* eslint-disable custom-rules/no-process-env-top-level, @typescript-eslint/no-require-imports */
 const AntModelSwitchCallout = "external" === 'ant' ? require('../components/AntModelSwitchCallout.js').AntModelSwitchCallout : null;
 const shouldShowAntModelSwitch = "external" === 'ant' ? require('../components/AntModelSwitchCallout.js').shouldShowModelSwitchCallout : (): boolean => false;
@@ -314,6 +315,106 @@ function median(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 0 ? Math.round((sorted[mid - 1]! + sorted[mid]!) / 2) : sorted[mid]!;
+}
+
+function normalizeDevText(value: string): string {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function truncateDevText(value: string, max = 240): string {
+  if (value.length <= max) {
+    return value;
+  }
+  return `${value.slice(0, Math.max(0, max - 1)).trimEnd()}\u2026`;
+}
+
+function getDevToolChoiceLabel(toolChoice: unknown): string | undefined {
+  if (typeof toolChoice === 'string' && toolChoice.trim()) {
+    return toolChoice.trim();
+  }
+  if (!toolChoice || typeof toolChoice !== 'object') {
+    return undefined;
+  }
+  const type = (toolChoice as {
+    type?: unknown;
+  }).type;
+  return typeof type === 'string' && type.trim() ? type.trim() : undefined;
+}
+
+function getDevEndpoint(provider: ReturnType<typeof getAPIProvider>): {
+  endpoint: string;
+  transport: string;
+  requestedModel?: string;
+  resolvedModel?: string;
+} {
+  if (provider === 'openai' || provider === 'codex' || provider === 'gemini' || provider === 'github') {
+    const resolved = resolveProviderRequest();
+    return {
+      endpoint: resolved.baseUrl,
+      transport: resolved.transport,
+      requestedModel: resolved.requestedModel,
+      resolvedModel: resolved.resolvedModel
+    };
+  }
+  if (provider === 'firstParty') {
+    return {
+      endpoint: (process.env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com').replace(/\/+$/, ''),
+      transport: 'messages'
+    };
+  }
+  if (provider === 'bedrock') {
+    return {
+      endpoint: 'aws-bedrock-runtime',
+      transport: 'messages'
+    };
+  }
+  if (provider === 'vertex') {
+    return {
+      endpoint: 'google-vertex-ai',
+      transport: 'messages'
+    };
+  }
+  return {
+    endpoint: 'azure-ai-foundry',
+    transport: 'messages'
+  };
+}
+
+function buildDevSummaryMessage(input: {
+  provider: ReturnType<typeof getAPIProvider>;
+  endpoint: string;
+  transport: string;
+  requestCount: number;
+  turnMs: number;
+  ttftMs?: number;
+  otps?: number;
+  requestId?: string;
+  requestedModel?: string;
+  resolvedModel?: string;
+  responseModel?: string;
+  maxTokens?: number;
+  temperature?: number;
+  toolChoice?: string;
+  responsePreview?: string;
+  isApiError?: boolean;
+}): string {
+  const status = input.isApiError ? 'api_error' : 'ok';
+  const timing = [`turn=${input.turnMs}ms`];
+  if (input.ttftMs !== undefined) timing.push(`ttft=${input.ttftMs}ms`);
+  if (input.otps !== undefined) timing.push(`otps=${input.otps}`);
+  const model = input.resolvedModel ?? input.responseModel ?? input.requestedModel ?? '-';
+  const requestParts = [`model=${model}`];
+  if (input.maxTokens !== undefined) requestParts.push(`max_tokens=${input.maxTokens}`);
+  if (input.temperature !== undefined) requestParts.push(`temperature=${input.temperature}`);
+  if (input.toolChoice) requestParts.push(`tool_choice=${input.toolChoice}`);
+  const safePreview = input.responsePreview?.replace(/"/g, "'");
+  const responsePreview = safePreview ? ` | preview="${safePreview}"` : '';
+  return [
+    `[dev] status=${status} | requests=${input.requestCount} | ${timing.join(' | ')}`,
+    `[dev] destination=${input.provider} -> ${input.endpoint} (${input.transport})`,
+    `[dev] request: ${requestParts.join(' | ')}`,
+    `[dev] response: request_id=${input.requestId ?? '-'} | model=${input.responseModel ?? model}${responsePreview}`
+  ].join('\n');
 }
 
 /**
@@ -2814,31 +2915,71 @@ export function REPL({
       }));
     }
     queryCheckpoint('query_end');
+    const entries = apiMetricsRef.current;
+    const ttfts = entries.map(e => e.ttftMs);
+    const otpsValues = entries.map(e => {
+      const delta = Math.round((e.endResponseLength - e.responseLengthBaseline) / 4);
+      const samplingMs = e.lastTokenTime - e.firstTokenTime;
+      return samplingMs > 0 ? Math.round(delta / (samplingMs / 1000)) : 0;
+    });
+    const isMultiRequest = entries.length > 1;
+    const ttftMs = entries.length > 0 ? isMultiRequest ? median(ttfts) : ttfts[0]! : undefined;
+    const otps = entries.length > 0 ? isMultiRequest ? median(otpsValues) : otpsValues[0]! : undefined;
+    const turnMs = Date.now() - loadingStartTimeRef.current;
+
+    if (getSessionDevMode()) {
+      const provider = getAPIProvider();
+      const endpointInfo = getDevEndpoint(provider);
+      const lastApiRequest = getLastAPIRequest();
+      const latestAssistant = [...messagesRef.current].reverse().find((msg): msg is Extract<MessageType, {
+        type: 'assistant';
+      }> => {
+        if (msg.type !== 'assistant') return false;
+        const parsedTimestamp = Date.parse(msg.timestamp);
+        if (Number.isNaN(parsedTimestamp)) return true;
+        return parsedTimestamp >= loadingStartTimeRef.current;
+      });
+      const responsePreview = latestAssistant ? (() => {
+        const text = getContentText(latestAssistant.message.content);
+        if (!text) return undefined;
+        return truncateDevText(normalizeDevText(text));
+      })() : undefined;
+      const requestModel = typeof lastApiRequest?.model === 'string' ? lastApiRequest.model : endpointInfo.requestedModel;
+      const maxTokens = typeof lastApiRequest?.max_tokens === 'number' ? lastApiRequest.max_tokens : undefined;
+      const temperature = typeof lastApiRequest?.temperature === 'number' ? lastApiRequest.temperature : undefined;
+      const toolChoice = getDevToolChoiceLabel(lastApiRequest?.tool_choice);
+      setMessages(prev => [...prev, createSystemMessage(buildDevSummaryMessage({
+        provider,
+        endpoint: endpointInfo.endpoint,
+        transport: endpointInfo.transport,
+        requestCount: entries.length,
+        turnMs,
+        ttftMs,
+        otps,
+        requestId: latestAssistant?.requestId,
+        requestedModel: requestModel,
+        resolvedModel: endpointInfo.resolvedModel,
+        responseModel: latestAssistant?.message.model,
+        maxTokens,
+        temperature,
+        toolChoice,
+        responsePreview,
+        isApiError: latestAssistant?.isApiErrorMessage
+      }), 'info')]);
+    }
 
     // Capture ant-only API metrics before resetLoadingState clears the ref.
     // For multi-request turns (tool use loops), compute P50 across all requests.
-    if ("external" === 'ant' && apiMetricsRef.current.length > 0) {
-      const entries = apiMetricsRef.current;
-      const ttfts = entries.map(e => e.ttftMs);
-      // Compute per-request OTPS using only active streaming time and
-      // streaming-only content. endResponseLength tracks content added by
-      // streaming deltas only, excluding subagent/compaction inflation.
-      const otpsValues = entries.map(e => {
-        const delta = Math.round((e.endResponseLength - e.responseLengthBaseline) / 4);
-        const samplingMs = e.lastTokenTime - e.firstTokenTime;
-        return samplingMs > 0 ? Math.round(delta / (samplingMs / 1000)) : 0;
-      });
-      const isMultiRequest = entries.length > 1;
+    if ("external" === 'ant' && entries.length > 0) {
       const hookMs = getTurnHookDurationMs();
       const hookCount = getTurnHookCount();
       const toolMs = getTurnToolDurationMs();
       const toolCount = getTurnToolCount();
       const classifierMs = getTurnClassifierDurationMs();
       const classifierCount = getTurnClassifierCount();
-      const turnMs = Date.now() - loadingStartTimeRef.current;
       setMessages(prev => [...prev, createApiMetricsMessage({
-        ttftMs: isMultiRequest ? median(ttfts) : ttfts[0]!,
-        otps: isMultiRequest ? median(otpsValues) : otpsValues[0]!,
+        ttftMs: ttftMs!,
+        otps: otps!,
         isP50: isMultiRequest,
         hookDurationMs: hookMs > 0 ? hookMs : undefined,
         hookCount: hookCount > 0 ? hookCount : undefined,
@@ -3944,7 +4085,7 @@ export function REPL({
         // Use ref to get current dialog state, avoiding stale closure
         focusedInputDialogRef.current === undefined && idleTimeSinceResponse >= getGlobalConfig().messageIdleNotifThresholdMs) {
         void sendNotification({
-          message: 'Claude is waiting for your input',
+          message: 'Claudinho está esperando sua resposta',
           notificationType: 'idle_prompt'
         }, terminal);
       }

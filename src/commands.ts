@@ -11,6 +11,7 @@ import color from './commands/color/index.js'
 import commit from './commands/commit.js'
 import copy from './commands/copy/index.js'
 import desktop from './commands/desktop/index.js'
+import dev from './commands/dev/index.js'
 import commitPushPr from './commands/commit-push-pr.js'
 import compact from './commands/compact/index.js'
 import config from './commands/config/index.js'
@@ -27,7 +28,6 @@ import ide from './commands/ide/index.js'
 import init from './commands/init.js'
 import initVerifiers from './commands/init-verifiers.js'
 import keybindings from './commands/keybindings/index.js'
-import login from './commands/login/index.js'
 import logout from './commands/logout/index.js'
 import installGitHubApp from './commands/install-github-app/index.js'
 import installSlackApp from './commands/install-slack-app/index.js'
@@ -43,6 +43,8 @@ import review, { ultrareview } from './commands/review.js'
 import session from './commands/session/index.js'
 import share from './commands/share/index.js'
 import skills from './commands/skills/index.js'
+import skillsMode from './commands/skills-mode/index.js'
+import promax from './commands/promax/index.js'
 import status from './commands/status/index.js'
 import tasks from './commands/tasks/index.js'
 import teleport from './commands/teleport/index.js'
@@ -271,6 +273,7 @@ const COMMANDS = memoize((): Command[] => [
   config,
   copy,
   desktop,
+  dev,
   context,
   contextNonInteractive,
   cost,
@@ -304,6 +307,8 @@ const COMMANDS = memoize((): Command[] => [
   resume,
   session,
   skills,
+  skillsMode,
+  promax,
   stats,
   status,
   statusline,
@@ -340,7 +345,7 @@ const COMMANDS = memoize((): Command[] => [
   hooks,
   exportCommand,
   sandboxToggle,
-  ...(!isUsing3PServices() ? [logout, login()] : []),
+  ...(!isUsing3PServices() ? [logout] : []),
   passes,
   ...(peersCmd ? [peersCmd] : []),
   tasks,

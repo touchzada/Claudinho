@@ -860,7 +860,7 @@ export async function powershellToolHasPermission(
     }
     const decisionReason = {
       type: 'other' as const,
-      reason: `Command contains malformed syntax that cannot be parsed: ${parsed.errors[0]?.message ?? 'unknown error'}`,
+      reason: `Comando tem sintaxe malformada que não pode ser analisada: ${parsed.errors[0]?.message ?? 'erro desconhecido'}`,
     }
     return {
       behavior: 'ask',

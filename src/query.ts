@@ -26,6 +26,7 @@ import {
 import { ImageSizeError } from './utils/imageValidation.js'
 import { ImageResizeError } from './utils/imageResizer.js'
 import { findToolByName, type ToolUseContext } from './Tool.js'
+import type { Tools } from './Tool.js'
 import { asSystemPrompt, type SystemPrompt } from './utils/systemPromptType.js'
 import type {
   AssistantMessage,
@@ -110,6 +111,7 @@ import {
 } from './bootstrap/state.js'
 import { createBudgetTracker, checkTokenBudget } from './query/tokenBudget.js'
 import { count } from './utils/array.js'
+import { getToolSearchOrReadInfo } from './utils/collapseReadSearch.js'
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const snipModule = feature('HISTORY_SNIP')
@@ -211,9 +213,49 @@ type State = {
   pendingToolUseSummary: Promise<ToolUseSummaryMessage | null> | undefined
   stopHookActive: boolean | undefined
   turnCount: number
+  consecutiveSearchReadOnlyTurns?: number
   // Why the previous iteration continued. Undefined on first iteration.
   // Lets tests assert recovery paths fired without inspecting message contents.
   transition: Continue | undefined
+}
+
+function isSearchReadOnlyToolBatch(
+  toolUseBlocks: ToolUseBlock[],
+  tools: Tools,
+): boolean {
+  if (toolUseBlocks.length === 0) {
+    return false
+  }
+
+  let hasSearchOrRead = false
+
+  for (const block of toolUseBlocks) {
+    const info = getToolSearchOrReadInfo(block.name, block.input, tools)
+
+    // Writes/edits and any non-collapsible tool use break the search loop pattern.
+    if (info.isMemoryWrite || (!info.isCollapsible && !info.isREPL)) {
+      return false
+    }
+
+    // Ignore silently absorbed ops (Snip/ToolSearch), they should not count.
+    if (info.isAbsorbedSilently) {
+      continue
+    }
+
+    // Non-search/read bash commands (fullscreen mode) are collapsible but are not loop-search.
+    if (info.isBash) {
+      return false
+    }
+
+    if (info.isSearch || info.isRead || info.isList || info.isREPL) {
+      hasSearchOrRead = true
+      continue
+    }
+
+    return false
+  }
+
+  return hasSearchOrRead
 }
 
 export async function* query(
@@ -318,6 +360,7 @@ async function* queryLoop(
       pendingToolUseSummary,
       stopHookActive,
       turnCount,
+      consecutiveSearchReadOnlyTurns = 0,
     } = state
 
     // Skill discovery prefetch — per-iteration (uses findWritePivot guard
@@ -1683,6 +1726,21 @@ async function* queryLoop(
 
     // Each time we have tool results and are about to recurse, that's a turn
     const nextTurnCount = turnCount + 1
+    const nextConsecutiveSearchReadOnlyTurns = isSearchReadOnlyToolBatch(
+      toolUseBlocks,
+      toolUseContext.options.tools,
+    )
+      ? consecutiveSearchReadOnlyTurns + 1
+      : 0
+    const shouldInjectSearchLoopNudge =
+      !toolUseContext.agentId && nextConsecutiveSearchReadOnlyTurns >= 3
+    const searchLoopNudge = shouldInjectSearchLoopNudge
+      ? createUserMessage({
+          content:
+            'Loop de busca detectado: pare de repetir Search/Read. Mude de estratégia agora: abra o arquivo mais provável direto, edite se necessário, ou peça um único hint objetivo ao usuário.',
+          isMeta: true,
+        })
+      : null
 
     // Periodic task summary for `claude ps` — fires mid-turn so a
     // long-running agent still refreshes what it's working on. Gated
@@ -1719,10 +1777,18 @@ async function* queryLoop(
 
     queryCheckpoint('query_recursive_call')
     const next: State = {
-      messages: [...messagesForQuery, ...assistantMessages, ...toolResults],
+      messages: [
+        ...messagesForQuery,
+        ...assistantMessages,
+        ...toolResults,
+        ...(searchLoopNudge ? [searchLoopNudge] : []),
+      ],
       toolUseContext: toolUseContextWithQueryTracking,
       autoCompactTracking: tracking,
       turnCount: nextTurnCount,
+      consecutiveSearchReadOnlyTurns: shouldInjectSearchLoopNudge
+        ? 0
+        : nextConsecutiveSearchReadOnlyTurns,
       maxOutputTokensRecoveryCount: 0,
       hasAttemptedReactiveCompact: false,
       pendingToolUseSummary: nextPendingToolUseSummary,

@@ -180,6 +180,16 @@ export type DiffTool = 'terminal' | 'auto'
 
 export type OutputStyle = string
 
+export type SavedProviderProfile = {
+  id: string
+  name: string
+  provider: 'openai' | 'anthropic' | 'gemini' | 'codex'
+  baseUrl: string
+  model: string
+  apiKey?: string
+  accountId?: string
+}
+
 export type GlobalConfig = {
   /**
    * @deprecated Use settings.apiKeyHelper instead.
@@ -228,6 +238,12 @@ export type GlobalConfig = {
   hasSeenUltraplanTerms?: boolean // ant-only: whether the one-time CCR terms notice has been shown in the ultraplan launch dialog
   hasResetAutoModeOptInForDefaultOffer?: boolean // ant-only: one-shot migration guard, re-prompts churned auto-mode users
   oauthAccount?: AccountInfo
+  codexOAuthTokens?: {
+    accessToken: string
+    refreshToken: string
+    expiresAt: number
+    accountId: string
+  }
   iterm2KeyBindingInstalled?: boolean // Legacy - keeping for backward compatibility
   editorMode?: EditorMode
   bypassPermissionsModeAccepted?: boolean
@@ -564,6 +580,10 @@ export type GlobalConfig = {
   // Additional model options for the model picker (fetched during bootstrap).
   additionalModelOptionsCache?: ModelOption[]
 
+  // Perfis de provedor salvos pelo /provider.
+  providerProfiles?: SavedProviderProfile[]
+  activeProviderProfileId?: string
+
   // Disk cache for /api/claude_code/organizations/metrics_enabled.
   // Org-level settings change rarely; persisting across processes avoids a
   // cold API call on every `claude -p` invocation.
@@ -662,6 +682,8 @@ export const GLOBAL_CONFIG_KEYS = [
   'copyOnSelect',
   'permissionExplainerEnabled',
   'prStatusFooterEnabled',
+  'providerProfiles',
+  'activeProviderProfileId',
   'remoteControlAtStartup',
   'remoteDialogSeen',
 ] as const

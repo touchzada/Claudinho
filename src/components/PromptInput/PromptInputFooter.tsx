@@ -17,8 +17,8 @@ import type { PromptInputMode, VimMode } from '../../types/textInputTypes.js';
 import type { AutoUpdaterResult } from '../../utils/autoUpdater.js';
 import { isFullscreenEnvEnabled } from '../../utils/fullscreen.js';
 import { isUndercover } from '../../utils/undercover.js';
-import { TokenStatusBar } from '../TokenStatusBar.js';
 import { SessionHud } from '../SessionHud.js';
+import { TokenStatusBar } from '../TokenStatusBar.js';
 import { CoordinatorTaskPanel, useCoordinatorTaskCount } from '../CoordinatorAgentStatus.js';
 import { getLastAssistantMessageId, StatusLine, statusLineShouldDisplay } from '../StatusLine.js';
 import { Notifications } from './Notifications.js';
@@ -141,16 +141,23 @@ function PromptInputFooter({
   }
   return <>
       <Box flexDirection={isNarrow ? 'column' : 'row'} justifyContent={isNarrow ? 'flex-start' : 'space-between'} paddingX={2} gap={isNarrow ? 0 : 1}>
-        <Box flexDirection="column" flexShrink={isNarrow ? 0 : 1}>
+        <Box flexDirection="column" flexShrink={isNarrow ? 0 : 1} flexGrow={1} minWidth={0}>
           {mode === 'prompt' && !isShort && !exitMessage.show && !isPasting && statusLineShouldDisplay(settings) && <StatusLine messagesRef={messagesRef} lastAssistantMessageId={lastAssistantMessageId} vimMode={vimMode} />}
           <PromptInputFooterLeftSide exitMessage={exitMessage} vimMode={vimMode} mode={mode} toolPermissionContext={toolPermissionContext} suppressHint={suppressHint} isLoading={isLoading} tasksSelected={pillSelected} teamsSelected={teamsSelected} teammateFooterIndex={teammateFooterIndex} tmuxSelected={tmuxSelected} isPasting={isPasting} isSearching={isSearching} historyQuery={historyQuery} setHistoryQuery={setHistoryQuery} historyFailedMatch={historyFailedMatch} onOpenTasksDialog={onOpenTasksDialog} />
         </Box>
-        <Box flexShrink={1} gap={1}>
-          <TokenStatusBar messages={messages} isLoading={isLoading} typingSignal={input} />
-          <SessionHud compact={columns < 140} />
-          {isFullscreen ? null : <Notifications apiKeyStatus={apiKeyStatus} autoUpdaterResult={autoUpdaterResult} debug={debug} isAutoUpdating={isAutoUpdating} verbose={verbose} messages={messages} onAutoUpdaterResult={onAutoUpdaterResult} onChangeIsUpdating={onChangeIsUpdating} ideSelection={ideSelection} mcpClients={mcpClients} isInputWrapped={isInputWrapped} isNarrow={isNarrow} />}
-          {"external" === 'ant' && isUndercover() && <Text dimColor>undercover</Text>}
-          <BridgeStatusIndicator bridgeSelected={bridgeSelected} />
+        <Box flexDirection="column" flexShrink={1} flexGrow={0} alignItems={isNarrow ? 'flex-start' : 'flex-end'} paddingLeft={isNarrow ? 0 : 2} minWidth={0}>
+          <Box minWidth={0} flexShrink={1} overflow="hidden" alignSelf={isNarrow ? 'stretch' : 'flex-end'}>
+            <TokenStatusBar messages={messages} isLoading={isLoading} typingSignal={input} />
+          </Box>
+          <Box flexDirection="row" flexShrink={1} alignItems="center" gap={1}>
+            <Box flexDirection="row" flexShrink={1} gap={1}>
+              {isFullscreen ? null : <Notifications apiKeyStatus={apiKeyStatus} autoUpdaterResult={autoUpdaterResult} debug={debug} isAutoUpdating={isAutoUpdating} verbose={verbose} messages={messages} onAutoUpdaterResult={onAutoUpdaterResult} onChangeIsUpdating={onChangeIsUpdating} ideSelection={ideSelection} mcpClients={mcpClients} isInputWrapped={isInputWrapped} isNarrow={isNarrow} />}
+              {"external" === 'ant' && isUndercover() && <Text dimColor>undercover</Text>}
+              <BridgeStatusIndicator bridgeSelected={bridgeSelected} />
+            </Box>
+            <Text color="#374151">|</Text>
+            <SessionHud compact={false} />
+          </Box>
         </Box>
       </Box>
       {"external" === 'ant' && <CoordinatorTaskPanel />}

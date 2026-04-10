@@ -28,8 +28,8 @@ export type PermissionPromptProps<T extends string> = {
   toolAnalyticsContext?: ToolAnalyticsContext;
 };
 const DEFAULT_PLACEHOLDERS: Record<FeedbackType, string> = {
-  accept: 'tell Claude what to do next',
-  reject: 'tell Claude what to do differently'
+  accept: 'diga ao Claudinho o que fazer a seguir',
+  reject: 'diga ao Claudinho o que fazer diferente'
 };
 
 /**
@@ -303,7 +303,7 @@ export function PermissionPrompt(t0) {
   } else {
     t10 = $[47];
   }
-  const t11 = showTabHint && " \xB7 Tab to amend";
+  const t11 = showTabHint && " \xB7 Tab pra complementar";
   let t12;
   if ($[48] !== t11) {
     t12 = <Box marginTop={1}><Text dimColor={true}>Esc pra cancelar{t11}</Text></Box>;

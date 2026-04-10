@@ -270,7 +270,7 @@ function getCodexPlanOption(): ModelOption {
   return {
     value: 'gpt-5.4',
     label: 'gpt-5.4',
-    description: 'GPT-5.4 on the Codex backend with high reasoning',
+    description: 'GPT-5.4 on the Codex backend with medium reasoning',
   }
 }
 
@@ -287,7 +287,7 @@ function getCodexModelOptions(): ModelOption[] {
     {
       value: 'gpt-5.4',
       label: 'gpt-5.4',
-      description: 'GPT-5.4 with high reasoning',
+      description: 'GPT-5.4 with medium reasoning',
     },
     {
       value: 'gpt-5.3-codex',

@@ -71,6 +71,52 @@ function hydrateOpenRouterApiKeyAlias(
   }
 }
 
+function parseModelOverrideFromArgv(args: string[]): string | null {
+  for (let i = 0; i < args.length; i++) {
+    const token = args[i]
+    if (!token) continue
+
+    if (token === '--model') {
+      const next = args[i + 1]
+      if (!next || next.startsWith('-')) return null
+      const trimmed = next.trim()
+      return trimmed ? trimmed : null
+    }
+
+    if (token.startsWith('--model=')) {
+      const raw = token.slice('--model='.length).trim()
+      return raw ? raw : null
+    }
+  }
+
+  return null
+}
+
+function applyCliModelOverrideToProcessEnv(
+  modelOverride: string,
+  env: NodeJS.ProcessEnv = process.env,
+): void {
+  const trimmed = modelOverride.trim()
+  if (!trimmed) return
+  if (trimmed.toLowerCase() === 'default') return
+
+  if (isEnvTruthy(env.CLAUDE_CODE_USE_GEMINI)) {
+    env.GEMINI_MODEL = trimmed
+    return
+  }
+
+  if (
+    isEnvTruthy(env.CLAUDE_CODE_USE_OPENAI) ||
+    isEnvTruthy(env.CLAUDE_CODE_USE_GITHUB)
+  ) {
+    env.OPENAI_MODEL = trimmed
+    return
+  }
+
+  env.ANTHROPIC_MODEL = trimmed
+  env.CLAUDE_MODEL = trimmed
+}
+
 function getProviderValidationError(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
@@ -169,6 +215,7 @@ async function main(): Promise<void> {
     console.error(error instanceof Error ? error.message : String(error))
     process.exit(1)
   }
+  const modelOverride = parseModelOverrideFromArgv(args)
 
   {
     const { enableConfigs } = await import('../utils/config.js')
@@ -203,6 +250,10 @@ async function main(): Promise<void> {
     } else {
       applyProfileEnvToProcessEnv(process.env, startupEnv)
     }
+  }
+
+  if (modelOverride) {
+    applyCliModelOverrideToProcessEnv(modelOverride, process.env)
   }
 
   hydrateOpenRouterApiKeyAlias(process.env)

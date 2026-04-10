@@ -28,6 +28,8 @@ type RegisteredHookMatcher = HookCallbackMatcher | PluginHookMatcher
 
 import type { SessionId } from 'src/types/ids.js'
 
+export type SessionSkillBehaviorMode = 'natural' | 'turbo'
+
 // DO NOT ADD MORE STATE HERE - BE JUDICIOUS WITH GLOBAL STATE
 
 // dev: true on entries that came via --dangerously-load-development-channels.
@@ -131,6 +133,10 @@ type State = {
   useCoworkPlugins: boolean
   // Session-only bypass permissions mode flag (not persisted)
   sessionBypassPermissionsMode: boolean
+  // Session-only dev/debug mode flag (not persisted)
+  sessionDevMode: boolean
+  // Session-only skill behavior mode (not persisted)
+  sessionSkillBehaviorMode: SessionSkillBehaviorMode
   // Session-only flag gating the .claude/scheduled_tasks.json watcher
   // (useScheduledTasks). Set by cronScheduler.start() when the JSON has
   // entries, or by CronCreateTool. Not persisted.
@@ -355,6 +361,10 @@ function getInitialState(): State {
     useCoworkPlugins: false,
     // Session-only bypass permissions mode flag (not persisted)
     sessionBypassPermissionsMode: false,
+    // Session-only dev/debug mode flag (not persisted)
+    sessionDevMode: false,
+    // Session-only skill behavior mode (not persisted)
+    sessionSkillBehaviorMode: 'natural',
     // Scheduled tasks disabled until flag or dialog enables them
     scheduledTasksEnabled: false,
     sessionCronTasks: [],
@@ -1271,6 +1281,24 @@ export function setSessionBypassPermissionsMode(enabled: boolean): void {
 
 export function getSessionBypassPermissionsMode(): boolean {
   return STATE.sessionBypassPermissionsMode
+}
+
+export function setSessionDevMode(enabled: boolean): void {
+  STATE.sessionDevMode = enabled
+}
+
+export function getSessionDevMode(): boolean {
+  return STATE.sessionDevMode
+}
+
+export function setSessionSkillBehaviorMode(
+  mode: SessionSkillBehaviorMode,
+): void {
+  STATE.sessionSkillBehaviorMode = mode
+}
+
+export function getSessionSkillBehaviorMode(): SessionSkillBehaviorMode {
+  return STATE.sessionSkillBehaviorMode
 }
 
 export function setScheduledTasksEnabled(enabled: boolean): void {

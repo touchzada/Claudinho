@@ -95,14 +95,14 @@ export function generateShellSuggestionsLabel(suggestions: PermissionUpdate[], s
       const firstPath = readPaths[0]!;
       const dirName = basename(firstPath) || firstPath;
       return <Text>
-          Yes, allow reading from <Text bold>{dirName}</Text>
-          {sep} from this project
+          Sim, permitir leitura de <Text bold>{dirName}</Text>
+          {sep} neste projeto
         </Text>;
     }
 
     // Multiple read paths
     return <Text>
-        Yes, allow reading from {formatPathList(readPaths)} from this project
+        Sim, permitir leitura de {formatPathList(readPaths)} neste projeto
       </Text>;
   }
   if (hasDirectories && !hasReadPaths && !hasCommands) {
@@ -111,15 +111,15 @@ export function generateShellSuggestionsLabel(suggestions: PermissionUpdate[], s
       const firstDir = directories[0]!;
       const dirName = basename(firstDir) || firstDir;
       return <Text>
-          Yes, and always allow access to <Text bold>{dirName}</Text>
-          {sep} from this project
+          Sim, e sempre permitir acesso a <Text bold>{dirName}</Text>
+          {sep} neste projeto
         </Text>;
     }
 
     // Multiple directories
     return <Text>
-        Yes, and always allow access to {formatPathList(directories)} from this
-        project
+        Sim, e sempre permitir acesso a {formatPathList(directories)} neste
+        projeto
       </Text>;
   }
   if (hasCommands && !hasDirectories && !hasReadPaths) {
@@ -138,8 +138,8 @@ export function generateShellSuggestionsLabel(suggestions: PermissionUpdate[], s
     if (hasDirectories && hasReadPaths) {
       // Mixed - use generic "access to"
       return <Text>
-          Yes, and always allow access to {formatPathList(allPaths)} from this
-          project
+          Sim, e sempre permitir acesso a {formatPathList(allPaths)} neste
+          projeto
         </Text>;
     }
   }
@@ -150,13 +150,13 @@ export function generateShellSuggestionsLabel(suggestions: PermissionUpdate[], s
     // Keep it concise but informative
     if (allPaths.length === 1 && shellCommands.length === 1) {
       return <Text>
-          Yes, and allow access to {formatPathList(allPaths)} and{' '}
-          {commandListDisplayTruncated(shellCommands)} commands
+          Sim, e permitir acesso a {formatPathList(allPaths)} e{' '}
+          {commandListDisplayTruncated(shellCommands)} comandos
         </Text>;
     }
     return <Text>
-        Yes, and allow {formatPathList(allPaths)} access and{' '}
-        {commandListDisplayTruncated(shellCommands)} commands
+        Sim, e permitir acesso a {formatPathList(allPaths)} e{' '}
+        {commandListDisplayTruncated(shellCommands)} comandos
       </Text>;
   }
   return null;

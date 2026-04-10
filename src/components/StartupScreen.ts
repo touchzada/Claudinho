@@ -186,8 +186,8 @@ function detectProvider(): { name: string; model: string; baseUrl: string; isLoc
     // Resolve model alias to actual model name + reasoning effort
     let displayModel = rawModel
     const codexAliases: Record<string, { model: string; reasoningEffort?: string }> = {
-      codexplan: { model: 'gpt-5.4', reasoningEffort: 'high' },
-      'gpt-5.4': { model: 'gpt-5.4', reasoningEffort: 'high' },
+      codexplan: { model: 'gpt-5.4', reasoningEffort: 'medium' },
+      'gpt-5.4': { model: 'gpt-5.4', reasoningEffort: 'medium' },
       'gpt-5.3-codex': { model: 'gpt-5.3-codex', reasoningEffort: 'high' },
       'gpt-5.3-codex-spark': { model: 'gpt-5.3-codex-spark' },
       codexspark: { model: 'gpt-5.3-codex-spark' },

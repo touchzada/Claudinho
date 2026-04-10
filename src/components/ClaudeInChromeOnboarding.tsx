@@ -72,7 +72,7 @@ export function ClaudeInChromeOnboarding(t0) {
   }
   let t7;
   if ($[10] !== t6) {
-    t7 = <Text dimColor={true}>Site-level permissions are inherited from the Chrome extension. Manage permissions in the Chrome extension settings to control which sites Claude can browse, click, and type on{t6}.</Text>;
+    t7 = <Text dimColor={true}>Site-level permissions are inherited from the Chrome extension. Manage permissions in the Chrome extension settings to control quais sites o Claudinho pode navegar, clicar e digitar{t6}.</Text>;
     $[10] = t6;
     $[11] = t7;
   } else {

@@ -50,6 +50,8 @@ import { extractConnectionErrorDetails } from './errorUtils.js'
 const abortError = () => new APIUserAbortError()
 
 const DEFAULT_MAX_RETRIES = 10
+const OPENROUTER_FREE_MAX_RETRIES = 2
+const OPENROUTER_FREE_MAX_DELAY_MS = 4000
 const FLOOR_OUTPUT_TOKENS = 3000
 const MAX_529_RETRIES = 3
 export const BASE_DELAY_MS = 500
@@ -460,6 +462,9 @@ export async function* withRetry<T>(
         )
       } else {
         delayMs = getRetryDelay(attempt, retryAfter)
+        if (isOpenRouterFreeModelRequest(options.model)) {
+          delayMs = Math.min(delayMs, OPENROUTER_FREE_MAX_DELAY_MS)
+        }
       }
 
       // In persistent mode the for-loop `attempt` is clamped at maxRetries+1;
@@ -790,10 +795,22 @@ export function getDefaultMaxRetries(): number {
   if (process.env.CLAUDE_CODE_MAX_RETRIES) {
     return parseInt(process.env.CLAUDE_CODE_MAX_RETRIES, 10)
   }
+  if (isOpenRouterFreeModelRequest(process.env.OPENAI_MODEL ?? '')) {
+    return OPENROUTER_FREE_MAX_RETRIES
+  }
   return DEFAULT_MAX_RETRIES
 }
 function getMaxRetries(options: RetryOptions): number {
-  return options.maxRetries ?? getDefaultMaxRetries()
+  if (options.maxRetries !== undefined) {
+    return options.maxRetries
+  }
+  if (process.env.CLAUDE_CODE_MAX_RETRIES) {
+    return parseInt(process.env.CLAUDE_CODE_MAX_RETRIES, 10)
+  }
+  if (isOpenRouterFreeModelRequest(options.model)) {
+    return OPENROUTER_FREE_MAX_RETRIES
+  }
+  return DEFAULT_MAX_RETRIES
 }
 
 const DEFAULT_FAST_MODE_FALLBACK_HOLD_MS = 30 * 60 * 1000 // 30 minutes
@@ -819,4 +836,24 @@ function getRateLimitResetDelayMs(error: APIError): number | null {
   const delayMs = resetUnixSec * 1000 - Date.now()
   if (delayMs <= 0) return null
   return Math.min(delayMs, PERSISTENT_RESET_CAP_MS)
+}
+
+export function isOpenRouterFreeModelRequest(model: string): boolean {
+  if (!isEnvTruthy(process.env.CLAUDE_CODE_USE_OPENAI)) {
+    return false
+  }
+  const normalizedModel = model.trim().toLowerCase()
+  if (!normalizedModel.includes(':free')) {
+    return false
+  }
+  const baseUrl = process.env.OPENAI_BASE_URL?.trim()
+  if (!baseUrl) {
+    return false
+  }
+  try {
+    const host = new URL(baseUrl).hostname.toLowerCase()
+    return host === 'openrouter.ai' || host.endsWith('.openrouter.ai')
+  } catch {
+    return baseUrl.toLowerCase().includes('openrouter.ai')
+  }
 }

@@ -1,4 +1,5 @@
 import { z } from 'zod/v4'
+import { join } from 'node:path'
 import type { ValidationResult } from '../../Tool.js'
 import { buildTool, type ToolDef } from '../../Tool.js'
 import { getCwd } from '../../utils/cwd.js'
@@ -100,12 +101,213 @@ const VCS_DIRECTORIES_TO_EXCLUDE = [
   '.jj',
   '.sl',
 ] as const
+const FALLBACK_DIRECTORIES_TO_EXCLUDE = new Set<string>([
+  ...VCS_DIRECTORIES_TO_EXCLUDE,
+  'node_modules',
+  'dist',
+  'build',
+  '.next',
+  '.nuxt',
+  '.cache',
+  '.turbo',
+  'coverage',
+  'target',
+  'tmp',
+  'temp',
+  'out',
+])
 
 // Default cap on grep results when head_limit is unspecified. Unbounded content-mode
 // greps can fill up to the 20KB persist threshold (~6-24K tokens/grep-heavy session).
 // 250 is generous enough for exploratory searches while preventing context bloat.
 // Pass head_limit=0 explicitly for unlimited.
 const DEFAULT_HEAD_LIMIT = 250
+const FALLBACK_MAX_FILES = 1_500
+const FALLBACK_MAX_FILE_BYTES = 1_500_000
+
+function shouldUseJsSearchFallback(error: unknown): boolean {
+  if (!(error instanceof Error)) return false
+  const msg = error.message.toLowerCase()
+  const code = (error as { code?: string | number }).code
+  return (
+    msg.includes('ripgrep (rg) is required for file search but could not be started') ||
+    msg.includes('executable not found') ||
+    code === 'ENOENT' ||
+    code === 'EACCES' ||
+    code === 'EPERM'
+  )
+}
+
+function buildFallbackRegex(
+  pattern: string,
+  caseInsensitive: boolean,
+  multiline: boolean,
+): RegExp {
+  const flags = `${caseInsensitive ? 'i' : ''}${multiline ? 'ms' : 'm'}`
+  return new RegExp(pattern, flags)
+}
+
+function buildFallbackRegexGlobal(
+  pattern: string,
+  caseInsensitive: boolean,
+  multiline: boolean,
+): RegExp {
+  const flags = `${caseInsensitive ? 'i' : ''}${multiline ? 'ms' : 'm'}g`
+  return new RegExp(pattern, flags)
+}
+
+async function collectFilesForFallback(rootPath: string): Promise<string[]> {
+  const fs = getFsImplementation()
+  const files: string[] = []
+  const queue: string[] = [rootPath]
+
+  while (queue.length > 0 && files.length < FALLBACK_MAX_FILES) {
+    const current = queue.shift()!
+    let stat
+    try {
+      stat = await fs.stat(current)
+    } catch {
+      continue
+    }
+
+    if (stat.isFile()) {
+      files.push(current)
+      continue
+    }
+
+    if (!stat.isDirectory()) continue
+
+    let entries: Array<{ name: string; isDirectory: () => boolean }>
+    try {
+      entries = await fs.readdir(current)
+    } catch {
+      continue
+    }
+
+    for (const entry of entries) {
+      if (FALLBACK_DIRECTORIES_TO_EXCLUDE.has(entry.name)) {
+        continue
+      }
+      const nextPath = join(current, entry.name)
+      if (entry.isDirectory()) {
+        queue.push(nextPath)
+      } else {
+        files.push(nextPath)
+        if (files.length >= FALLBACK_MAX_FILES) break
+      }
+    }
+  }
+
+  return files
+}
+
+function matchesSimpleGlob(pathname: string, glob?: string): boolean {
+  if (!glob) return true
+  const patterns = glob
+    .split(/\s+/)
+    .flatMap(chunk =>
+      chunk.includes('{') && chunk.includes('}')
+        ? [chunk]
+        : chunk.split(','),
+    )
+    .map(_ => _.trim())
+    .filter(Boolean)
+  if (patterns.length === 0) return true
+  return patterns.some(pattern =>
+    matchWildcardPattern(pattern, pathname) ||
+    matchWildcardPattern(pattern, toRelativePath(pathname)),
+  )
+}
+
+async function fallbackSearchWithJs({
+  absolutePath,
+  pattern,
+  outputMode,
+  caseInsensitive,
+  showLineNumbers,
+  type,
+  glob,
+  multiline,
+}: {
+  absolutePath: string
+  pattern: string
+  outputMode: 'content' | 'files_with_matches' | 'count'
+  caseInsensitive: boolean
+  showLineNumbers: boolean
+  type?: string
+  glob?: string
+  multiline: boolean
+}): Promise<string[]> {
+  const fs = getFsImplementation()
+  const compiled = buildFallbackRegex(pattern, caseInsensitive, multiline)
+  const compiledGlobal = buildFallbackRegexGlobal(
+    pattern,
+    caseInsensitive,
+    multiline,
+  )
+
+  const stat = await fs.stat(absolutePath)
+  const candidates = stat.isFile()
+    ? [absolutePath]
+    : await collectFilesForFallback(absolutePath)
+
+  const typeSuffix = type ? `.${type.toLowerCase()}` : null
+  const contentResults: string[] = []
+  const filesWithMatches: string[] = []
+  const countResults: string[] = []
+
+  for (const filePath of candidates) {
+    if (typeSuffix && !filePath.toLowerCase().endsWith(typeSuffix)) continue
+    if (!matchesSimpleGlob(filePath, glob)) continue
+
+    let fileStat
+    try {
+      fileStat = await fs.stat(filePath)
+    } catch {
+      continue
+    }
+    if (!fileStat.isFile() || fileStat.size > FALLBACK_MAX_FILE_BYTES) continue
+
+    let text: string
+    try {
+      text = await fs.readFile(filePath, { encoding: 'utf8' })
+    } catch {
+      continue
+    }
+    if (text.includes('\u0000')) continue
+
+    if (outputMode === 'files_with_matches') {
+      if (compiled.test(text)) filesWithMatches.push(filePath)
+      continue
+    }
+
+    if (outputMode === 'count') {
+      compiledGlobal.lastIndex = 0
+      const matches = text.match(compiledGlobal)
+      if (matches && matches.length > 0) {
+        countResults.push(`${filePath}:${matches.length}`)
+      }
+      continue
+    }
+
+    // content mode
+    const lines = text.split('\n')
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]!
+      if (!compiled.test(line)) continue
+      const lineNo = i + 1
+      contentResults.push(
+        showLineNumbers
+          ? `${filePath}:${lineNo}:${line}`
+          : `${filePath}:${line}`,
+      )
+    }
+  }
+
+  if (outputMode === 'files_with_matches') return filesWithMatches
+  if (outputMode === 'count') return countResults
+  return contentResults
+}
 
 function applyHeadLimit<T>(
   items: T[],
@@ -438,7 +640,22 @@ export const GrepTool = buildTool({
     // We don't use AbortController for timeout to avoid interrupting the agent loop
     // If ripgrep times out, it throws RipgrepTimeoutError which propagates up
     // so Claude knows the search didn't complete (rather than thinking there were no matches)
-    const results = await ripGrep(args, absolutePath, abortController.signal)
+    let results: string[]
+    try {
+      results = await ripGrep(args, absolutePath, abortController.signal)
+    } catch (error) {
+      if (!shouldUseJsSearchFallback(error)) throw error
+      results = await fallbackSearchWithJs({
+        absolutePath,
+        pattern,
+        outputMode: output_mode,
+        caseInsensitive: case_insensitive,
+        showLineNumbers,
+        type,
+        glob,
+        multiline,
+      })
+    }
 
     if (output_mode === 'content') {
       // For content mode, results are the actual content lines

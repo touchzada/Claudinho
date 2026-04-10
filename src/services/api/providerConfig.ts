@@ -18,11 +18,11 @@ const CODEX_ALIAS_MODELS: Record<
 > = {
   codexplan: {
     model: 'gpt-5.4',
-    reasoningEffort: 'high',
+    reasoningEffort: 'medium',
   },
   'gpt-5.4': {
     model: 'gpt-5.4',
-    reasoningEffort: 'high',
+    reasoningEffort: 'medium',
   },
   'gpt-5.3-codex': {
     model: 'gpt-5.3-codex',
@@ -74,7 +74,7 @@ export type ResolvedCodexCredentials = {
   apiKey: string
   accountId?: string
   authPath?: string
-  source: 'env' | 'auth.json' | 'none'
+  source: 'env' | 'auth.json' | 'oauth' | 'none'
 }
 
 type ModelDescriptor = {
@@ -138,34 +138,50 @@ function parseReasoningEffort(value: string | undefined): ReasoningEffort | unde
   return undefined
 }
 
+function stripReasoningSuffix(model: string): {
+  modelWithoutSuffix: string
+  suffixEffort?: ReasoningEffort
+} {
+  const match = model.match(/^(.+?)\s*\((low|medium|high|xhigh)\)\s*$/i)
+  if (!match) {
+    return { modelWithoutSuffix: model }
+  }
+  return {
+    modelWithoutSuffix: match[1]!.trim(),
+    suffixEffort: parseReasoningEffort(match[2]),
+  }
+}
+
 function parseModelDescriptor(model: string): ModelDescriptor {
   const trimmed = model.trim()
-  const queryIndex = trimmed.indexOf('?')
+  const { modelWithoutSuffix, suffixEffort } = stripReasoningSuffix(trimmed)
+  const queryIndex = modelWithoutSuffix.indexOf('?')
   if (queryIndex === -1) {
-    const alias = trimmed.toLowerCase() as CodexAlias
+    const alias = modelWithoutSuffix.toLowerCase() as CodexAlias
     const aliasConfig = CODEX_ALIAS_MODELS[alias]
+    const reasoningEffort = suffixEffort ?? aliasConfig?.reasoningEffort
     if (aliasConfig) {
       return {
         raw: trimmed,
         baseModel: aliasConfig.model,
-        reasoning: aliasConfig.reasoningEffort
-          ? { effort: aliasConfig.reasoningEffort }
-          : undefined,
+        reasoning: reasoningEffort ? { effort: reasoningEffort } : undefined,
       }
     }
     return {
       raw: trimmed,
-      baseModel: trimmed,
+      baseModel: modelWithoutSuffix,
+      reasoning: reasoningEffort ? { effort: reasoningEffort } : undefined,
     }
   }
 
-  const baseModel = trimmed.slice(0, queryIndex).trim()
-  const params = new URLSearchParams(trimmed.slice(queryIndex + 1))
+  const baseModel = modelWithoutSuffix.slice(0, queryIndex).trim()
+  const params = new URLSearchParams(modelWithoutSuffix.slice(queryIndex + 1))
   const alias = baseModel.toLowerCase() as CodexAlias
   const aliasConfig = CODEX_ALIAS_MODELS[alias]
   const resolvedBaseModel = aliasConfig?.model ?? baseModel
   const reasoning =
     parseReasoningEffort(params.get('reasoning') ?? undefined) ??
+    suffixEffort ??
     (aliasConfig?.reasoningEffort
       ? { effort: aliasConfig.reasoningEffort }
       : undefined)
@@ -179,7 +195,8 @@ function parseModelDescriptor(model: string): ModelDescriptor {
 
 function isCodexAlias(model: string): boolean {
   const normalized = model.trim().toLowerCase()
-  const base = normalized.split('?', 1)[0] ?? normalized
+  const baseWithQueryRemoved = normalized.split('?', 1)[0] ?? normalized
+  const base = stripReasoningSuffix(baseWithQueryRemoved).modelWithoutSuffix
   return base in CODEX_ALIAS_MODELS
 }
 
@@ -322,6 +339,23 @@ export function resolveCodexApiCredentials(
     }
   }
 
+  // Try OAuth tokens first (new priority)
+  // Note: This is synchronous, so we can't do async refresh here.
+  // The refresh will happen in ensureValidCodexToken() before requests.
+  try {
+    const { getCodexOAuthTokens } = require('../../utils/codex-auth.js')
+    const oauthTokens = getCodexOAuthTokens()
+    if (oauthTokens?.accessToken && oauthTokens?.accountId) {
+      return {
+        apiKey: oauthTokens.accessToken,
+        accountId: oauthTokens.accountId,
+        source: 'oauth',
+      }
+    }
+  } catch {
+    // OAuth module not available or tokens not found, continue to auth.json
+  }
+
   const authPath = resolveCodexAuthPath(env)
   const authJson = loadCodexAuthJson(authPath)
   if (!authJson) {
@@ -373,10 +407,35 @@ export function resolveCodexApiCredentials(
   }
 }
 
+/**
+ * Async version that ensures OAuth tokens are refreshed if needed.
+ * Use this before making Codex API requests.
+ */
+export async function resolveCodexApiCredentialsAsync(
+  env: NodeJS.ProcessEnv = process.env,
+): Promise<ResolvedCodexCredentials> {
+  // First try sync resolution (env vars, auth.json)
+  const syncResult = resolveCodexApiCredentials(env)
+  
+  // If we got OAuth tokens, ensure they're valid (refresh if needed)
+  if (syncResult.source === 'oauth') {
+    try {
+      const { ensureValidCodexToken } = require('../../utils/codex-auth.js')
+      const validTokens = await ensureValidCodexToken()
+      return {
+        apiKey: validTokens.accessToken,
+        accountId: validTokens.accountId,
+        source: 'oauth',
+      }
+    } catch (err) {
+      // If refresh fails, fall through to return the sync result
+      // (which will likely fail the API call, but that's expected)
+    }
+  }
+  
+  return syncResult
+}
+
 export function getReasoningEffortForModel(model: string): ReasoningEffort | undefined {
-  const normalized = model.trim().toLowerCase()
-  const base = normalized.split('?', 1)[0] ?? normalized
-  const alias = base as CodexAlias
-  const aliasConfig = CODEX_ALIAS_MODELS[alias]
-  return aliasConfig?.reasoningEffort
+  return parseModelDescriptor(model).reasoning?.effort
 }

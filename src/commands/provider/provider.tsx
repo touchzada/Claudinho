@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import type { LocalJSXCommandCall, LocalJSXCommandOnDone } from '../../types/command.js'
 import { COMMON_HELP_ARGS, COMMON_INFO_ARGS } from '../../constants/xml.js'
+import { ProviderManager, type ProviderManagerResult } from '../../components/ProviderManager.js'
 import TextInput from '../../components/TextInput.js'
 import {
   Select,
@@ -45,8 +46,12 @@ import {
   type RecommendationGoal,
 } from '../../utils/providerRecommendation.js'
 import { hasLocalOllama, listOllamaModels } from '../../utils/providerDiscovery.js'
+import { runCodexOAuthFlow } from '../../services/oauth/codex-client.js'
+import { saveCodexOAuthTokens, isCodexAuthenticated } from '../../utils/codex-auth.js'
 
 type ProviderChoice = 'auto' | ProviderProfile | 'openrouter' | 'clear'
+type CodexModelChoice = 'gpt-5.4' | 'gpt-5.4-mini' | 'gpt-5.3-codex' | 'gpt-5.2'
+type CodexEffortChoice = 'low' | 'medium' | 'high' | 'xhigh'
 
 type Step =
   | { name: 'choose' }
@@ -79,11 +84,20 @@ type Step =
   | { name: 'gemini-key' }
   | { name: 'gemini-model'; apiKey: string }
   | { name: 'codex-check' }
+  | { name: 'codex-oauth' }
   | { name: 'codex-manual-key' }
   | { name: 'codex-manual-account'; apiKey: string }
   | {
       name: 'codex-model'
-      source: 'detected' | 'manual'
+      source: 'detected' | 'manual' | 'oauth'
+      model?: CodexModelChoice
+      apiKey?: string
+      accountId?: string
+    }
+  | {
+      name: 'codex-effort'
+      source: 'detected' | 'manual' | 'oauth'
+      model: CodexModelChoice
       apiKey?: string
       accountId?: string
     }
@@ -246,7 +260,7 @@ export function buildCurrentProviderSummary(options?: {
       baseUrl: processEnv.OPENAI_BASE_URL,
     })
 
-    let providerLabel = 'OpenAI-compatible'
+    let providerLabel = 'OpenAI compativel'
     if (request.transport === 'codex_responses') {
       providerLabel = 'Codex'
     } else if (request.baseUrl.includes('localhost:11434')) {
@@ -299,7 +313,7 @@ function buildSavedProfileSummary(
         ),
         credentialLabel:
           maskSecretForDisplay(env.GEMINI_API_KEY) !== undefined
-            ? 'configured'
+            ? 'ok'
             : undefined,
       }
     case 'codex':
@@ -317,7 +331,7 @@ function buildSavedProfileSummary(
         ),
         credentialLabel:
           maskSecretForDisplay(env.CODEX_API_KEY) !== undefined
-            ? 'configured'
+            ? 'ok'
             : undefined,
       }
     case 'ollama':
@@ -337,7 +351,7 @@ function buildSavedProfileSummary(
     case 'openai':
     default:
       return {
-        providerLabel: 'OpenAI-compatible',
+        providerLabel: 'OpenAI compativel',
         modelLabel: getSafeDisplayValue(
           env.OPENAI_MODEL ?? 'gpt-4o',
           process.env,
@@ -350,7 +364,7 @@ function buildSavedProfileSummary(
         ),
         credentialLabel:
           maskSecretForDisplay(env.OPENAI_API_KEY) !== undefined
-            ? 'configured'
+            ? 'ok'
             : undefined,
       }
   }
@@ -373,7 +387,7 @@ export function buildProfileSaveMessage(
   }
 
   // Keep the Windows path inside code formatting so markdown rendering
-  // does not swallow backslashes like "\." in ".openclaude-profile.json".
+  // does not swallow backslashes like "\." in ".claudinho-profile.json".
   lines.push(`Perfil: \`${filePath}\``)
   lines.push('Reinicia o claudinho pra usar.')
 
@@ -384,18 +398,40 @@ function buildUsageText(): string {
   const summary = buildCurrentProviderSummary()
   return [
     'Uso: /provider',
-    'Uso rápido: /provider <auto|openrouter|ollama|openai|gemini|codex|clear>',
-    'Diagnóstico: /provider doctor [openrouter|openai|ollama|gemini|codex]',
+    'Sem argumento: abre o gerenciador de provedores',
+    'Uso rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡pido: /provider <auto|openrouter|ollama|openai|gemini|codex|clear> [modelo]',
+    'DiagnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³stico: /provider doctor [openrouter|openai|ollama|gemini|codex]',
     '',
-    'Setup guiado pra perfis de provedor salvos.',
+    'Gerencia provedores salvos e tambem aceita atalhos rapidos.',
     '',
     `Provedor atual: ${summary.providerLabel}`,
     `Modelo atual: ${summary.modelLabel}`,
     `Endpoint atual: ${summary.endpointLabel}`,
     `Perfil salvo: ${summary.savedProfileLabel}`,
     '',
-    'Escolhe Auto, OpenRouter, Ollama, OpenAI-compatível, Gemini ou Codex, e salva um perfil pro próximo restart do claudinho.',
-    'Dica: pra troca rápida usa /provider codex ou /provider openrouter',
+    'Escolhe Auto, OpenRouter, Ollama, OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel, Gemini ou Codex, e salva um perfil pro prÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³ximo restart do claudinho.',
+    'Dica: pra troca rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡pida usa /provider codex ou /provider openrouter',
+    'Exemplo de modelo customizado: /provider openrouter openrouter/auto',
+  ].join('\n')
+}
+
+function buildSimpleUsageText(): string {
+  const summary = buildCurrentProviderSummary()
+  return [
+    'Uso: /provider',
+    'Sem argumento: abre o gerenciador de provedores',
+    'Uso rapido: /provider <auto|openrouter|ollama|openai|gemini|codex|clear> [modelo]',
+    'Diagnostico: /provider doctor [openrouter|openai|ollama|gemini|codex]',
+    '',
+    'Use o gerenciador para adicionar, editar, apagar e escolher o provedor ativo.',
+    '',
+    `Provedor atual: ${summary.providerLabel}`,
+    `Modelo atual: ${summary.modelLabel}`,
+    `Endpoint atual: ${summary.endpointLabel}`,
+    `Perfil salvo: ${summary.savedProfileLabel}`,
+    '',
+    'Dica: pra troca rapida usa /provider codex ou /provider openrouter',
+    'Exemplo: /provider openrouter openrouter/auto',
   ].join('\n')
 }
 
@@ -455,6 +491,24 @@ function getEnvWithPersistedFallback(
   return merged
 }
 
+function resolveRememberedOpenAIKey(options: {
+  processEnv: NodeJS.ProcessEnv
+  persistedEnv?: ProfileEnv
+  includeOpenRouterAlias?: boolean
+}): string | undefined {
+  const openAIKeyFromEnv = sanitizeApiKey(options.processEnv.OPENAI_API_KEY)
+  if (openAIKeyFromEnv) return openAIKeyFromEnv
+
+  if (options.includeOpenRouterAlias) {
+    const openRouterKeyFromEnv = sanitizeApiKey(
+      options.processEnv.OPENROUTER_API_KEY,
+    )
+    if (openRouterKeyFromEnv) return openRouterKeyFromEnv
+  }
+
+  return sanitizeApiKey(options.persistedEnv?.OPENAI_API_KEY)
+}
+
 function normalizeDoctorTargetArg(
   raw: string | undefined,
 ): ProviderDoctorTarget | null {
@@ -497,8 +551,11 @@ export function buildProviderDoctorReport(options?: {
   ].filter(key => processEnv[key] !== undefined)
 
   const openAIKeyFromEnv = sanitizeApiKey(processEnv.OPENAI_API_KEY)
+  const openRouterAliasKeyFromEnv = sanitizeApiKey(processEnv.OPENROUTER_API_KEY)
+  const openRouterKeyFromEnv = openAIKeyFromEnv || openRouterAliasKeyFromEnv
   const openAIKeyFromProfile = sanitizeApiKey(persistedEnv?.OPENAI_API_KEY)
   const openAIKey = sanitizeApiKey(mergedEnv.OPENAI_API_KEY)
+  const openRouterKey = openRouterKeyFromEnv || openAIKeyFromProfile || openAIKey
   const openAIBaseUrl =
     sanitizeProviderConfigValue(processEnv.OPENAI_BASE_URL, processEnv) ||
     sanitizeProviderConfigValue(persistedEnv?.OPENAI_BASE_URL, persistedEnv) ||
@@ -554,22 +611,22 @@ export function buildProviderDoctorReport(options?: {
 
   const appendOpenRouterSection = () => {
     sections.push('[OpenRouter]')
-    sections.push(`Status: ${openAIKey ? 'pronto' : 'faltando chave'}`)
+    sections.push(`Status: ${openRouterKey ? 'pronto' : 'faltando chave'}`)
     sections.push(
       `Chave: ${
-        openAIKeyFromEnv
+        openRouterKeyFromEnv
           ? 'ambiente'
           : openAIKeyFromProfile
             ? 'perfil salvo'
             : 'ausente'
       }`,
     )
-    sections.push(`Modelo padrão: ${openRouterModel}`)
+    sections.push(`Modelo padrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o: ${openRouterModel}`)
     sections.push(`Endpoint: ${OPENROUTER_BASE_URL}`)
   }
 
   const appendOpenAISection = () => {
-    sections.push('[OpenAI-compatível]')
+    sections.push('[OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel]')
     sections.push(`Status: ${openAIKey ? 'pronto' : 'faltando chave'}`)
     sections.push(
       `Chave: ${
@@ -668,10 +725,10 @@ export function buildProviderDoctorReport(options?: {
     `Modelo atual: ${summary.modelLabel}`,
     `Endpoint atual: ${summary.endpointLabel}`,
     `Perfil salvo: ${persisted?.profile ?? 'none'}`,
-    `Flags explícitas no shell: ${
+    `Flags explÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­citas no shell: ${
       explicitFlags.length > 0 ? explicitFlags.join(', ') : 'nenhuma'
     }`,
-    'Obs: flags explícitas do shell têm prioridade sobre perfil salvo.',
+    'Obs: flags explÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­citas do shell tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªm prioridade sobre perfil salvo.',
     '',
   ]
 
@@ -679,38 +736,49 @@ export function buildProviderDoctorReport(options?: {
   return [...lines, ...sections].join('\n')
 }
 
-function buildQuickProfileFromChoice(
+export function buildQuickProfileFromChoice(
   choice: ProviderChoice,
   processEnv: NodeJS.ProcessEnv,
   persisted?: ProfileFile | null,
+  options?: {
+    modelOverride?: string
+  },
 ): { profile: ProviderProfile; env: ProfileEnv } | null {
   const persistedEnv = resolvePersistedEnv(persisted)
   const mergedEnv = getEnvWithPersistedFallback(processEnv, persistedEnv)
   const defaults = getProviderWizardDefaults(processEnv, persisted)
+  const modelOverride = options?.modelOverride?.trim() || undefined
 
   if (choice === 'openrouter') {
-    const key = sanitizeApiKey(mergedEnv.OPENAI_API_KEY)
+    const key = resolveRememberedOpenAIKey({
+      processEnv,
+      persistedEnv,
+      includeOpenRouterAlias: true,
+    })
     if (!key) return null
 
     const env = buildOpenAIProfileEnv({
       goal: normalizeRecommendationGoal(null),
       apiKey: key,
       baseUrl: OPENROUTER_BASE_URL,
-      model: defaults.openRouterModel,
+      model: modelOverride || defaults.openRouterModel,
       processEnv: {},
     })
     return env ? { profile: 'openai', env } : null
   }
 
   if (choice === 'openai') {
-    const key = sanitizeApiKey(mergedEnv.OPENAI_API_KEY)
+    const key = resolveRememberedOpenAIKey({
+      processEnv,
+      persistedEnv,
+    })
     if (!key) return null
 
     const env = buildOpenAIProfileEnv({
       goal: normalizeRecommendationGoal(null),
       apiKey: key,
       baseUrl: defaults.openAIBaseUrl,
-      model: defaults.openAIModel,
+      model: modelOverride || defaults.openAIModel,
       processEnv: {},
     })
     return env ? { profile: 'openai', env } : null
@@ -728,7 +796,7 @@ function buildQuickProfileFromChoice(
       null
     const env = buildGeminiProfileEnv({
       apiKey: key,
-      model: defaults.geminiModel,
+      model: modelOverride || defaults.geminiModel,
       baseUrl: geminiBaseUrl,
       processEnv: {},
     })
@@ -736,6 +804,14 @@ function buildQuickProfileFromChoice(
   }
 
   if (choice === 'codex') {
+    // Check if we have OAuth tokens or old credentials
+    const credentials = resolveCodexApiCredentials(mergedEnv)
+    
+    // If no credentials (empty apiKey or no accountId), return null to force wizard
+    if (!credentials.apiKey || credentials.apiKey === '' || !credentials.accountId) {
+      return null
+    }
+    
     const shellOpenAIModel = sanitizeProviderConfigValue(
       processEnv.OPENAI_MODEL,
       processEnv,
@@ -754,14 +830,23 @@ function buildQuickProfileFromChoice(
         ? sanitizeProviderConfigValue(persistedEnv?.OPENAI_MODEL, persistedEnv)
         : undefined
     const codexModel =
-      shellRequest.transport === 'codex_responses' && shellOpenAIModel
+      modelOverride ||
+      (shellRequest.transport === 'codex_responses' && shellOpenAIModel
         ? shellOpenAIModel
-        : persistedCodexModel || 'codexplan'
+        : persistedCodexModel || 'codexplan')
+    
+    // Try to build the profile env - it will return null if credentials are invalid
     const env = buildCodexProfileEnv({
       model: codexModel,
       processEnv: mergedEnv,
     })
-    return env ? { profile: 'codex', env } : null
+    
+    // If buildCodexProfileEnv returns null, force wizard
+    if (!env) {
+      return null
+    }
+    
+    return { profile: 'codex', env }
   }
 
   return null
@@ -817,7 +902,7 @@ export function TextEntryDialog({
   const handleSubmit = React.useCallback(
     (nextValue: string) => {
       if (!allowEmpty && nextValue.trim().length === 0) {
-        setError('Um valor é obrigatório pra esse passo.')
+        setError('Um valor ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© obrigatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³rio pra esse passo.')
         return
       }
 
@@ -868,7 +953,7 @@ function ProviderChooser({
       label: 'Auto',
       value: 'auto',
       description:
-        'Prefere Ollama local se tiver, senão te ajuda a configurar OpenAI',
+        'Prefere Ollama local se tiver, senÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o te ajuda a configurar OpenAI',
     },
     {
       label: 'Ollama',
@@ -876,7 +961,7 @@ function ProviderChooser({
       description: 'Roda modelo local sem precisar de chave de API',
     },
     {
-      label: 'OpenAI-compatível',
+      label: 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel',
       value: 'openai',
       description:
         'GPT-4o, DeepSeek, OpenRouter, Groq, LM Studio e outras APIs',
@@ -885,7 +970,7 @@ function ProviderChooser({
       label: 'OpenRouter',
       value: 'openrouter',
       description:
-        'Atalho pra OPENAI_BASE_URL=openrouter.ai com modelo inicial grátis',
+        'Atalho pra OPENAI_BASE_URL=openrouter.ai com modelo inicial grÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tis',
     },
     {
       label: 'Gemini',
@@ -915,8 +1000,8 @@ function ProviderChooser({
     >
       <Box flexDirection="column" gap={1}>
         <Text>
-          Salva um perfil de provedor pro próximo restart do claudinho sem
-          precisar mexer nas variáveis de ambiente.
+          Salva um perfil de provedor pro prÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³ximo restart do claudinho sem
+          precisar mexer nas variÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡veis de ambiente.
         </Text>
         <Box flexDirection="column">
           <Text dimColor>Modelo atual: {summary.modelLabel}</Text>
@@ -946,24 +1031,24 @@ function AutoGoalChooser({
     {
       label: 'Balanceado',
       value: 'balanced',
-      description: 'Padrão bom pra maioria dos casos',
+      description: 'PadrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o bom pra maioria dos casos',
     },
     {
-      label: 'Código',
+      label: 'CÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³digo',
       value: 'coding',
-      description: 'Prefere modelos locais bons pra código ou GPT-4o',
+      description: 'Prefere modelos locais bons pra cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³digo ou GPT-4o',
     },
     {
       label: 'Velocidade',
       value: 'latency',
-      description: 'Prefere modelos locais mais rápidos ou gpt-4o-mini',
+      description: 'Prefere modelos locais mais rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡pidos ou gpt-4o-mini',
     },
   ]
 
   return (
-    <Dialog title="Objetivo do setup automático" onCancel={onBack}>
+    <Dialog title="Objetivo do setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico" onCancel={onBack}>
       <Box flexDirection="column" gap={1}>
-        <Text>Escolhe o objetivo que o setup automático deve otimizar.</Text>
+        <Text>Escolhe o objetivo que o setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico deve otimizar.</Text>
         <Select
           options={options}
           defaultValue="balanced"
@@ -1056,12 +1141,12 @@ function AutoRecommendationStep({
   }, [goal])
 
   if (status.state === 'loading') {
-    return <LoadingState message="Verificando provedores locais…" />
+    return <LoadingState message="Verificando provedores locaisÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" />
   }
 
   if (status.state === 'error') {
     return (
-      <Dialog title="Setup automático falhou" onCancel={onCancel} color="warning">
+      <Dialog title="Setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico falhou" onCancel={onCancel} color="warning">
         <Box flexDirection="column" gap={1}>
           <Text>{status.message}</Text>
           <Select
@@ -1079,16 +1164,16 @@ function AutoRecommendationStep({
 
   if (status.state === 'openai') {
     return (
-      <Dialog title="Fallback do setup automático" onCancel={onCancel}>
+      <Dialog title="Fallback do setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico" onCancel={onCancel}>
         <Box flexDirection="column" gap={1}>
           <Text>
-            Nenhum modelo Ollama local viável foi detectado. O setup automático pode
-            continuar pro setup OpenAI-compatível com modelo padrão{' '}
+            Nenhum modelo Ollama local viÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡vel foi detectado. O setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico pode
+            continuar pro setup OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel com modelo padrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o{' '}
             {status.defaultModel}.
           </Text>
           <Select
             options={[
-              { label: 'Continuar pro setup OpenAI-compatível', value: 'continue' },
+              { label: 'Continuar pro setup OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel', value: 'continue' },
               { label: 'Voltar', value: 'back' },
               { label: 'Cancelar', value: 'cancel' },
             ]}
@@ -1112,12 +1197,12 @@ function AutoRecommendationStep({
     <Dialog title="Salvar perfil recomendado?" onCancel={onBack}>
       <Box flexDirection="column" gap={1}>
         <Text>
-          O setup automático recomenda um perfil Ollama local pra {goal} baseado nos
-          modelos disponíveis nessa máquina.
+          O setup automÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡tico recomenda um perfil Ollama local pra {goal} baseado nos
+          modelos disponÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­veis nessa mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡quina.
         </Text>
         <Text dimColor>
           Modelo recomendado: {status.model}
-          {status.summary ? ` · ${status.summary}` : ''}
+          {status.summary ? ` ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· ${status.summary}` : ''}
         </Text>
         <Select
           options={[
@@ -1214,7 +1299,7 @@ function OllamaModelStep({
   }, [])
 
   if (status.state === 'loading') {
-    return <LoadingState message="Verificando modelos Ollama locais…" />
+    return <LoadingState message="Verificando modelos Ollama locaisÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" />
   }
 
   if (status.state === 'unavailable') {
@@ -1266,12 +1351,14 @@ function CodexCredentialStep({
   credentialsEnv,
   onUseDetected,
   onManual,
+  onOAuth,
   onBack,
   onCancel,
 }: {
   credentialsEnv?: NodeJS.ProcessEnv
   onUseDetected: () => void
   onManual: () => void
+  onOAuth: () => void
   onBack: () => void
   onCancel: () => void
 }): React.ReactNode {
@@ -1285,16 +1372,24 @@ function CodexCredentialStep({
           <Select
             options={[
               {
+                label: 'Login com OAuth (Recomendado)',
+                value: 'oauth',
+                description:
+                  'Login automatico via navegador - sem precisar copiar API key',
+              },
+              {
                 label: 'Colar CODEX_API_KEY manualmente',
                 value: 'manual',
                 description:
-                  'Você digita as credenciais aqui, sem depender do auth.json',
+                  'Voce digita as credenciais aqui, sem depender do auth.json',
               },
               { label: 'Voltar', value: 'back' },
               { label: 'Cancelar', value: 'cancel' },
             ]}
             onChange={value => {
-              if (value === 'manual') {
+              if (value === 'oauth') {
+                onOAuth()
+              } else if (value === 'manual') {
                 onManual()
               } else if (value === 'back') {
                 onBack()
@@ -1324,19 +1419,27 @@ function CodexCredentialStep({
               description: 'Segue pro seletor de modelo do Codex',
             },
             {
+              label: 'Login com OAuth',
+              value: 'oauth',
+              description:
+                'Login automatico via navegador - tokens renovam sozinhos',
+            },
+            {
               label: 'Trocar credenciais manualmente',
               value: 'manual',
               description:
-                'Use essa opção se quiser mudar conta/token sem sair da sessão',
+                'Use essa opcao se quiser mudar conta/token sem sair da sessao',
             },
             { label: 'Voltar', value: 'back' },
             { label: 'Cancelar', value: 'cancel' },
           ]}
           inlineDescriptions
-          visibleOptionCount={4}
+          visibleOptionCount={5}
           onChange={value => {
             if (value === 'detected') {
               onUseDetected()
+            } else if (value === 'oauth') {
+              onOAuth()
             } else if (value === 'manual') {
               onManual()
             } else if (value === 'back') {
@@ -1360,10 +1463,10 @@ function resolveCodexCredentials(processEnv: NodeJS.ProcessEnv):
   if (!credentials.apiKey) {
     const authHint = credentials.authPath
       ? `Arquivo esperado: ${credentials.authPath}.`
-      : 'Defina CODEX_API_KEY ou faça login de novo no Codex CLI.'
+      : 'Defina CODEX_API_KEY ou faca login de novo no Codex CLI.'
     return {
       ok: false,
-      message: `Não achei credenciais do Codex. Você pode colar manualmente agora, ou fazer login no Codex CLI. ${authHint}`,
+      message: `Nao achei credenciais do Codex. Voce pode colar manualmente agora, ou fazer login no Codex CLI. ${authHint}`,
     }
   }
 
@@ -1371,7 +1474,7 @@ function resolveCodexCredentials(processEnv: NodeJS.ProcessEnv):
     return {
       ok: false,
       message:
-        'As credenciais atuais do Codex não têm chatgpt_account_id. Você pode informar manualmente agora, ou definir CHATGPT_ACCOUNT_ID/CODEX_ACCOUNT_ID.',
+        'As credenciais atuais do Codex nao tem chatgpt_account_id. Voce pode informar manualmente agora, ou definir CHATGPT_ACCOUNT_ID/CODEX_ACCOUNT_ID.',
     }
   }
 
@@ -1384,24 +1487,207 @@ function resolveCodexCredentials(processEnv: NodeJS.ProcessEnv):
   }
 }
 
-function getCodexModelOptions(): OptionWithDescription<string>[] {
+function CodexOAuthStep({
+  onSuccess,
+  onBack,
+  onCancel,
+}: {
+  onSuccess: () => void
+  onBack: () => void
+  onCancel: () => void
+}): React.ReactNode {
+  const [status, setStatus] = React.useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle')
+  const [errorMessage, setErrorMessage] = React.useState<string>('')
+  const [authUrl, setAuthUrl] = React.useState<string>('')
+
+  React.useEffect(() => {
+    if (status !== 'idle') return
+
+    setStatus('loading')
+
+    runCodexOAuthFlow(
+      async (url) => {
+        setAuthUrl(url)
+      },
+      async () => {
+        // Fallback manual input (nao implementado ainda)
+        return ''
+      },
+    )
+      .then((tokens) => {
+        saveCodexOAuthTokens(tokens)
+        setStatus('success')
+        setTimeout(() => {
+          onSuccess()
+        }, 1000)
+      })
+      .catch((err) => {
+        setStatus('error')
+        setErrorMessage(
+          err instanceof Error ? err.message : 'Erro desconhecido no login OAuth',
+        )
+      })
+  }, [status, onSuccess])
+
+  if (status === 'loading') {
+    return (
+      <Dialog title="Login OAuth - Codex" onCancel={onCancel}>
+        <Box flexDirection="column" gap={1}>
+          <LoadingState message="Abrindo navegador para login..." />
+          {authUrl && (
+            <Box flexDirection="column" gap={1} marginTop={1}>
+              <Text dimColor>Se o navegador nao abrir, acesse:</Text>
+              <Text color="cyan">{authUrl}</Text>
+            </Box>
+          )}
+          <Box marginTop={1}>
+            <Text dimColor>Aguardando autenticacao no navegador...</Text>
+          </Box>
+        </Box>
+      </Dialog>
+    )
+  }
+
+  if (status === 'success') {
+    return (
+      <Dialog title="Login concluido" onCancel={onSuccess}>
+        <Box flexDirection="column" gap={1}>
+          <Text color="green">Login OAuth realizado com sucesso!</Text>
+          <Text dimColor>
+            Seus tokens foram salvos e serao renovados automaticamente.
+          </Text>
+        </Box>
+      </Dialog>
+    )
+  }
+
+  if (status === 'error') {
+    return (
+      <Dialog title="Erro no login OAuth" onCancel={onCancel} color="error">
+        <Box flexDirection="column" gap={1}>
+          <Text>{errorMessage}</Text>
+          <Select
+            options={[
+              { label: 'Tentar novamente', value: 'retry' },
+              { label: 'Voltar', value: 'back' },
+              { label: 'Cancelar', value: 'cancel' },
+            ]}
+            onChange={(value) => {
+              if (value === 'retry') {
+                setStatus('idle')
+                setErrorMessage('')
+              } else if (value === 'back') {
+                onBack()
+              } else {
+                onCancel()
+              }
+            }}
+            onCancel={onCancel}
+          />
+        </Box>
+      </Dialog>
+    )
+  }
+
+  return null
+}
+function getCodexModelOptions(): OptionWithDescription<CodexModelChoice>[] {
   return [
     {
-      label: 'codexplan',
-      value: 'codexplan',
-      description: 'GPT-5.4 com raciocínio maior no backend do Codex',
+      label: 'GPT-5.4',
+      value: 'gpt-5.4',
+      description: 'Mais equilibrado para uso geral.',
     },
     {
-      label: 'codexspark',
-      value: 'codexspark',
-      description: 'Perfil Codex Spark mais rápido pro loop de ferramentas',
+      label: 'GPT-5.4-Mini',
+      value: 'gpt-5.4-mini',
+      description: 'Mais rapido e economico.',
+    },
+    {
+      label: 'GPT-5.3-Codex',
+      value: 'gpt-5.3-codex',
+      description: 'Focado em codigo e ferramentas.',
+    },
+    {
+      label: 'GPT-5.2',
+      value: 'gpt-5.2',
+      description: 'Bom para tarefas longas com consistencia.',
     },
   ]
+}
+
+function getCodexEffortOptions(): OptionWithDescription<CodexEffortChoice>[] {
+  return [
+    { label: 'Baixa', value: 'low', description: 'Mais rapido, menos reflexao.' },
+    { label: 'Media', value: 'medium', description: 'Equilibrio entre velocidade e qualidade.' },
+    { label: 'Alta', value: 'high', description: 'Analise mais profunda.' },
+    { label: 'Altissimo', value: 'xhigh', description: 'Maximo de raciocinio disponivel.' },
+  ]
+}
+
+function normalizeCodexModelChoice(
+  model: string | undefined,
+): CodexModelChoice | undefined {
+  if (!model) return undefined
+  const normalized = model.trim().toLowerCase()
+  if (
+    normalized.startsWith('gpt-5.4-mini') ||
+    normalized.startsWith('gpt-5.4-mini?')
+  ) {
+    return 'gpt-5.4-mini'
+  }
+  if (
+    normalized.startsWith('gpt-5.4') ||
+    normalized.startsWith('codexplan')
+  ) {
+    return 'gpt-5.4'
+  }
+  if (
+    normalized.startsWith('gpt-5.3-codex') ||
+    normalized.startsWith('codexspark')
+  ) {
+    return 'gpt-5.3-codex'
+  }
+  if (normalized.startsWith('gpt-5.2')) {
+    return 'gpt-5.2'
+  }
+  return undefined
+}
+
+function extractCodexEffortChoice(
+  model: string | undefined,
+): CodexEffortChoice | undefined {
+  if (!model) return undefined
+  const normalized = model.trim().toLowerCase()
+  const fromQuery = normalized.match(/[?&]reasoning=(low|medium|high|xhigh)\b/)
+  if (fromQuery?.[1]) {
+    return fromQuery[1] as CodexEffortChoice
+  }
+  const fromSuffix = normalized.match(/\((low|medium|high|xhigh)\)\s*$/)
+  if (fromSuffix?.[1]) {
+    return fromSuffix[1] as CodexEffortChoice
+  }
+  return undefined
+}
+
+function getDefaultCodexEffortChoice(model: CodexModelChoice): CodexEffortChoice {
+  if (model === 'gpt-5.3-codex') return 'high'
+  return 'medium'
+}
+
+function buildCodexModelWithEffort(
+  model: CodexModelChoice,
+  effort: CodexEffortChoice,
+): string {
+  return `${model} (${effort})`
 }
 
 function getInitialStepFromChoice(
   choice: ProviderChoice | null | undefined,
   defaults: ProviderWizardDefaults,
+  modelOverride?: string,
 ): Step {
   switch (choice) {
     case 'auto':
@@ -1409,7 +1695,7 @@ function getInitialStepFromChoice(
     case 'openrouter':
       return {
         name: 'openai-key',
-        defaultModel: defaults.openRouterModel,
+        defaultModel: modelOverride || defaults.openRouterModel,
         defaultBaseUrl: OPENROUTER_BASE_URL,
         skipBaseStep: true,
         providerLabel: 'OpenRouter',
@@ -1419,9 +1705,9 @@ function getInitialStepFromChoice(
     case 'openai':
       return {
         name: 'openai-key',
-        defaultModel: defaults.openAIModel,
+        defaultModel: modelOverride || defaults.openAIModel,
         defaultBaseUrl: defaults.openAIBaseUrl,
-        providerLabel: 'OpenAI-compatível',
+        providerLabel: 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel',
       }
     case 'gemini':
       return { name: 'gemini-key' }
@@ -1435,10 +1721,12 @@ function getInitialStepFromChoice(
 function ProviderWizard({
   onDone,
   initialChoice,
+  initialModelOverride,
   persisted,
 }: {
   onDone: LocalJSXCommandOnDone
   initialChoice?: ProviderChoice | null
+  initialModelOverride?: string
   persisted?: ProfileFile | null
 }): React.ReactNode {
   const persistedProfile = React.useMemo(
@@ -1447,9 +1735,6 @@ function ProviderWizard({
   )
   const persistedEnv = resolvePersistedEnv(persistedProfile)
   const defaults = getProviderWizardDefaults(process.env, persistedProfile)
-  const rememberedOpenAIKey = sanitizeApiKey(
-    process.env.OPENAI_API_KEY ?? persistedEnv?.OPENAI_API_KEY,
-  )
   const rememberedGeminiKey = sanitizeApiKey(
     process.env.GEMINI_API_KEY ??
       process.env.GOOGLE_API_KEY ??
@@ -1460,7 +1745,7 @@ function ProviderWizard({
     [persistedEnv],
   )
   const [step, setStep] = React.useState<Step>(() =>
-    getInitialStepFromChoice(initialChoice, defaults),
+    getInitialStepFromChoice(initialChoice, defaults, initialModelOverride),
   )
 
   switch (step.name) {
@@ -1477,7 +1762,7 @@ function ProviderWizard({
                 name: 'openai-key',
                 defaultModel: defaults.openAIModel,
                 defaultBaseUrl: defaults.openAIBaseUrl,
-                providerLabel: 'OpenAI-compatível',
+                providerLabel: 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel',
               })
             } else if (value === 'openrouter') {
               setStep({
@@ -1532,29 +1817,34 @@ function ProviderWizard({
         />
       )
 
-    case 'openai-key':
+    case 'openai-key': {
+      const rememberedOpenAIKeyForStep = resolveRememberedOpenAIKey({
+        processEnv: process.env,
+        persistedEnv,
+        includeOpenRouterAlias: Boolean(step.skipBaseStep),
+      })
       return (
         <TextEntryDialog
           resetStateKey={step.name}
-          title={`Setup ${step.providerLabel ?? 'OpenAI-compatível'}`}
+          title={`Setup ${step.providerLabel ?? 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel'}`}
           subtitle={step.skipBaseStep ? 'Passo 1 de 2' : 'Passo 1 de 3'}
           description={
-            rememberedOpenAIKey
-              ? 'Digite uma chave de API, ou deixa em branco pra reusar a chave já encontrada (ambiente/perfil salvo).'
-              : 'Digite a chave de API do seu provedor OpenAI-compatível.'
+            rememberedOpenAIKeyForStep
+              ? 'Digite uma chave de API, ou deixa em branco pra reusar a chave jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ encontrada (ambiente/perfil salvo).'
+              : 'Digite a chave de API do seu provedor OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel.'
           }
           initialValue=""
           placeholder="sk-..."
           mask="*"
-          allowEmpty={Boolean(rememberedOpenAIKey)}
+          allowEmpty={Boolean(rememberedOpenAIKeyForStep)}
           validate={value => {
-            const candidate = value.trim() || rememberedOpenAIKey || ''
+            const candidate = value.trim() || rememberedOpenAIKeyForStep || ''
             return sanitizeApiKey(candidate)
               ? null
-              : 'Digite uma chave de API real. Placeholders tipo SUA_CHAVE não são válidos.'
+              : 'Digite uma chave de API real. Placeholders tipo SUA_CHAVE nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lidos.'
           }}
           onSubmit={value => {
-            const apiKey = value.trim() || rememberedOpenAIKey || ''
+            const apiKey = value.trim() || rememberedOpenAIKeyForStep || ''
             if (step.skipBaseStep) {
               setStep({
                 name: 'openai-model',
@@ -1579,12 +1869,13 @@ function ProviderWizard({
           onCancel={() => setStep({ name: 'choose' })}
         />
       )
+    }
 
     case 'openai-base':
       return (
         <TextEntryDialog
           resetStateKey={step.name}
-          title={`Setup ${step.providerLabel ?? 'OpenAI-compatível'}`}
+          title={`Setup ${step.providerLabel ?? 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel'}`}
           subtitle="Passo 2 de 3"
           description={`Opcionalmente digite uma URL base. Deixa em branco pra ${DEFAULT_OPENAI_BASE_URL}.`}
           initialValue={
@@ -1622,12 +1913,10 @@ function ProviderWizard({
       return (
         <TextEntryDialog
           resetStateKey={step.name}
-          title={`Setup ${step.providerLabel ?? 'OpenAI-compatível'}`}
+          title={`Setup ${step.providerLabel ?? 'OpenAI-compatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel'}`}
           subtitle={step.skipBaseStep ? 'Passo 2 de 2' : 'Passo 3 de 3'}
           description={`Digite um nome de modelo. Deixa em branco pra ${step.defaultModel}.`}
-          initialValue={
-            step.skipBaseStep ? step.defaultModel : defaults.openAIModel ?? step.defaultModel
-          }
+          initialValue={step.defaultModel}
           placeholder={step.defaultModel}
           allowEmpty
           onSubmit={value => {
@@ -1670,8 +1959,8 @@ function ProviderWizard({
           subtitle="Passo 1 de 2"
           description={
             rememberedGeminiKey
-              ? 'Digite uma chave de API do Gemini, ou deixa em branco pra reusar a chave já encontrada (ambiente/perfil salvo).'
-              : 'Digite uma chave de API do Gemini. Você pode criar uma em https://aistudio.google.com/apikey.'
+              ? 'Digite uma chave de API do Gemini, ou deixa em branco pra reusar a chave jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ encontrada (ambiente/perfil salvo).'
+              : 'Digite uma chave de API do Gemini. VocÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âª pode criar uma em https://aistudio.google.com/apikey.'
           }
           initialValue=""
           placeholder="AIza..."
@@ -1715,7 +2004,17 @@ function ProviderWizard({
           credentialsEnv={codexEnvWithFallback}
           onUseDetected={() => setStep({ name: 'codex-model', source: 'detected' })}
           onManual={() => setStep({ name: 'codex-manual-key' })}
+          onOAuth={() => setStep({ name: 'codex-oauth' })}
           onBack={() => setStep({ name: 'choose' })}
+          onCancel={() => onDone()}
+        />
+      )
+
+    case 'codex-oauth':
+      return (
+        <CodexOAuthStep
+          onSuccess={() => setStep({ name: 'codex-model', source: 'oauth' })}
+          onBack={() => setStep({ name: 'codex-check' })}
           onCancel={() => onDone()}
         />
       )
@@ -1726,14 +2025,14 @@ function ProviderWizard({
           resetStateKey={step.name}
           title="Setup do Codex"
           subtitle="Passo 1 de 2"
-          description="Cole sua CODEX_API_KEY. Se a chave tiver chatgpt_account_id embutido, o próximo passo pode ser pulado."
+          description="Cole sua CODEX_API_KEY. Se a chave tiver chatgpt_account_id embutido, o prÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³ximo passo pode ser pulado."
           initialValue=""
           placeholder="sk-..."
           mask="*"
           validate={value =>
             sanitizeApiKey(value.trim())
               ? null
-              : 'Digite uma CODEX_API_KEY real. Placeholders não são válidos.'
+              : 'Digite uma CODEX_API_KEY real. Placeholders nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lidos.'
           }
           onSubmit={value => {
             const apiKey = value.trim()
@@ -1771,7 +2070,7 @@ function ProviderWizard({
           validate={value =>
             value.trim().length > 0
               ? null
-              : 'CHATGPT_ACCOUNT_ID é obrigatório pra usar Codex.'
+              : 'CHATGPT_ACCOUNT_ID ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© obrigatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³rio pra usar Codex.'
           }
           onSubmit={value => {
             setStep({
@@ -1786,73 +2085,144 @@ function ProviderWizard({
       )
 
     case 'codex-model':
-      return (
-        <Dialog title="Escolhe um perfil do Codex" onCancel={() => setStep({ name: 'codex-check' })}>
-          <Box flexDirection="column" gap={1}>
-            <Text>
-              {step.source === 'detected'
-                ? 'Credenciais detectadas com sucesso. Agora escolhe o modo do Codex.'
-                : 'Credenciais manuais salvas. Agora escolhe o modo do Codex.'}
-            </Text>
-            <Select
-              options={getCodexModelOptions()}
-              defaultValue="codexplan"
-              defaultFocusValue="codexplan"
-              inlineDescriptions
-              visibleOptionCount={2}
-              onChange={value => {
-                const env =
-                  step.source === 'detected'
-                    ? buildCodexProfileEnv({
-                        model: value,
-                        processEnv: codexEnvWithFallback,
-                      })
-                    : buildCodexProfileEnv({
-                        model: value,
-                        apiKey: step.apiKey ?? null,
-                        processEnv: {
-                          ...process.env,
-                          CODEX_API_KEY: step.apiKey ?? process.env.CODEX_API_KEY,
-                          CHATGPT_ACCOUNT_ID:
-                            step.accountId ?? process.env.CHATGPT_ACCOUNT_ID,
-                          CODEX_ACCOUNT_ID:
-                            step.accountId ?? process.env.CODEX_ACCOUNT_ID,
-                        },
-                      })
+      {
+        const selectedModel =
+          step.model ??
+          normalizeCodexModelChoice(initialModelOverride) ??
+          normalizeCodexModelChoice(process.env.OPENAI_MODEL) ??
+          normalizeCodexModelChoice(persistedEnv?.OPENAI_MODEL) ??
+          'gpt-5.4'
+        return (
+          <Dialog
+            title="Selecionar modelo do Codex"
+            onCancel={() => setStep({ name: 'codex-check' })}
+          >
+            <Box flexDirection="column" gap={1}>
+              <Text>
+                Escolha o modelo. No proximo passo voce escolhe a eficiencia
+                de raciocinio.
+              </Text>
+              <Select
+                options={getCodexModelOptions()}
+                defaultValue={selectedModel}
+                defaultFocusValue={selectedModel}
+                inlineDescriptions
+                visibleOptionCount={4}
+                onChange={value => {
+                  setStep({
+                    name: 'codex-effort',
+                    source: step.source,
+                    model: value as CodexModelChoice,
+                    apiKey: step.apiKey,
+                    accountId: step.accountId,
+                  })
+                }}
+                onCancel={() => setStep({ name: 'codex-check' })}
+              />
+            </Box>
+          </Dialog>
+        )
+      }
 
-                if (!env) {
-                  onDone(
-                    'Não consegui montar o perfil Codex com essas credenciais. Tenta /provider codex e escolhe o modo manual novamente.',
-                    { display: 'system' },
+    case 'codex-effort':
+      {
+        const effortFromModel =
+          extractCodexEffortChoice(initialModelOverride) ??
+          extractCodexEffortChoice(process.env.OPENAI_MODEL) ??
+          extractCodexEffortChoice(persistedEnv?.OPENAI_MODEL)
+        const defaultEffort =
+          effortFromModel ?? getDefaultCodexEffortChoice(step.model)
+        return (
+          <Dialog
+            title="Selecionar raciocinio"
+            onCancel={() =>
+              setStep({
+                name: 'codex-model',
+                source: step.source,
+                model: step.model,
+                apiKey: step.apiKey,
+                accountId: step.accountId,
+              })
+            }
+          >
+            <Box flexDirection="column" gap={1}>
+              <Text>
+                Agora escolha a eficiencia de raciocinio para esse modelo.
+              </Text>
+              <Select
+                options={getCodexEffortOptions()}
+                defaultValue={defaultEffort}
+                defaultFocusValue={defaultEffort}
+                inlineDescriptions
+                visibleOptionCount={4}
+                onChange={value => {
+                  const modelWithEffort = buildCodexModelWithEffort(
+                    step.model,
+                    value as CodexEffortChoice,
                   )
-                  return
-                }
+                  const env =
+                    step.source === 'detected'
+                      ? buildCodexProfileEnv({
+                          model: modelWithEffort,
+                          processEnv: codexEnvWithFallback,
+                        })
+                      : buildCodexProfileEnv({
+                          model: modelWithEffort,
+                          apiKey: step.apiKey ?? null,
+                          processEnv: {
+                            ...process.env,
+                            CODEX_API_KEY: step.apiKey ?? process.env.CODEX_API_KEY,
+                            CHATGPT_ACCOUNT_ID:
+                              step.accountId ?? process.env.CHATGPT_ACCOUNT_ID,
+                            CODEX_ACCOUNT_ID:
+                              step.accountId ?? process.env.CODEX_ACCOUNT_ID,
+                          },
+                        })
 
-                finishProfileSave(onDone, 'codex', env)
-              }}
-              onCancel={() => setStep({ name: 'codex-check' })}
-            />
-          </Box>
-        </Dialog>
-      )
+                  if (!env) {
+                    onDone(
+                      'Nao consegui montar o perfil Codex com essas credenciais. Tenta /provider codex novamente.',
+                      { display: 'system' },
+                    )
+                    return
+                  }
+
+                  finishProfileSave(onDone, 'codex', env)
+                }}
+                onCancel={() =>
+                  setStep({
+                    name: 'codex-model',
+                    source: step.source,
+                    model: step.model,
+                    apiKey: step.apiKey,
+                    accountId: step.accountId,
+                  })
+                }
+              />
+            </Box>
+          </Dialog>
+        )
+      }
   }
 }
 
 export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
-  const normalizedArgs = args?.trim().toLowerCase() || ''
+  const rawArgs = args?.trim() || ''
+  const normalizedArgs = rawArgs.toLowerCase()
   const persisted = loadProfileFile()
 
   if (COMMON_INFO_ARGS.includes(normalizedArgs)) {
-    onDone(buildUsageText(), { display: 'system' })
+    onDone(buildSimpleUsageText(), { display: 'system' })
     return null
   }
 
   if (COMMON_HELP_ARGS.includes(normalizedArgs)) {
-    onDone(buildUsageText(), { display: 'system' })
+    onDone(buildSimpleUsageText(), { display: 'system' })
     return null
   }
 
-  const tokens = normalizedArgs.split(/\s+/).filter(Boolean)
+  const rawTokens = rawArgs.split(/\s+/).filter(Boolean)
+  const tokens = rawTokens.map(token => token.toLowerCase())
   if (tokens[0] === 'doctor') {
     const target = normalizeDoctorTargetArg(tokens[1])
     if (!target) {
@@ -1874,13 +2244,33 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     return null
   }
 
-  if (!normalizedArgs) {
-    return <ProviderWizard onDone={onDone} persisted={persisted} />
+  if (!rawArgs) {
+    // Wrapper to convert ProviderManagerResult to string message
+    const handleProviderManagerDone = (result?: ProviderManagerResult) => {
+      if (!result) {
+        onDone('OperaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o cancelada.', { display: 'system' })
+        return
+      }
+      
+      const message = result.message || 
+        (result.action === 'saved' 
+          ? 'Perfil salvo com sucesso. Reinicia o claudinho pra usar.' 
+          : 'OperaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o cancelada.')
+      
+      onDone(message, { display: 'system' })
+    }
+    
+    return <ProviderManager mode="manage" onDone={handleProviderManagerDone} />
   }
 
-  const quickChoice = QUICK_PROVIDER_ARGS.find(value => value === normalizedArgs)
+  const quickChoice = QUICK_PROVIDER_ARGS.find(value => value === tokens[0])
   if (quickChoice) {
+    const modelOverride = rawTokens.slice(1).join(' ').trim() || undefined
     if (quickChoice === 'clear') {
+      if (modelOverride) {
+        onDone('Uso: /provider clear', { display: 'system' })
+        return null
+      }
       const filePath = deleteProfileFile()
       onDone(
         `Perfil de provedor removido de ${filePath}. Reinicia o claudinho pra voltar pro startup normal.`,
@@ -1889,10 +2279,22 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
       return null
     }
 
+    if (quickChoice === 'codex') {
+      return (
+        <ProviderWizard
+          onDone={onDone}
+          initialChoice={quickChoice}
+          initialModelOverride={modelOverride}
+          persisted={persisted}
+        />
+      )
+    }
+
     const quickProfile = buildQuickProfileFromChoice(
       quickChoice,
       process.env,
       persisted,
+      { modelOverride },
     )
     if (quickProfile) {
       finishProfileSave(onDone, quickProfile.profile, quickProfile.env)
@@ -1903,14 +2305,12 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
       <ProviderWizard
         onDone={onDone}
         initialChoice={quickChoice}
+        initialModelOverride={modelOverride}
         persisted={persisted}
       />
     )
   }
 
-  onDone(
-    'Uso: /provider\nUso rápido: /provider <auto|openrouter|ollama|openai|gemini|codex|clear>\nDiagnóstico: /provider doctor [openrouter|openai|ollama|gemini|codex]',
-    { display: 'system' },
-  )
+  onDone(buildSimpleUsageText(), { display: 'system' })
   return null
 }

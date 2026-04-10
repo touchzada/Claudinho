@@ -1816,7 +1816,7 @@ export async function bashToolHasPermission(
     if (!parseResult.success) {
       const decisionReason = {
         type: 'other' as const,
-        reason: `Command contains malformed syntax that cannot be parsed: ${parseResult.error}`,
+        reason: `Comando tem sintaxe malformada que não pode ser analisada: ${parseResult.error}`,
       }
       return {
         behavior: 'ask',

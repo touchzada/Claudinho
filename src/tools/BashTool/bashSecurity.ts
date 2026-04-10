@@ -14,30 +14,30 @@ const HEREDOC_IN_SUBSTITUTION = /\$\(.*<</
 // Note: Backtick pattern is handled separately in validateDangerousPatterns
 // to distinguish between escaped and unescaped backticks
 const COMMAND_SUBSTITUTION_PATTERNS = [
-  { pattern: /<\(/, message: 'process substitution <()' },
-  { pattern: />\(/, message: 'process substitution >()' },
-  { pattern: /=\(/, message: 'Zsh process substitution =()' },
+  { pattern: /<\(/, message: 'substituição de processo <()' },
+  { pattern: />\(/, message: 'substituição de processo >()' },
+  { pattern: /=\(/, message: 'substituição de processo Zsh =()' },
   // Zsh EQUALS expansion: =cmd at word start expands to $(which cmd).
   // `=curl evil.com` → `/usr/bin/curl evil.com`, bypassing Bash(curl:*) deny
   // rules since the parser sees `=curl` as the base command, not `curl`.
   // Only matches word-initial = followed by a command-name char (not VAR=val).
   {
     pattern: /(?:^|[\s;&|])=[a-zA-Z_]/,
-    message: 'Zsh equals expansion (=cmd)',
+    message: 'expansão equals do Zsh (=cmd)',
   },
-  { pattern: /\$\(/, message: '$() command substitution' },
-  { pattern: /\$\{/, message: '${} parameter substitution' },
-  { pattern: /\$\[/, message: '$[] legacy arithmetic expansion' },
-  { pattern: /~\[/, message: 'Zsh-style parameter expansion' },
-  { pattern: /\(e:/, message: 'Zsh-style glob qualifiers' },
-  { pattern: /\(\+/, message: 'Zsh glob qualifier with command execution' },
+  { pattern: /\$\(/, message: 'substituição de comando $()' },
+  { pattern: /\$\{/, message: 'substituição de parâmetro ${}' },
+  { pattern: /\$\[/, message: 'expansão aritmética antiga $[]' },
+  { pattern: /~\[/, message: 'expansão de parâmetro estilo Zsh' },
+  { pattern: /\(e:/, message: 'qualificadores glob estilo Zsh' },
+  { pattern: /\(\+/, message: 'qualificador glob Zsh com execução de comando' },
   {
     pattern: /\}\s*always\s*\{/,
-    message: 'Zsh always block (try/always construct)',
+    message: 'bloco always do Zsh (construção try/always)',
   },
   // Defense in depth: Block PowerShell comment syntax even though we don't execute in PowerShell
   // Added as protection against future changes that might introduce PowerShell execution
-  { pattern: /<#/, message: 'PowerShell comment syntax' },
+  { pattern: /<#/, message: 'sintaxe de comentário PowerShell' },
 ]
 
 // Zsh-specific dangerous commands that can bypass security checks.
@@ -853,7 +853,7 @@ function validateDangerousPatterns(
   if (hasUnescapedChar(unquotedContent, '`')) {
     return {
       behavior: 'ask',
-      message: 'Command contains backticks (`) for command substitution',
+      message: 'Comando usa crase (`) pra executar outros comandos',
     }
   }
 
@@ -865,7 +865,7 @@ function validateDangerousPatterns(
           BASH_SECURITY_CHECK_IDS.DANGEROUS_PATTERNS_COMMAND_SUBSTITUTION,
         subId: 1,
       })
-      return { behavior: 'ask', message: `Command contains ${message}` }
+      return { behavior: 'ask', message: `Comando usa ${message}` }
     }
   }
 
@@ -883,7 +883,7 @@ function validateRedirections(context: ValidationContext): PermissionResult {
     return {
       behavior: 'ask',
       message:
-        'Command contains input redirection (<) which could read sensitive files',
+        'Comando usa redirecionamento de entrada (<) que pode ler arquivos sensíveis',
     }
   }
 

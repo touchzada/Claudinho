@@ -746,9 +746,9 @@ export function renderGroupedAgentToolUse(toolUses: Array<{
                 </Text>
               </> : <>
                 <Text bold>{toolUses.length}</Text>{' '}
-                {commonType ? `${commonType} agents` : 'agents'} finished
+                {commonType ? `${commonType} agents` : 'agents'} finalizados
               </> : <>
-              Running <Text bold>{toolUses.length}</Text>{' '}
+              Executando <Text bold>{toolUses.length}</Text>{' '}
               {commonType ? `${commonType} agents` : 'agents'}…
             </>}{' '}
         </Text>

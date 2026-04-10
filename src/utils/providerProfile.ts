@@ -14,7 +14,8 @@ import {
 } from './providerRecommendation.ts'
 import { getOllamaChatBaseUrl } from './providerDiscovery.ts'
 
-export const PROFILE_FILE_NAME = '.openclaude-profile.json'
+export const PROFILE_FILE_NAME = '.claudinho-profile.json'
+export const LEGACY_PROFILE_FILE_NAME = '.openclaude-profile.json'
 export const DEFAULT_GEMINI_BASE_URL =
   'https://generativelanguage.googleapis.com/v1beta/openai'
 export const DEFAULT_GEMINI_MODEL = 'gemini-2.0-flash'
@@ -94,6 +95,14 @@ function resolveProfileFilePath(options?: ProfileFileLocation): string {
   return resolve(options?.cwd ?? process.cwd(), PROFILE_FILE_NAME)
 }
 
+function resolveLegacyProfileFilePath(options?: ProfileFileLocation): string {
+  if (options?.filePath) {
+    return options.filePath
+  }
+
+  return resolve(options?.cwd ?? process.cwd(), LEGACY_PROFILE_FILE_NAME)
+}
+
 export function isProviderProfile(value: unknown): value is ProviderProfile {
   return (
     value === 'openai' ||
@@ -152,7 +161,7 @@ export function maskSecretForDisplay(
   if (!sanitized) return undefined
 
   if (sanitized.length <= 8) {
-    return 'configured'
+    return 'ok'
   }
 
   if (sanitized.startsWith('sk-')) {
@@ -177,7 +186,7 @@ export function redactSecretValueForDisplay(
 
   const secretValues = collectSecretValues(sources)
   if (secretValues.includes(trimmed) || looksLikeSecretValue(trimmed)) {
-    return maskSecretForDisplay(trimmed) ?? 'configured'
+    return maskSecretForDisplay(trimmed) ?? 'ok'
   }
 
   return trimmed
@@ -362,8 +371,14 @@ export function createProfileFile(
 }
 
 export function loadProfileFile(options?: ProfileFileLocation): ProfileFile | null {
-  const filePath = resolveProfileFilePath(options)
-  if (!existsSync(filePath)) {
+  const preferredFilePath = resolveProfileFilePath(options)
+  const legacyFilePath = resolveLegacyProfileFilePath(options)
+  const filePath = existsSync(preferredFilePath)
+    ? preferredFilePath
+    : existsSync(legacyFilePath)
+      ? legacyFilePath
+      : null
+  if (!filePath) {
     return null
   }
 
@@ -400,7 +415,11 @@ export function saveProfileFile(
 
 export function deleteProfileFile(options?: ProfileFileLocation): string {
   const filePath = resolveProfileFilePath(options)
+  const legacyFilePath = resolveLegacyProfileFilePath(options)
   rmSync(filePath, { force: true })
+  if (legacyFilePath !== filePath) {
+    rmSync(legacyFilePath, { force: true })
+  }
   return filePath
 }
 
@@ -639,12 +658,18 @@ export async function buildStartupEnvFromProfile(options?: {
   resolveOllamaDefaultModel?: (goal: RecommendationGoal) => Promise<string>
 }): Promise<NodeJS.ProcessEnv> {
   const processEnv = options?.processEnv ?? process.env
-  if (hasExplicitProviderSelection(processEnv)) {
+  const persisted = options?.persisted ?? loadProfileFile()
+  if (!persisted) {
     return processEnv
   }
 
-  const persisted = options?.persisted ?? loadProfileFile()
-  if (!persisted) {
+  const hasManagedProviderSelection =
+    processEnv.CLAUDINHO_PROVIDER_PROFILE_ATIVO === '1'
+
+  if (
+    hasExplicitProviderSelection(processEnv) &&
+    !hasManagedProviderSelection
+  ) {
     return processEnv
   }
 
@@ -653,7 +678,9 @@ export async function buildStartupEnvFromProfile(options?: {
     persisted,
     goal:
       options?.goal ??
-      normalizeRecommendationGoal(processEnv.OPENCLAUDE_PROFILE_GOAL),
+      normalizeRecommendationGoal(
+        processEnv.CLAUDINHO_PROFILE_GOAL ?? processEnv.OPENCLAUDE_PROFILE_GOAL,
+      ),
     processEnv,
     getOllamaChatBaseUrl:
       options?.getOllamaChatBaseUrl ?? getOllamaChatBaseUrl,

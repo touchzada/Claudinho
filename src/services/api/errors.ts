@@ -908,8 +908,8 @@ export function getAssistantMessageFromError(
     const fallbackSuggestion = get3PModelFallbackSuggestion(model)
     return createAssistantAPIErrorMessage({
       content: fallbackSuggestion
-        ? `The model ${model} is not available on your ${getAPIProvider()} deployment. Try ${switchCmd} to switch to ${fallbackSuggestion}, or ask your admin to enable this model.`
-        : `There's an issue with the selected model (${model}). It may not exist or you may not have access to it. Run ${switchCmd} to pick a different model.`,
+        ? `O modelo ${model} não está disponível no seu deployment ${getAPIProvider()}. Tente ${switchCmd} pra mudar pra ${fallbackSuggestion}, ou peça pro seu admin habilitar este modelo.`
+        : `Tem um problema com o modelo selecionado (${model}). Ele pode não existir ou você pode não ter acesso a ele. Execute ${switchCmd} pra escolher um modelo diferente.`,
       error: 'invalid_request',
     })
   }

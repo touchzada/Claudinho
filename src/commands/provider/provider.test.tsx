@@ -8,6 +8,7 @@ import { createRoot, render, useApp } from '../../ink.js'
 import { AppStateProvider } from '../../state/AppState.js'
 import {
   buildProviderDoctorReport,
+  buildQuickProfileFromChoice,
   buildCurrentProviderSummary,
   buildProfileSaveMessage,
   call,
@@ -190,19 +191,19 @@ test('buildProfileSaveMessage maps provider fields without echoing secrets', () 
       OPENAI_MODEL: 'gpt-4o',
       OPENAI_BASE_URL: 'https://api.openai.com/v1',
     },
-    'D:/codings/Opensource/openclaude/.openclaude-profile.json',
+    'D:/codings/Opensource/claudinho/.claudinho-profile.json',
   )
 
-  expect(message).toContain('Perfil OpenAI-compatible salvo.')
+  expect(message).toContain('Perfil OpenAI compativel salvo.')
   expect(message).toContain('Modelo: gpt-4o')
   expect(message).toContain('Endpoint: https://api.openai.com/v1')
-  expect(message).toContain('Credenciais: configured')
+  expect(message).toContain('Credenciais: ok')
   expect(message).not.toContain('sk-secret-12345678')
 })
 
 test('buildProfileSaveMessage wraps Windows profile path to avoid markdown backslash escaping', () => {
   const filePath =
-    'C:\\Users\\Bruno\\Documents\\Claudinho\\.openclaude-profile.json'
+    'C:\\Users\\Bruno\\Documents\\Claudinho\\.claudinho-profile.json'
   const message = buildProfileSaveMessage(
     'openai',
     {
@@ -227,7 +228,7 @@ test('buildCurrentProviderSummary redacts poisoned model and endpoint values', (
     persisted: null,
   })
 
-  expect(summary.providerLabel).toBe('OpenAI-compatible')
+  expect(summary.providerLabel).toBe('OpenAI compativel')
   expect(summary.modelLabel).toBe('sk-...5678')
   expect(summary.endpointLabel).toBe('sk-...5678')
 })
@@ -285,6 +286,46 @@ test('buildProviderDoctorReport shows profile fallback for openrouter key', () =
   expect(report).toContain('[OpenRouter]')
   expect(report).toContain('Status: pronto')
   expect(report).toContain('Chave: perfil salvo')
+})
+
+test('buildProviderDoctorReport treats OPENROUTER_API_KEY as environment key', () => {
+  const report = buildProviderDoctorReport({
+    processEnv: {
+      OPENROUTER_API_KEY: 'sk-or-secret-12345678',
+    },
+    target: 'openrouter',
+    persisted: {
+      profile: 'openai',
+      createdAt: new Date().toISOString(),
+      env: {
+        OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+        OPENAI_MODEL: 'openrouter/auto',
+      },
+    },
+  })
+
+  expect(report).toContain('[OpenRouter]')
+  expect(report).toContain('Status: pronto')
+  expect(report).toContain('Chave: ambiente')
+})
+
+test('buildQuickProfileFromChoice supports openrouter model override and OPENROUTER_API_KEY', () => {
+  const quick = buildQuickProfileFromChoice(
+    'openrouter',
+    {
+      OPENROUTER_API_KEY: 'sk-or-secret-12345678',
+    },
+    null,
+    {
+      modelOverride: 'openrouter/auto',
+    },
+  )
+
+  expect(quick).not.toBeNull()
+  expect(quick?.profile).toBe('openai')
+  expect(quick?.env.OPENAI_BASE_URL).toBe('https://openrouter.ai/api/v1')
+  expect(quick?.env.OPENAI_MODEL).toBe('openrouter/auto')
+  expect(quick?.env.OPENAI_API_KEY).toBe('sk-or-secret-12345678')
 })
 
 test('call supports /provider doctor openrouter', async () => {

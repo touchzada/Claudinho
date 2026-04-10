@@ -183,6 +183,9 @@ export type KeyParseState = {
   mode: 'NORMAL' | 'IN_PASTE'
   incomplete: string
   pasteBuffer: string
+  // One-shot guard used after forcing a lone ESC flush: if the next chunk
+  // is the orphaned Shift+Tab tail ("[Z"), re-synthesize it as ESC[Z.
+  pendingEscPrefix: boolean
   // Internal tokenizer instance
   _tokenizer?: Tokenizer
 }
@@ -191,6 +194,7 @@ export const INITIAL_STATE: KeyParseState = {
   mode: 'NORMAL',
   incomplete: '',
   pasteBuffer: '',
+  pendingEscPrefix: false,
 }
 
 function inputToString(input: Buffer | string): string {
@@ -227,9 +231,11 @@ export function parseMultipleKeypresses(
   const keys: ParsedInput[] = []
   let inPaste = prevState.mode === 'IN_PASTE'
   let pasteBuffer = prevState.pasteBuffer
+  let pendingEscPrefix = prevState.pendingEscPrefix
 
   for (const token of tokens) {
     if (token.type === 'sequence') {
+      pendingEscPrefix = false
       if (token.value === PASTE_START) {
         inPaste = true
         pasteBuffer = ''
@@ -257,6 +263,21 @@ export function parseMultipleKeypresses(
         }
       }
     } else if (token.type === 'text') {
+      if (pendingEscPrefix) {
+        // Recover Shift+Tab when ESC was flushed alone and the continuation
+        // arrived in the next chunk as plain text ("[Z").
+        if (token.value.startsWith('[Z')) {
+          keys.push(parseKeypress('\x1b[Z'))
+          const remainder = token.value.slice(2)
+          if (remainder) {
+            keys.push(parseKeypress(remainder))
+          }
+          pendingEscPrefix = false
+          continue
+        }
+        pendingEscPrefix = false
+      }
+
       if (inPaste) {
         pasteBuffer += token.value
       } else if (
@@ -291,10 +312,14 @@ export function parseMultipleKeypresses(
   }
 
   // Build new state
+  const armEscPrefixRecovery =
+    isFlush && prevState.mode === 'NORMAL' && prevState.incomplete === '\x1b'
+
   const newState: KeyParseState = {
     mode: inPaste ? 'IN_PASTE' : 'NORMAL',
     incomplete: tokenizer.buffer(),
     pasteBuffer,
+    pendingEscPrefix: armEscPrefixRecovery || pendingEscPrefix,
     _tokenizer: tokenizer,
   }
 

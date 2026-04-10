@@ -88,7 +88,7 @@ export function SandboxPermissionRequest(t0) {
   let t6;
   if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
     t6 = {
-      label: <Text>Não, e diga ao Claude o que fazer diferente <Text bold={true}>(esc)</Text></Text>,
+      label: <Text>Não, e diga ao Claudinho o que fazer diferente <Text bold={true}>(esc)</Text></Text>,
       value: "no"
     };
     $[6] = t6;

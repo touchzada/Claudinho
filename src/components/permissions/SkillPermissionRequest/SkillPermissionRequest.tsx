@@ -300,10 +300,10 @@ export function SkillPermissionRequest(props) {
     t11 = $[32];
   }
   const handleCancel = t11;
-  const t12 = `Use skill "${skill}"?`;
+  const t12 = `Usar skill "${skill}"?`;
   let t13;
   if ($[33] === Symbol.for("react.memo_cache_sentinel")) {
-    t13 = <Text>Claude may use instructions, code, or files from this Skill.</Text>;
+    t13 = <Text>Claudinho pode usar instruções, código ou arquivos desta Skill.</Text>;
     $[33] = t13;
   } else {
     t13 = $[33];

@@ -64,7 +64,7 @@ GOOD:
 BAD (never write these):
 - "Fix bug found while testing with Claude Capybara"
 - "1-shotted by claude-opus-4-6"
-- "Generated with Claude Code"
+- "Gerado com o Claudinho"
 - "Co-Authored-By: Claude Opus 4.6 <…>"
 `
   }

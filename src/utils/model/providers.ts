@@ -32,8 +32,20 @@ export function getAPIProvider(): APIProvider {
 export function usesAnthropicAccountFlow(): boolean {
   return getAPIProvider() === 'firstParty'
 }
+
+function normalizeOpenAIModelForProviderCheck(model: string): string {
+  const trimmed = model.trim().toLowerCase()
+  const noQuery = trimmed.split('?', 1)[0] ?? trimmed
+  const withOptionalReasoningSuffix = noQuery.match(
+    /^(.+?)\s*\((low|medium|high|xhigh)\)$/,
+  )
+  return (withOptionalReasoningSuffix?.[1] ?? noQuery).trim()
+}
+
 function isCodexModel(): boolean {
-  const model = (process.env.OPENAI_MODEL || '').toLowerCase()
+  const model = normalizeOpenAIModelForProviderCheck(
+    process.env.OPENAI_MODEL || '',
+  )
   return (
     model === 'codexplan' ||
     model === 'codexspark' ||

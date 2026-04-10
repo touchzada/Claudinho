@@ -73,9 +73,9 @@ export const WebFetchTool = buildTool({
     const { url } = input as { url: string }
     try {
       const hostname = new URL(url).hostname
-      return `Claude quer buscar conteúdo de ${hostname}`
+      return `Claudinho quer buscar conteúdo de ${hostname}`
     } catch {
-      return `Claude quer buscar conteúdo desta URL`
+      return `Claudinho quer buscar conteúdo desta URL`
     }
   },
   userFacingName() {

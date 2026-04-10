@@ -35,7 +35,7 @@ export function getPillLabel(tasks: BackgroundTaskState[]): string {
         return teamCount === 1 ? '1 team' : `${teamCount} teams`
       }
       case 'local_agent':
-        return n === 1 ? '1 local agent' : `${n} local agents`
+        return n === 1 ? '1 agent local' : `${n} agents locais`
       case 'remote_agent': {
         const first = tasks[0]!
         // Per design mockup: ◇ open diamond while running/needs-input,

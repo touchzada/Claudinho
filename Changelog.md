@@ -2,6 +2,135 @@
 
 ## [Unreleased]
 
+### Fase 42: Substituição Massiva de "Claude" por "Claudinho" em Mensagens (08/04/2026)
+- Substituídas todas as referências a "Claude" por "Claudinho" em mensagens de erro, atribuição e dicas
+- Traduzidas mensagens de status de tarefas em background e ações de UI
+- **Símbolos de modos de permissão atualizados:**
+  - ▲ (triângulo) para "Modo Planejamento" (antes: ⏸)
+  - ✓ (check) para "Aceitar edições" (antes: ⏵⏵)
+  - ☠ (caveira) para "Pular Permissões" (antes: ⏵⏵)
+  - Removido texto " on" quando modo está ativo - agora mostra apenas o símbolo
+- Arquivos traduzidos:
+  - `src/utils/teleport/api.ts` - Mensagens de erro de autenticação web
+  - `src/utils/teleport.tsx` - Mensagens de erro de sessão não encontrada e autenticação
+  - `src/utils/teleport/environments.ts` - Mensagens de erro de autenticação
+  - `src/utils/attribution.ts` - Comentários sobre atribuição de código gerado
+  - `src/utils/undercover.ts` - Exemplos de mensagens ruins no modo camuflagem
+  - `src/i18n/pt-BR.ts` - Dicas e mensagens de ajuda (6 strings)
+  - `src/commands/plugin/index.tsx` - Descrição do comando plugin
+  - `src/main.tsx` - Descrição do comando plugin
+  - `src/hooks/notifs/useCanSwitchToExistingSubscription.tsx` - Notificação de plano existente
+  - `src/components/PromptInput/PromptInputFooterLeftSide.tsx` - Mensagens de interrupção e ações de tasks
+  - `src/components/messages/SystemTextMessage.tsx` - Mensagem de tarefas em background
+  - `src/tasks/pillLabel.ts` - Labels de tarefas locais
+  - `src/utils/permissions/PermissionMode.ts` - Símbolos de modos de permissão
+  - `src/components/PromptInput/PromptInputFooterLeftSide.tsx` - Remoção do texto " on"
+- Strings traduzidas:
+  - "Claude Code web sessions require authentication..." → "Sessões web do Claudinho requerem autenticação..."
+  - "Run /status in Claude Code to check your account" → "Execute /status no Claudinho pra verificar sua conta"
+  - "Generated with Claude Code" → "Gerado com o Claudinho"
+  - "Use git worktrees pra rodar múltiplas sessões do Claude" → "...do Claudinho"
+  - "Rodando várias sessões do Claude?" → "...do Claudinho?"
+  - "enquanto o Claude tá trabalhando" → "...o Claudinho tá trabalhando"
+  - "Mande mensagens pro Claude" → "...pro Claudinho"
+  - "Peça pro Claude criar" → "...pro Claudinho criar"
+  - "memória do Claude" → "...do Claudinho"
+  - "Gerenciar plugins do Claude Code" → "...do Claudinho"
+  - "/login to activate" → "/login pra ativar"
+  - "interrupt" → "interromper"
+  - "still running" → "ainda rodando"
+  - "1 local agent" / "N local agents" → "1 agent local" / "N agents locais"
+  - "hide tasks" / "show tasks" → "esconder tasks" / "mostrar tasks"
+  - "show teammates" → "mostrar teammates"
+  - "hide" → "esconder"
+- Total: 12 arquivos com 21+ strings traduzidas
+- Compilado com sucesso ✓
+
+### Fase 41: Substituição de "Claude" por "Claudinho" em Permissões (07/04/2026)
+- Substituídas todas as referências a "Claude" por "Claudinho" em mensagens de permissão
+- Arquivos traduzidos:
+  - `src/tools/WebFetchTool/WebFetchTool.ts` - "Claude quer buscar conteúdo" → "Claudinho quer buscar conteúdo"
+  - `src/tools/WebSearchTool/WebSearchTool.ts` - "Claude quer buscar na web" → "Claudinho quer buscar na web"
+  - `src/components/permissions/EnterPlanModePermissionRequest/EnterPlanModePermissionRequest.tsx` - "Claude wants to enter plan mode" → "Claudinho quer entrar no modo plan"
+  - `src/components/permissions/ExitPlanModePermissionRequest/ExitPlanModePermissionRequest.tsx` - "Claude wants to exit plan mode" → "Claudinho quer sair do modo plan"
+- Total: 4 arquivos com mensagens de permissão traduzidas
+- Compilado com sucesso ✓
+
+### Fase 40: Tradução de Status de Agents (07/04/2026)
+- Traduzidas mensagens de status de agents
+- Arquivo: `src/tools/AgentTool/UI.tsx`
+- Strings traduzidas:
+  - "agents finished" → "agents finalizados"
+  - "Running" → "Executando"
+- Compilado com sucesso ✓
+
+### Fase 39: Substituição de "Claude" por "Claudinho" em Mensagens (07/04/2026)
+- Substituídas todas as referências a "Claude" por "Claudinho" em mensagens visíveis ao usuário
+- Arquivos traduzidos:
+  - `src/utils/computerUse/cleanup.ts` - "Claude is done using your computer" → "Claudinho terminou de usar seu computador"
+  - `src/screens/REPL.tsx` - "Claude is waiting for your input" → "Claudinho está esperando sua resposta"
+  - `src/tools/EnterPlanModeTool/UI.tsx` - "Claude is now exploring..." → "Claudinho está explorando..."
+  - `src/components/Onboarding.tsx` - "Claude can make mistakes" → "Claudinho pode cometer erros"
+  - `src/components/ClaudeInChromeOnboarding.tsx` - "which sites Claude can browse" → "quais sites o Claudinho pode navegar"
+  - `src/components/permissions/EnterPlanModePermissionRequest/EnterPlanModePermissionRequest.tsx` - "In plan mode, Claude will:" → "No modo plan, Claudinho vai:"
+  - `src/components/IdeOnboardingDialog.tsx` - "Claude has context of" → "Claudinho tem contexto de"
+  - `src/components/agents/AgentsList.tsx` - "that Claude can delegate to" → "pros quais o Claudinho pode delegar"
+- Total: 8 arquivos com mensagens traduzidas
+- Compilado com sucesso ✓
+
+### Fase 38: Traduções de Interface de Perguntas e Navegação (07/04/2026)
+- Traduzidas strings de navegação e interação com perguntas
+- Arquivos:
+  - `src/components/agents/AgentNavigationFooter.tsx`
+  - `src/components/permissions/AskUserQuestionPermissionRequest/PreviewQuestionView.tsx`
+  - `src/tools/AskUserQuestionTool/AskUserQuestionTool.tsx`
+- Strings traduzidas:
+  - "Press ↑↓ to navigate · Enter to select · Esc to go back" → "Pressione ↑↓ pra navegar · Enter pra selecionar · Esc pra voltar"
+  - "Press ${keyName} again to exit" → "Pressione ${keyName} novamente pra sair"
+  - "press n to add notes" → "pressione n pra adicionar notes"
+  - "User answered Claude's questions:" → "Usuário respondeu as perguntas do Claudinho:"
+- Compilado com sucesso ✓
+
+### Fase 37: Ajustes de Permissões de Skills (07/04/2026)
+- Traduzido "Tab to amend" → "Tab pra complementar"
+- Trocado "Claude pode usar" → "Claudinho pode usar" nas mensagens de skill
+- Arquivos:
+  - `src/components/permissions/PermissionPrompt.tsx`
+  - `src/components/permissions/SkillPermissionRequest/SkillPermissionRequest.tsx`
+- Compilado com sucesso ✓
+
+### Fase 36: Correção de "Esc para interromper" (07/04/2026)
+- Corrigida capitalização da mensagem de interrupção
+- Arquivo: `src/i18n/pt-BR.ts`
+- String corrigida: "esc pra interromper" → "Esc para interromper"
+- Compilado com sucesso ✓
+
+### Fase 35: Mensagens de Erro de Modelo (07/04/2026)
+- Traduzidas mensagens de erro quando o modelo selecionado não está disponível
+- Arquivo: `src/services/api/errors.ts`
+- Strings traduzidas:
+  - "There's an issue with the selected model (${model}). It may not exist or you may not have access to it. Run ${switchCmd} to pick a different model." → "Tem um problema com o modelo selecionado (${model}). Ele pode não existir ou você pode não ter acesso a ele. Execute ${switchCmd} pra escolher um modelo diferente."
+  - "The model ${model} is not available on your ${getAPIProvider()} deployment. Try ${switchCmd} to switch to ${fallbackSuggestion}, or ask your admin to enable this model." → "O modelo ${model} não está disponível no seu deployment ${getAPIProvider()}. Tente ${switchCmd} pra mudar pra ${fallbackSuggestion}, ou peça pro seu admin habilitar este modelo."
+- Compilado com sucesso ✓
+
+### Fase 34: Tradução em Massa de Skills (07/04/2026)
+- Traduzidas automaticamente 446 skills em massa usando script PowerShell
+- Script criado: `scripts/traduzir-skills.ps1`
+- Tradução automática de termos comuns:
+  - "Expert in" → "Expert em"
+  - "Use for" → "Use pra"
+  - "Triggers on" → "Ativa com:"
+  - "best practices" → "melhores práticas"
+  - "automation" → "automação"
+  - "testing" → "testes"
+  - E mais 20+ substituições automáticas
+- Total processado: 763 skills
+- Traduzidas: 446 skills
+- Já traduzidas/puladas: 315 skills
+- Erros: 2 (arquivos em uso)
+- **IMPORTANTE**: Traduções aplicadas diretamente nos arquivos SKILL.md
+- Não requer recompilação (são arquivos de configuração externos)
+
 ### Fase 33: Tradução de Descrições de Skills e Agents (07/04/2026)
 - Traduzidas descrições (campo `description:`) de 20 agents e 8 skills
 - Apenas o campo de descrição foi traduzido (o que aparece pro usuário)

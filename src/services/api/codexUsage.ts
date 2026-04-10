@@ -2,6 +2,7 @@ import {
   DEFAULT_CODEX_BASE_URL,
   isCodexBaseUrl,
   resolveCodexApiCredentials,
+  resolveCodexApiCredentialsAsync,
   resolveProviderRequest,
 } from './providerConfig.js'
 
@@ -401,7 +402,7 @@ export async function fetchCodexUsage(): Promise<CodexUsageData> {
     )
   }
 
-  const credentials = resolveCodexApiCredentials()
+  const credentials = await resolveCodexApiCredentialsAsync()
   if (!credentials.apiKey) {
     const authHint = credentials.authPath
       ? ` or place a Codex auth.json at ${credentials.authPath}`

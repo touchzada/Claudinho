@@ -1,10 +1,10 @@
 {
   "name": "@touchzada/claudinho",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Assistente de IA no terminal com qualquer modelo — OpenAI, Gemini, DeepSeek, Ollama e 200+",
   "type": "module",
   "bin": {
-    "claudinho": "./bin/claudinho.cmd"
+    "claudinho": "./bin/claudinho"
   },
   "files": [
     "bin/",
@@ -42,6 +42,7 @@
     "doctor:runtime": "bun run scripts/system-check.ts",
     "doctor:runtime:json": "bun run scripts/system-check.ts --json",
     "doctor:report": "bun run scripts/system-check.ts --out reports/doctor-runtime.json",
+    "voice:test:openai": "bun run scripts/voice-openai-test.ts",
     "hardening:check": "bun run smoke && bun run doctor:runtime",
     "hardening:strict": "bun run typecheck && bun run hardening:check",
     "prepack": "bun run scripts/build.ts"

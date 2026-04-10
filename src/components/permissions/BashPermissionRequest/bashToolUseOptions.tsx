@@ -64,7 +64,7 @@ export function bashToolUseOptions({
       type: 'input',
       label: 'Sim',
       value: 'yes',
-      placeholder: 'e diga ao Claude o que fazer a seguir',
+      placeholder: 'e diga ao Claudinho o que fazer a seguir',
       onChange: onAcceptFeedbackChange,
       allowEmptySubmitToCancel: true
     });
@@ -132,7 +132,7 @@ export function bashToolUseOptions({
       type: 'input',
       label: 'Não',
       value: 'no',
-      placeholder: 'e diga ao Claude o que fazer diferente',
+      placeholder: 'e diga ao Claudinho o que fazer diferente',
       onChange: onRejectFeedbackChange,
       allowEmptySubmitToCancel: true
     });
